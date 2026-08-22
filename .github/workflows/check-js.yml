@@ -1,0 +1,18 @@
+name: Check JavaScript
+on:
+  push:
+    branches: [backup-before-activation-fix-20260822]
+jobs:
+  syntax:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check index.html JavaScript
+        run: python - <<'PY'
+from pathlib import Path
+import re
+html=Path('index.html').read_text(encoding='utf-8')
+blocks=re.findall(r'<script(?:\s[^>]*)?>(.*?)</script>',html,re.S|re.I)
+Path('/tmp/script.js').write_text('\n'.join(blocks),encoding='utf-8')
+PY
+      - run: node --check /tmp/script.js

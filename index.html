@@ -3,11 +3,11 @@
 body{margin:0;font-family:Arial,sans-serif;background:#f4f8fc;color:#18324a}header{background:linear-gradient(135deg,#123a6f,#1c5c9e);color:#fff;padding:26px 16px}.wrap,main{max-width:1000px;margin:auto}.brand{font-size:27px;font-weight:900}.tag{margin-top:6px}nav{display:flex;gap:8px;flex-wrap:wrap;margin-top:18px}button{border:0;border-radius:11px;padding:11px 15px;font-weight:800;cursor:pointer}nav button{background:#fff;color:#123a6f}nav button.active,nav button:hover{background:#f4b400}main{padding:20px 14px}.panel{background:#fff;border:1px solid #d9e4ef;border-radius:17px;padding:20px;margin-bottom:16px;box-shadow:0 4px 16px #123a6f10}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px}label{display:block;font-weight:800;font-size:14px;margin:10px 0 5px}input,select,textarea{width:100%;padding:11px;border:1px solid #c9d8e6;border-radius:9px;box-sizing:border-box;font:inherit}textarea{min-height:85px}.hidden{display:none!important}.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}.green{background:#159a7c;color:#fff}.gold{background:#f4b400;color:#17324d}.dark{background:#123a6f;color:#fff}.soft{background:#eaf4ff;color:#123a6f}.notice,.ok,.private{padding:12px;border-radius:11px;margin-top:12px}.notice{background:#fff8df;border:1px solid #efd36a}.ok{background:#eaf8f2;border:1px solid #9dd9c4}.private{background:#fff0f4;border:1px solid #efb3c2}.aspect{border-left:7px solid #f4b400}.coop{border-left-color:#159a7c}.lead{border-left-color:#7b61ff}.uncomfortable{border-left-color:#d96b7b}.big{font-size:28px;font-weight:900;color:#123a6f;margin-top:7px}.share{background:linear-gradient(135deg,#eef7ff,#fff9e8);border:1px solid #cddfee;border-radius:15px;padding:15px;margin-top:14px}.shareline{display:flex;gap:7px}.reason{background:#fbfdff;border:1px solid #d9e4ef;border-radius:12px;padding:12px;margin-top:9px}.reason b{color:#123a6f}.small{font-size:12px;color:#6b7d90}.rank{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid #e4edf4}.bar{height:8px;background:#dce7f2;border-radius:8px;margin-top:5px}.fill{height:8px;background:#123a6f;border-radius:8px}.hiddenprint{display:block}@media(max-width:650px){.shareline{flex-direction:column}}@media print{header,nav,#teacher,#student,#paper,.actions{display:none!important}.panel{box-shadow:none;border:0}}
 
 .print-sheet{background:#fff;color:#172b3a;border:1px solid #d8e2ec;border-radius:12px;padding:12px;margin-top:15px;line-height:1.18}
-.print-sheet{page-break-after:avoid;break-after:avoid}.print-head{text-align:center;border-bottom:2px solid #123a6f;padding-bottom:12px;margin-bottom:14px}
+.print-sheet{page-break-after:avoid;break-after:avoid;padding:9px;margin-top:10px}.print-head{text-align:center;border-bottom:2px solid #123a6f;padding-bottom:12px;margin-bottom:14px}
 .print-head h1{font-size:18px;margin:0;color:#123a6f}.print-head h2{font-size:14px;margin:3px 0 7px}
 .print-meta{display:flex;justify-content:space-between;gap:12px;text-align:left;font-size:11px;margin-top:3px}
 .print-instruction{font-size:10px;background:#f6f9fc;border:1px solid #d9e4ef;border-radius:7px;padding:7px;margin-bottom:8px}
-.print-q{border:1px solid #cfdbe7;border-radius:7px;padding:6px;margin:4px 0;page-break-inside:avoid}
+.print-q{border:1px solid #cfdbe7;border-radius:7px;padding:5px;margin:3px 0;page-break-inside:avoid}
 .print-q h3{font-size:12px;margin:0 0 4px;color:#123a6f}.print-q p{font-size:10px;margin:3px 0 5px}
 .print-q .line{font-size:9px;margin:4px 0;min-height:12px}
 .print-footer{text-align:center;font-size:7px;color:#647687;margin-top:5px;border-top:1px solid #d9e4ef;padding-top:3px}
@@ -24,9 +24,27 @@ body{margin:0;font-family:Arial,sans-serif;background:#f4f8fc;color:#18324a}head
 
 .qrbox{margin-top:14px;padding:14px;border:1px dashed #b9c9d8;border-radius:12px;background:#f8fbfe;text-align:center}
 .qrbox img{display:block;margin:8px auto}
+
+#commercialGate input{display:block;width:100%;box-sizing:border-box;margin:6px 0 12px;padding:10px;border:1px solid #cfdbe7;border-radius:8px}
+#commercialGate label{font-size:12px;font-weight:700;display:block;margin-top:7px}
 </style></head><body>
 <header><div class="wrap"><div class="brand">🌟 SOSIO DIGITAL NaFaS BK</div><div class="tag">Peta Pertemanan • Kolaborasi • Kepemimpinan</div>
 <nav><button id="nt" class="active" onclick="page('teacher')">👩‍🏫 Guru BK</button><button id="ns" onclick="page('student')">📱 Mode HP</button><button id="np" onclick="page('paper')">📄 Mode Tanpa HP</button><button id="nr" onclick="page('result')">🗺️ Hasil Guru BK</button></nav></div></header>
+
+<div id="commercialBadge" style="max-width:980px;margin:10px auto;padding:0 18px;font-size:12px;color:#647687"></div>
+<section id="commercialGate" class="panel" style="max-width:620px;margin:30px auto">
+  <h2>🔐 Aktivasi SOSIO DIGITAL NaFaS BK</h2>
+  <div class="notice"><b>1 pembelian = 1 Guru BK.</b><br>Setelah aktivasi, Bapak/Ibu dapat menggunakan aplikasi untuk seluruh kelas yang ditangani.</div>
+  <label>Nama Guru BK</label>
+  <input id="licenseTeacher" placeholder="Contoh: Ibu Ani">
+  <label>Asal Sekolah</label>
+  <input id="licenseSchool" placeholder="Contoh: SMP Negeri 1 ...">
+  <label>Kode Aktivasi</label>
+  <input id="licenseCode" placeholder="Contoh: NAFAS-XXXXXX" autocomplete="off">
+  <button class="gold" onclick="activateCommercial()">🔓 Aktifkan Aplikasi</button>
+  <div id="licenseMsg"></div>
+  <div class="small">Kode aktivasi hanya untuk Guru BK yang melakukan pembelian. Jangan dibagikan kepada orang lain.</div>
+</section>
 <main>
 <section id="teacher"><div class="panel"><h2>👩‍🏫 Buat Sesi Sosiometri</h2><div class="grid"><div><label>Sekolah</label><input id="school"></div><div><label>Kelas / Rombel</label><input id="className"></div><div><label>Tahun Ajaran</label><input id="year" value="2026/2027"></div><div><label>Guru BK</label><input id="counselor"></div></div><label>Daftar nama siswa — satu nama per baris</label><textarea id="students" placeholder="Aisyah Putri&#10;Bima Aditya&#10;Citra Kirana"></textarea><div class="actions"><button class="green" onclick="create()">💾 Buat Sesi & Bagikan</button></div><div id="tmsg"></div></div>
 <div class="panel"><h2>📱 Sesi Aktif</h2><div id="session">Belum ada sesi.</div></div></section>
@@ -47,12 +65,70 @@ body{margin:0;font-family:Arial,sans-serif;background:#f4f8fc;color:#18324a}head
 <section id="result" class="hidden"><div class="panel"><h2>🗺️ Hasil Guru BK</h2><div class="grid"><div><label>Kode Sesi</label><input id="rcode"></div><div><label>PIN Guru BK</label><input id="rpin"></div></div><div class="actions"><button class="dark" onclick="results()">🔐 Buka Hasil</button><button class="soft" onclick="printResults()">🖨️ Cetak Hasil / PDF</button></div><div id="res"></div></div></section>
 </main>
 <script>
-const SERVER_URL='https://script.google.com/macros/s/AKfycbwawXgXFSwSO7Kj9J35xF7ewGJchGO4TeqL6OuJreGPX2p_Q1klsvvGHx_DQnD0sMfT/exec';
+const SERVER_URL='https://script.google.com/macros/s/AKfycbzHfa62A58BMYKVsBeq_CLV1HLh7S7UdSRfPmntFdGmf3R34-ZpYJcQksT_bJlE1enz/exec';
 let session=null;
 try{session=JSON.parse(localStorage.getItem('NAFAS_SOSIO_SESSION')||'null')}catch(e){session=null}
 function saveSession(){if(session)localStorage.setItem('NAFAS_SOSIO_SESSION',JSON.stringify(session))}
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-async function api(action,data){let r=await fetch(SERVER_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(Object.assign({action},data||{}))});return await r.json()}
+
+const LICENSE_KEY='NAFAS_LICENSE_V1';
+let license=null;
+try{license=JSON.parse(localStorage.getItem(LICENSE_KEY)||'null')}catch(e){license=null}
+
+
+function logoutCommercial(){if(confirm('Keluar dari akun Guru BK di perangkat ini?'))clearLicense()}
+function saveLicense(){if(license)localStorage.setItem(LICENSE_KEY,JSON.stringify(license))}
+function clearLicense(){localStorage.removeItem(LICENSE_KEY);license=null;location.reload()}
+
+async function commercialApi(action,data){
+  let payload=Object.assign({action},data||{});
+  if(license?.code) payload.license=license.code;
+  let r=await fetch(SERVER_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(payload)});
+  return await r.json();
+}
+
+async function activateCommercial(){
+  const code=(document.getElementById('licenseCode')?.value||'').trim().toUpperCase();
+  const teacher=(document.getElementById('licenseTeacher')?.value||'').trim();
+  const school=(document.getElementById('licenseSchool')?.value||'').trim();
+  if(!code||!teacher||!school){note('licenseMsg','Lengkapi nama, sekolah, dan kode aktivasi.');return}
+  note('licenseMsg','⏳ Memeriksa kode aktivasi...');
+  try{
+    const r=await commercialApi('activateLicense',{license:code,teacher:teacher,school:school});
+    if(r.status!=='OK'){note('licenseMsg','❌ '+esc(r.message));return}
+    license={code:code,teacher:r.teacher||teacher,school:r.school||school};
+    saveLicense();
+    note('licenseMsg','✅ Aktivasi berhasil. Selamat menggunakan SOSIO DIGITAL NaFaS BK.','ok');
+    setTimeout(showCommercialGate,500);
+  }catch(e){note('licenseMsg','❌ Tidak dapat terhubung ke server. Periksa internet.')}
+}
+
+function showCommercialGate(){
+  const main=document.querySelector('main');
+  const gate=document.getElementById('commercialGate');
+  const badge=document.getElementById('commercialBadge');
+  const isStudent=location.hash.startsWith('#sesi=');
+  if(isStudent){
+    gate?.classList.add('hidden'); main?.classList.remove('hidden');
+    if(badge)badge.innerHTML='📱 Mode Siswa';
+    return;
+  }
+  if(license?.code){
+    gate?.classList.add('hidden'); main?.classList.remove('hidden');
+    if(badge)badge.innerHTML='🔐 Lisensi aktif: <b>'+esc(license.teacher)+'</b> • '+esc(license.school)+' &nbsp; <button class="soft" onclick="logoutCommercial()">Ganti Pengguna</button>';
+  }else{
+    gate?.classList.remove('hidden'); main?.classList.add('hidden');
+    if(badge)badge.innerHTML='🔒 Aplikasi belum diaktivasi';
+  }
+}
+
+async function api(action,data){
+  let payload=Object.assign({action},data||{});
+  // Teacher actions require the activated license; student actions can use session code alone.
+  if(license?.code) payload.license=license.code;
+  let r=await fetch(SERVER_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(payload)});
+  return await r.json();
+}
 function page(id){
 ['teacher','student','paper','result'].forEach(x=>document.getElementById(x).classList.toggle('hidden',x!==id));
 ['t','s','p','r'].forEach(x=>document.getElementById('n'+x)?.classList.remove('active'));
@@ -95,13 +171,41 @@ function allPaperDrafts(){
  session.students.forEach((s,i)=>{let d=loadDraft(s.id); if(d)o[s.id]=d}); return o;
 }
 function showTeacherSession(){
- if(!session)return;
- let u=studentUrl();
- let qr='https://api.qrserver.com/v1/create-qr-code/?size=260x260&margin=8&data='+encodeURIComponent(u);
- document.getElementById('session').innerHTML='<div class="grid"><div><b>KODE SESI</b><div class="big">'+esc(session.code)+'</div><button class="soft" onclick="copyText(session.code)">📋 Salin Kode</button></div><div><b>PIN GURU BK</b><div class="big">'+esc(session.pin)+'</div><button class="soft" onclick="copyText(session.pin)">📋 Salin PIN</button></div></div><div class="share"><h3>📱 Bagikan ke Siswa</h3><div class="shareline"><input id="link" readonly value="'+esc(u)+'"><button class="soft" onclick="copyLink()">📋 Salin Link</button></div><div class="qrbox"><b>▣ QR Code Siswa</b><p class="small">Siswa dapat memindai QR untuk membuka sesi.</p><img src="'+qr+'" style="width:180px;height:180px;border:1px solid #ddd;border-radius:10px;background:#fff;padding:6px"><br><button class="soft" onclick="printShareCard()">🖨️ Cetak Kartu Link & QR</button></div></div>';
+if(!session)return;
+let u=studentUrl();
+let qr='https://api.qrserver.com/v1/create-qr-code/?size=260x260&margin=8&data='+encodeURIComponent(u);
+document.getElementById('session').innerHTML='<div class="grid"><div><b>KODE SESI</b><div class="big">'+esc(session.code)+'</div><button class="soft" onclick="copyText(session.code)">📋 Salin Kode</button></div><div><b>PIN GURU BK</b><div class="big">'+esc(session.pin||'—')+'</div><button class="soft" onclick="copyText(session.pin)">📋 Salin PIN</button></div></div><div class="share"><h3>📱 Bagikan ke Siswa</h3><div class="shareline"><input id="link" readonly value="'+esc(u)+'"><button class="soft" onclick="copyLink()">📋 Salin Link</button></div><div class="qrbox"><b>▣ QR Code Siswa</b><p class="small">Siswa dapat memindai QR untuk membuka sesi.</p><img src="'+qr+'" style="width:180px;height:180px;border:1px solid #ddd;border-radius:10px;background:#fff;padding:6px"><br><button class="soft" onclick="printShareCard()">🖨️ Cetak Kartu Link & QR</button></div><div id="submissionStatus" style="margin-top:14px;padding:12px;border:1px solid #d9e4ef;border-radius:12px;background:#f8fbfe"><div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap"><b>📊 Status Pengisian</b><button class="soft" onclick="refreshSubmissionStatus()">🔄 Perbarui Status</button></div><div id="statusSummary" class="small" style="margin-top:7px">Belum diperbarui.</div><div id="statusList" style="margin-top:8px"></div></div><div class="small" style="margin-top:8px">Kode dan PIN tetap tersimpan saat berpindah menu.</div></div>';
+renderLocalStatus();
 }
 async function create(){let names=document.getElementById('students').value.split('\n').map(x=>x.trim()).filter(Boolean);if(names.length<2){note('tmsg','Masukkan minimal 2 nama siswa.');return}note('tmsg','⏳ Membuat sesi online...');let students=names.map((name,i)=>({id:'S'+(i+1),name}));let r=await api('createSession',{school:document.getElementById('school').value,className:document.getElementById('className').value,year:document.getElementById('year').value,counselor:document.getElementById('counselor').value,students});if(r.status!=='OK'){note('tmsg','❌ '+esc(r.message));return}session={code:r.code,pin:r.pin,students,school:document.getElementById('school').value,className:document.getElementById('className').value,year:document.getElementById('year').value,counselor:document.getElementById('counselor').value};saveSession();showTeacherSession();let link=location.href.split('#')[0]+'#sesi='+encodeURIComponent(r.code);document.getElementById('session').innerHTML='<div class="grid"><div><b>KODE SESI</b><div class="big">'+r.code+'</div></div><div><b>PIN GURU BK</b><div class="big">'+r.pin+'</div></div></div><div class="share"><h3>📱 Bagikan ke Siswa</h3><div class="shareline"><input id="link" readonly value="'+esc(link)+'"><button class="soft" onclick="copyLink()">📋 Salin Link</button></div><div class="small">PIN Guru BK hanya untuk Guru BK.</div></div>';note('tmsg','✅ Sesi online berhasil dibuat.','ok')}
-function copyLink(){copyText(document.getElementById('link').value)}
+function copyLink(){copyText(document.getElementById('link').value)}function renderLocalStatus(){
+if(!session||!document.getElementById('statusSummary'))return;
+let done=Array.isArray(session.submittedIds)?session.submittedIds.map(String):[];
+let total=session.students?.length||0;
+document.getElementById('statusSummary').innerHTML='<b>'+done.length+' dari '+total+' siswa sudah mengisi.</b>';
+document.getElementById('statusList').innerHTML=(session.students||[]).map(function(s){
+let ok=done.includes(String(s.id));
+return '<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #edf2f6;font-size:13px"><span>'+esc(s.name)+'</span><b style="color:'+(ok?'#159a7c':'#8a98a8')+'">'+(ok?'✓ Sudah':'○ Belum')+'</b></div>';
+}).join('');
+}
+async function refreshSubmissionStatus(){
+if(!session){alert('Buat sesi terlebih dahulu.');return}
+let btn=document.querySelector('#submissionStatus button');
+if(btn){btn.disabled=true;btn.textContent='⏳ Memperbarui...'}
+try{
+let r=await api('getResults',{code:session.code,pin:session.pin});
+if(r.status!=='OK'){note('tmsg','❌ '+esc(r.message||'Status belum dapat diperbarui.'));return}
+let answered={};
+(r.responses||[]).forEach(function(x){answered[String(x.respondent)]=true});
+session.submittedIds=(session.students||[]).filter(function(s){return answered[String(s.id)]}).map(function(s){return String(s.id)});
+session.submittedCount=session.submittedIds.length;
+saveSession();
+renderLocalStatus();
+note('tmsg','✅ Status pengisian berhasil diperbarui.','ok');
+}catch(e){note('tmsg','❌ Tidak dapat memperbarui status. Periksa koneksi internet.')}
+finally{if(btn){btn.disabled=false;btn.textContent='🔄 Perbarui Status'}}
+}
+
 function block(cls,title,txt,n){let h='<div class="panel aspect '+cls+'"><h3>'+title+'</h3><p>'+txt+'</p>';for(let i=0;i<n;i++)h+='<label>Pilihan '+(i+1)+'</label><select class="ch '+cls+'"></select><label>Alasan</label><textarea class="rs '+cls+'" placeholder="Tuliskan alasan singkat..."></textarea>';return h+'</div>'}
 function opts(){return '<option value="">— Pilih nama —</option>'+session.students.map(s=>'<option value="'+esc(s.id)+'">'+esc(s.name)+'</option>').join('')}
 async function loadStudent(){let code=location.hash.startsWith('#sesi=')?decodeURIComponent(location.hash.slice(6)):document.getElementById('scode').value.trim();if(!code){document.getElementById('q').innerHTML='<div class="notice">Masukkan kode sesi.</div>';return}let r=await api('getSession',{code});if(r.status!=='OK'){document.getElementById('q').innerHTML='<div class="notice">'+esc(r.message)+'</div>';return}session=r.session;document.getElementById('scode').value=code;document.getElementById('me').innerHTML=opts();document.getElementById('q').innerHTML=block('heart','❤️ Pertemanan','Pilih 2 teman yang paling nyaman kamu ajak berteman.',2)+block('coop','🤝 Kerja Sama','Pilih 2 teman yang paling kamu pilih untuk bekerja sama.',2)+block('lead','⭐ Kepemimpinan','Pilih 1 teman yang menurutmu mampu memimpin.',1)+block('uncomfortable','🔎 Relasi Kurang Nyaman','Pilih maksimal 1 teman yang menurutmu paling sulit diajak berinteraksi atau bekerja sama.',1);document.querySelectorAll('.ch').forEach(x=>x.innerHTML=opts())}
@@ -134,7 +238,7 @@ document.getElementById('paperRows').innerHTML='';
  '<div><label>🤝 Kerja Sama 1</label><select class="pe coop">'+opts+'</select><label>Alasan</label><input class="pr coop"></div>'+
  '<div><label>🤝 Kerja Sama 2</label><select class="pe coop">'+opts+'</select><label>Alasan</label><input class="pr coop"></div>'+
  '<div><label>⭐ Kepemimpinan</label><select class="pe lead">'+opts+'</select><label>Alasan</label><input class="pr lead"></div>'+
- '<div><label>🔎 Relasi Kurang Nyaman (opsional)</label><select class="pe uncomfortable">'+opts+'</select><label>Alasan (opsional)</label><input class="pr uncomfortable"></div>'+
+ '<div><label>🔎 Relasi Kurang Nyaman</label><select class="pe uncomfortable">'+opts+'</select><label>Alasan</label><input class="pr uncomfortable"></div>'+
  '</div></div>').join('');
 
  document.getElementById('paperRows').innerHTML=
@@ -146,7 +250,7 @@ document.getElementById('paperRows').innerHTML='';
  '<div class="print-q"><h3>❤️ A. PERTEMANAN</h3><p>1. Pilih 2 teman yang paling nyaman kamu ajak berteman.</p><div class="line">1) ____________________________________ &nbsp;&nbsp; Alasan: ______________________________________________</div><div class="line">2) ____________________________________ &nbsp;&nbsp; Alasan: ______________________________________________</div></div>'+
  '<div class="print-q"><h3>🤝 B. KERJA SAMA</h3><p>2. Pilih 2 teman yang paling kamu pilih untuk bekerja sama dalam kelompok.</p><div class="line">1) ____________________________________ &nbsp;&nbsp; Alasan: ______________________________________________</div><div class="line">2) ____________________________________ &nbsp;&nbsp; Alasan: ______________________________________________</div></div>'+
  '<div class="print-q"><h3>⭐ C. KEPEMIMPINAN</h3><p>3. Pilih 1 teman yang menurutmu mampu memimpin kelompok dengan baik.</p><div class="line">Nama: __________________________________ &nbsp;&nbsp; Alasan: ______________________________________________</div></div>'+
- '<div class="print-q"><h3>🔎 D. RELASI KURANG NYAMAN</h3><p>4. Jika ada, pilih maksimal 1 teman yang menurutmu paling sulit diajak berinteraksi atau bekerja sama.</p><div class="line">Nama: __________________________________ &nbsp;&nbsp; Alasan: ______________________________________________</div><p class="small">* Boleh dikosongkan jika tidak ada.</p></div>'+
+ '<div class="print-q"><h3>🔎 D. RELASI KURANG NYAMAN</h3><p>4. Jika ada, pilih maksimal 1 teman yang menurutmu paling sulit diajak berinteraksi atau bekerja sama.</p><div class="line">Nama: __________________________________ &nbsp;&nbsp; Alasan: ______________________________________________</div></div>'+
  '<div class="print-footer">SOSIO DIGITAL NaFaS BK • Data digunakan untuk kepentingan layanan Bimbingan dan Konseling.</div>'+
  '</div>';
 }
@@ -209,5 +313,5 @@ function reasons(t,ic,k,rk){
 }
 document.getElementById('res').innerHTML='<div class="ok">'+rs.length+' dari '+st.length+' siswa sudah mengisi.</div><div class="notice"><b>Catatan:</b> Hasil menampilkan <b>nama siswa</b>. Kode S1/S2 hanya digunakan sebagai ID teknis.</div>'+sec('Pertemanan','❤️','heart')+sec('Kerja Sama','🤝','coop')+sec('Kepemimpinan','⭐','lead')+sec('Relasi Kurang Nyaman','🔎','uncomfortable')+reasons('Alasan Pertemanan','❤️','heart','heartReason')+reasons('Alasan Kerja Sama','🤝','coop','coopReason')+reasons('Alasan Kepemimpinan','⭐','lead','leadReason')+reasons('Alasan Relasi Kurang Nyaman','🔎','uncomfortable','uncomfortableReason')+'<div class="private">🔐 Khusus Guru BK. Gunakan data ini secara bijak dan jangan membagikan jawaban individual kepada siswa lain.</div>'
 }
-showSavedSession();if(location.hash.startsWith('#sesi=')){page('student');loadStudent()}
+showSavedSession();showCommercialGate();if(location.hash.startsWith('#sesi=')){page('student');loadStudent()}
 </script></body></html>

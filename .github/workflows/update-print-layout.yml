@@ -1,0 +1,42 @@
+name: Update print layout
+on:
+  push:
+    branches: [main]
+permissions:
+  contents: write
+jobs:
+  patch-print:
+    if: ${{ !startsWith(github.event.head_commit.message, 'Auto-fix print layout') }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Patch printResults
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import re
+          p = Path('index.html')
+          s = p.read_text(encoding='utf-8')
+          new = r'''function printResults(){
+            const source=document.getElementById('res');
+            if(!source || !source.innerHTML.trim()){alert('Silakan klik "Buka Hasil" terlebih dahulu.');return;}
+            const w=window.open('','_blank','width=950,height=750');
+            if(!w){alert('Jendela cetak diblokir browser. Izinkan pop-up untuk situs ini.');return;}
+            const cls=(document.getElementById('rcode')?.value||'').trim();
+            w.document.write(`<!doctype html><html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Hasil Sosiometri ${cls}</title><style>*{box-sizing:border-box}body{margin:0;background:#fff;color:#17324d;font-family:Arial,sans-serif;font-size:11px}.toolbar{position:sticky;top:0;background:#fff;padding:12px;text-align:center;border-bottom:1px solid #d8e2ec;z-index:5}.toolbar button{border:0;border-radius:9px;padding:11px 20px;background:#f4b400;color:#17324d;font-weight:900;cursor:pointer;font-size:14px}.sheet{max-width:950px;margin:0 auto;padding:12px}.sheet h1{font-size:20px;text-align:center;margin:3px 0}.sheet h2{font-size:14px;text-align:center;margin:3px 0 8px}.sheet h3{font-size:12px;margin:6px 0}.sheet .panel,.sheet .aspect,.sheet .reason{border:1px solid #d8e2ec;border-radius:7px;padding:7px;margin:5px 0;box-shadow:none}.sheet .rank{padding:4px 0}.sheet .bar{height:6px}.sheet .fill{height:6px}.sheet .notice,.sheet .ok,.sheet .private{padding:6px;margin:5px 0}.sheet .actions{display:none!important}.sheet .small{font-size:9px}.sheet .result-summary{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:7px 0}.sheet .result-summary>div{border:1px solid #d8e2ec;border-radius:7px;padding:6px;text-align:center}.sheet .result-summary b{display:block;font-size:15px;color:#123a6f}@media(max-width:650px){.sheet .result-summary{grid-template-columns:repeat(2,1fr)}}@page{size:A4;margin:6mm}@media print{.toolbar{display:none}.sheet{max-width:none;padding:0}.sheet .panel,.sheet .aspect,.sheet .reason{break-inside:avoid;page-break-inside:avoid}} </style></head><body><div class="toolbar"><button onclick="window.print()">🖨️ CETAK / SIMPAN PDF</button></div><main class="sheet"><h1>🌟 SOSIO DIGITAL NaFaS BK</h1><h2>HASIL SOSIOMETRI</h2>${source.innerHTML}</main></body></html>`);
+            w.document.close();
+          }
+          '''
+          pattern = r'function printResults\(\)\{.*?\n\}\n(?=function )'
+          s2, n = re.subn(pattern, new, s, count=1, flags=re.S)
+          if n != 1:
+              raise SystemExit('printResults function not found; no changes made')
+          p.write_text(s2, encoding='utf-8')
+          PY
+      - name: Commit patched index
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          git diff --cached --quiet || git commit -m "Auto-fix print layout"
+          git push

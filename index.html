@@ -3,7 +3,7 @@
 body{margin:0;font-family:Arial,sans-serif;background:#f4f8fc;color:#18324a}header{background:linear-gradient(135deg,#123a6f,#1c5c9e);color:#fff;padding:26px 16px}.wrap,main{max-width:1000px;margin:auto}.brand{font-size:27px;font-weight:900}.tag{margin-top:6px}nav{display:flex;gap:8px;flex-wrap:wrap;margin-top:18px}button{border:0;border-radius:11px;padding:11px 15px;font-weight:800;cursor:pointer}nav button{background:#fff;color:#123a6f}nav button.active,nav button:hover{background:#f4b400}main{padding:20px 14px}.panel{background:#fff;border:1px solid #d9e4ef;border-radius:17px;padding:20px;margin-bottom:16px;box-shadow:0 4px 16px #123a6f10}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px}label{display:block;font-weight:800;font-size:14px;margin:10px 0 5px}input,select,textarea{width:100%;padding:11px;border:1px solid #c9d8e6;border-radius:9px;box-sizing:border-box;font:inherit}textarea{min-height:85px}.hidden{display:none!important}.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}.green{background:#159a7c;color:#fff}.gold{background:#f4b400;color:#17324d}.dark{background:#123a6f;color:#fff}.soft{background:#eaf4ff;color:#123a6f}.notice,.ok,.private{padding:12px;border-radius:11px;margin-top:12px}.notice{background:#fff8df;border:1px solid #efd36a}.ok{background:#eaf8f2;border:1px solid #9dd9c4}.private{background:#fff0f4;border:1px solid #efb3c2}.aspect{border-left:7px solid #f4b400}.coop{border-left-color:#159a7c}.lead{border-left-color:#7b61ff}.uncomfortable{border-left-color:#d96b7b}.big{font-size:28px;font-weight:900;color:#123a6f;margin-top:7px}.share{background:linear-gradient(135deg,#eef7ff,#fff9e8);border:1px solid #cddfee;border-radius:15px;padding:15px;margin-top:14px}.shareline{display:flex;gap:7px}.reason{background:#fbfdff;border:1px solid #d9e4ef;border-radius:12px;padding:12px;margin-top:9px}.reason b{color:#123a6f}.small{font-size:12px;color:#6b7d90}.rank{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid #e4edf4}.bar{height:8px;background:#dce7f2;border-radius:8px;margin-top:5px}.fill{height:8px;background:#123a6f;border-radius:8px}.hiddenprint{display:block}@media(max-width:650px){.shareline{flex-direction:column}}@media print{header,nav,#teacher,#student,#paper,.actions{display:none!important}.panel{box-shadow:none;border:0}}
 
 /* ============================================
-   HASIL SEDERHANA - HEMAT KERTAS
+   HASIL - HANYA TABEL (SANGAT RINGKAS)
    ============================================ */
 
 /* Header */
@@ -12,54 +12,19 @@ body{margin:0;font-family:Arial,sans-serif;background:#f4f8fc;color:#18324a}head
   justify-content: space-between;
   align-items: center;
   flex-wrap: wrap;
-  padding: 6px 12px;
+  padding: 4px 10px;
   background: #eaf1f9;
-  border-radius: 8px;
-  margin-bottom: 10px;
-  font-size: 12px;
+  border-radius: 6px;
+  margin-bottom: 8px;
+  font-size: 11px;
 }
 .result-head .info { color: #4a5d70; }
 .result-head .info strong { color: #123a6f; }
 
-/* 4 Kartu Statistik */
-.stat-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 6px;
-  margin-bottom: 10px;
-}
-.stat-card {
-  background: #fff;
-  border-radius: 8px;
-  padding: 6px 8px;
-  border: 1px solid #e4edf4;
-  text-align: center;
-}
-.stat-card .label {
-  font-size: 9px;
-  color: #6b7d90;
-  text-transform: uppercase;
-  letter-spacing: 0.3px;
-}
-.stat-card .value {
-  font-size: 18px;
-  font-weight: 900;
-  color: #123a6f;
-  margin: 1px 0;
-}
-.stat-card .sub {
-  font-size: 9px;
-  color: #8a9daf;
-}
-.stat-card.heart .value { color: #f4b400; }
-.stat-card.coop .value { color: #159a7c; }
-.stat-card.lead .value { color: #7b61ff; }
-.stat-card.uncomfortable .value { color: #d96b7b; }
-
-/* Tabel Ringkas */
+/* Tabel Utama */
 .table-wrap {
   overflow-x: auto;
-  margin-bottom: 8px;
+  margin-bottom: 6px;
 }
 .table-main {
   width: 100%;
@@ -73,10 +38,11 @@ body{margin:0;font-family:Arial,sans-serif;background:#f4f8fc;color:#18324a}head
   text-align: center;
   font-weight: 700;
   font-size: 10px;
+  border: 1px solid #123a6f;
 }
 .table-main td {
   padding: 3px 6px;
-  border-bottom: 1px solid #eaf0f6;
+  border: 1px solid #d9e4ef;
   text-align: center;
 }
 .table-main tr:nth-child(even) { background: #f8fafc; }
@@ -107,115 +73,54 @@ body{margin:0;font-family:Arial,sans-serif;background:#f4f8fc;color:#18324a}head
   color: #123a6f;
 }
 .table-main .count-low { background: #d96b7b15; color: #b84a5a; }
+.table-main .total-col { font-weight: 700; color: #123a6f; }
 
-/* Grafik Batang */
-.bar-chart {
-  margin: 4px 0 8px;
-}
-.bar-chart .bar-row {
-  display: flex;
-  align-items: center;
-  padding: 1px 0;
-  font-size: 10px;
-  gap: 6px;
-}
-.bar-chart .bar-label {
-  min-width: 80px;
-  font-weight: 600;
-  color: #18324a;
-  text-align: right;
+/* Footer */
+.result-footer {
+  margin-top: 6px;
   font-size: 9px;
+  color: #6b7d90;
+  text-align: center;
+  border-top: 1px solid #e4edf4;
+  padding-top: 4px;
 }
-.bar-chart .bar-track {
-  flex: 1;
-  height: 12px;
-  background: #edf2f7;
-  border-radius: 6px;
-  overflow: hidden;
-}
-.bar-chart .bar-fill {
-  height: 100%;
-  border-radius: 6px;
-}
-.bar-chart .bar-fill.heart { background: #f4b400; }
-.bar-chart .bar-fill.coop { background: #159a7c; }
-.bar-chart .bar-fill.lead { background: #7b61ff; }
-.bar-chart .bar-fill.uncomfortable { background: #d96b7b; }
-.bar-chart .bar-value {
-  min-width: 20px;
-  font-weight: 700;
-  color: #123a6f;
-  font-size: 10px;
-}
-.bar-chart .bar-group {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 4px;
-}
-
-/* Alasan Ringkas */
-.reason-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-  gap: 4px;
-  margin-top: 4px;
-}
-.reason-item {
-  background: #f8fafc;
-  border-radius: 4px;
-  padding: 3px 8px;
-  border-left: 3px solid #d9e4ef;
-  font-size: 9px;
-}
-.reason-item .who { font-weight: 700; color: #123a6f; }
-.reason-item .text { color: #4a5d70; }
-.reason-item .from { font-size: 8px; color: #8a9daf; }
-.reason-item.heart { border-left-color: #f4b400; }
-.reason-item.coop { border-left-color: #159a7c; }
-.reason-item.lead { border-left-color: #7b61ff; }
-.reason-item.uncomfortable { border-left-color: #d96b7b; }
 
 /* Responsive */
-@media(max-width:700px){
-  .stat-grid { grid-template-columns: 1fr 1fr; }
-  .bar-chart .bar-group { grid-template-columns: 1fr; }
-  .bar-chart .bar-label { min-width: 60px; font-size: 8px; }
-}
-@media(max-width:450px){
-  .stat-grid { grid-template-columns: 1fr 1fr; }
-  .stat-card .value { font-size: 14px; }
+@media(max-width:600px){
   .table-main { font-size: 9px; }
   .table-main th, .table-main td { padding: 2px 3px; }
-  .reason-grid { grid-template-columns: 1fr; }
 }
 
 /* CETAK - SANGAT RINGKAS */
 @media print {
-  .stat-grid { page-break-after: avoid; }
   .table-wrap { page-break-after: avoid; }
-  .bar-chart { page-break-after: avoid; }
-  .reason-grid { page-break-after: avoid; }
-  .stat-card { border: 1px solid #d0dae6 !important; box-shadow: none !important; }
-  .table-main tr:nth-child(even) { background: #f5f7fa !important; }
   .table-main td { padding: 2px 4px; font-size: 8px; }
   .table-main th { padding: 2px 4px; font-size: 8px; }
-  .bar-chart .bar-track { height: 8px; }
-  .bar-chart .bar-label { min-width: 60px; font-size: 7px; }
-  .bar-chart .bar-value { font-size: 8px; min-width: 18px; }
-  .reason-item { font-size: 7px; padding: 2px 6px; }
-  .result-head { background: #e8edf3 !important; padding: 4px 8px; font-size: 10px; }
-  .ok, .private { font-size: 8px !important; padding: 3px 6px !important; }
-  .panel { padding: 10px !important; }
+  .result-head { background: #e8edf3 !important; padding: 3px 8px; font-size: 9px; }
+  .result-footer { font-size: 7px; }
+  .panel { padding: 8px !important; }
+  .table-main tr:nth-child(even) { background: #f5f7fa !important; }
 }
 
 .print-sheet{background:#fff;color:#172b3a;border:1px solid #d8e2ec;border-radius:12px;padding:12px;margin-top:15px;line-height:1.18}.print-sheet{page-break-after:avoid;break-after:avoid}.print-head{text-align:center;border-bottom:2px solid #123a6f;padding-bottom:12px;margin-bottom:14px}.print-head h1{font-size:18px;margin:0;color:#123a6f}.print-head h2{font-size:14px;margin:3px 0 7px}.print-meta{display:flex;justify-content:space-between;gap:12px;text-align:left;font-size:11px;margin-top:3px}.print-instruction{font-size:10px;background:#f6f9fc;border:1px solid #d9e4ef;border-radius:7px;padding:7px;margin-bottom:8px}.print-q{border:1px solid #cfdbe7;border-radius:7px;padding:6px;margin:4px 0;page-break-inside:avoid}.print-q h3{font-size:12px;margin:0 0 4px;color:#123a6f}.print-q p{font-size:10px;margin:3px 0 5px}.print-q .line{font-size:9px;margin:4px 0;min-height:12px}.print-footer{text-align:center;font-size:7px;color:#647687;margin-top:5px;border-top:1px solid #d9e4ef;padding-top:3px}
 .qrbox{margin-top:14px;padding:14px;border:1px dashed #b9c9d8;border-radius:12px;background:#f8fbfe;text-align:center}.qrbox img{display:block;margin:8px auto}
+
+/* Tombol cetak di panel hasil */
+.print-btn-group {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
 </style></head><body>
 <header><div class="wrap"><div class="brand">🌟 SOSIO DIGITAL NaFaS BK</div><div class="tag">Peta Pertemanan • Kolaborasi • Kepemimpinan</div><nav><button id="nt" class="active" onclick="page('teacher')">👩‍🏫 Guru BK</button><button id="ns" onclick="page('student')">📱 Mode HP</button><button id="np" onclick="page('paper')">📄 Mode Tanpa HP</button><button id="nr" onclick="page('result')">🗺️ Hasil Guru BK</button></nav></div></header>
 <main><section id="teacher"><div class="panel"><h2>👩‍🏫 Buat Sesi Sosiometri</h2><div class="grid"><div><label>Sekolah</label><input id="school"></div><div><label>Kelas / Rombel</label><input id="className"></div><div><label>Tahun Ajaran</label><input id="year" value="2026/2027"></div><div><label>Guru BK</label><input id="counselor"></div></div><label>Daftar nama siswa — satu nama per baris</label><textarea id="students" placeholder="Aisyah Putri&#10;Bima Aditya&#10;Citra Kirana"></textarea><div class="actions"><button class="green" onclick="create()">💾 Buat Sesi & Bagikan</button></div><div id="tmsg"></div></div><div class="panel"><h2>📱 Sesi Aktif</h2><div id="session">Belum ada sesi.</div></div></section>
 <section id="student" class="hidden"><div class="panel"><h2>📱 Pengisian Siswa</h2><div class="notice">Hasil sosiometri hanya dapat dilihat Guru BK.</div><label>Kode Sesi</label><input id="scode"><label>Nama Kamu</label><select id="me"></select><div id="q"></div><div class="actions"><button class="green" onclick="send()">📨 Kirim Jawaban</button></div><div id="smsg"></div></div></section>
 <section id="paper" class="hidden"><div class="panel"><h2>📄 Mode Tanpa HP</h2><div class="notice"><b>Mode Tanpa HP:</b> siswa mengisi lembar kertas, lalu Guru BK memasukkan hasilnya di sini. <b>Entri tersimpan sementara otomatis di perangkat ini.</b> Jika ada acara/kendala di tengah pengisian, Ibu dapat kembali dan melanjutkan dari data terakhir. Data yang sudah berhasil masuk ke JAWABAN tidak akan dikirim dua kali.</div><div id="paperEntry"></div><div class="actions"><button class="gold" onclick="paper()">🔄 Muat Entri</button><button class="dark" onclick="submitPaper()">💾 Simpan Hasil Entri</button></div><div id="pmsg"></div></div><div class="panel"><h3>🖨️ Lembar Sosiometri untuk Dicetak</h3><div class="notice">Klik <b>🖨️ Cetak Lembar Siswa</b> untuk mencetak lembar yang akan dibagikan kepada siswa. Lembar ini sudah memuat identitas sesi dan seluruh pertanyaan.</div><div id="paperRows"></div><button class="gold" onclick="printSociometry()">🖨️ Cetak Lembar Siswa</button></div></section>
-<section id="result" class="hidden"><div class="panel"><h2>🗺️ Hasil Guru BK</h2><div class="grid"><div><label>Kode Sesi</label><input id="rcode"></div><div><label>PIN Guru BK</label><input id="rpin"></div></div><div class="actions"><button class="dark" onclick="results()">🔐 Buka Hasil</button><button class="soft" onclick="openPrintPage()">🖨️ Cetak / PDF</button></div><div id="res"></div></div></section></main>
+<section id="result" class="hidden"><div class="panel"><h2>🗺️ Hasil Guru BK</h2><div class="grid"><div><label>Kode Sesi</label><input id="rcode"></div><div><label>PIN Guru BK</label><input id="rpin"></div></div><div class="actions print-btn-group">
+  <button class="dark" onclick="results()">🔐 Buka Hasil</button>
+  <button class="gold" onclick="printResults()">🖨️ Cetak / PDF</button>
+</div>
+<div id="res"></div></div></section></main>
 <script>
 const SERVER_URL='https://script.google.com/macros/s/AKfycbwawXgXFSwSO7Kj9J35xF7ewGJchGO4TeqL6OuJreGPX2p_Q1klsvvGHx_DQnD0sMfT/exec';let session=null;try{session=JSON.parse(localStorage.getItem('NAFAS_SOSIO_SESSION')||'null')}catch(e){session=null}function saveSession(){if(session)localStorage.setItem('NAFAS_SOSIO_SESSION',JSON.stringify(session))}const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));async function api(action,data){let r=await fetch(SERVER_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(Object.assign({action},data||{}))});return await r.json()}
 function page(id){['teacher','student','paper','result'].forEach(x=>document.getElementById(x).classList.toggle('hidden',x!==id));['t','s','p','r'].forEach(x=>document.getElementById('n'+x)?.classList.remove('active'));let m={teacher:'nt',student:'ns',paper:'np',result:'nr'};document.getElementById(m[id]).classList.add('active');if(id==='student')loadStudent();if(id==='paper')paper();if(id==='teacher')showTeacherSession();if(id==='result'){if(session){document.getElementById('rcode').value=session.code||'';document.getElementById('rpin').value=session.pin||''}}}
@@ -230,10 +135,10 @@ function printSociometry(){if(!session){alert('Buat sesi terlebih dahulu di menu
 function submitPaper(){if(!session){note('pmsg','Buat sesi terlebih dahulu.');return}let cards=[...document.querySelectorAll('#paperEntry .panel')];note('pmsg','⏳ Menyimpan entri satu per satu. Data yang sudah tersimpan tidak akan diulang.');for(let i=0;i<cards.length;i++){let s=session.students[i],sels=[...cards[i].querySelectorAll('select')],ins=[...cards[i].querySelectorAll('input')],h=sels.slice(0,2).map(x=>x.value).filter(Boolean),c=sels.slice(2,4).map(x=>x.value).filter(Boolean),l=sels[4]?.value?[sels[4].value]:[],u=sels[5]?.value?[sels[5].value]:[],hr=ins.slice(0,2).map(x=>x.value.trim()),cr=ins.slice(2,4).map(x=>x.value.trim()),lr=ins[4]?.value.trim()?[ins[4].value.trim()]:[],ur=ins[5]?.value.trim()?[ins[5].value.trim()]:[];if(h.length!==2||c.length!==2||!l.length||hr.some(x=>!x)||cr.some(x=>!x)||!lr.length){note('pmsg','⚠️ Entri '+(i+1)+' belum lengkap.');return}let r=await api('submitResponse',{code:session.code,respondent:s.id,heart:h,heartReason:hr,coop:c,coopReason:cr,lead:l,leadReason:lr,uncomfortable:u,uncomfortableReason:ur});if(r.status!=='OK'&&!(r.message&&r.message.includes('sudah diterima'))){note('pmsg','❌ Entri '+(i+1)+' belum tersimpan.');return}}note('pmsg','✅ Semua entri yang belum tersimpan sudah berhasil disimpan ke JAWABAN.','ok')}
 
 // ================================================================
-// FUNGSI HASIL - SEDERHANA, RINGKAS, HEMAT KERTAS
+// FUNGSI HASIL - HANYA TABEL (SANGAT RINGKAS)
 // ================================================================
 
-function renderSimpleResults(r) {
+function renderTableOnly(r) {
   const rs = r.responses || [];
   const st = r.session.students;
   const className = r.session.className || '';
@@ -249,39 +154,8 @@ function renderSimpleResults(r) {
   });
 
   const name = id => (st.find(s => String(s.id) === String(id)) || { name: id }).name;
-  
-  // Ranking
-  const getRank = (key) => {
-    return st.map(s => ({ id: s.id, name: s.name, count: counts[key][s.id] || 0 }))
-             .sort((a,b) => b.count - a.count || a.name.localeCompare(b.name,'id'));
-  };
 
-  const rankHeart = getRank('heart');
-  const rankCoop = getRank('coop');
-  const rankLead = getRank('lead');
-  const rankUncomfortable = getRank('uncomfortable');
-
-  // Alasan
-  const getReasons = (key, reasonKey) => {
-    const result = {};
-    rs.forEach(x => {
-      (x[key] || []).forEach((id, idx) => {
-        if (!result[id]) result[id] = [];
-        const text = (x[reasonKey] || [])[idx] || '';
-        if (text.trim()) {
-          result[id].push({ from: x.respondentName, text: text.trim() });
-        }
-      });
-    });
-    return result;
-  };
-
-  const reasonsHeart = getReasons('heart', 'heartReason');
-  const reasonsCoop = getReasons('coop', 'coopReason');
-  const reasonsLead = getReasons('lead', 'leadReason');
-  const reasonsUncomfortable = getReasons('uncomfortable', 'uncomfortableReason');
-
-  // --- RENDER HTML ---
+  // --- RENDER HANYA TABEL ---
   let html = '';
 
   // Header
@@ -290,32 +164,20 @@ function renderSimpleResults(r) {
     <div class="info">Kode: <strong>${esc(code)}</strong></div>
   </div>`;
 
-  // 4 Kartu Statistik
-  const topHeart = rankHeart[0] || { name: '-', count: 0 };
-  const topCoop = rankCoop[0] || { name: '-', count: 0 };
-  const topLead = rankLead[0] || { name: '-', count: 0 };
-  const topUncomfortable = rankUncomfortable[0] || { name: '-', count: 0 };
-
-  html += `<div class="stat-grid">
-    <div class="stat-card heart"><div class="label">❤️ Pertemanan</div><div class="value">${esc(topHeart.name)}</div><div class="sub">${topHeart.count} pilihan</div></div>
-    <div class="stat-card coop"><div class="label">🤝 Kerja Sama</div><div class="value">${esc(topCoop.name)}</div><div class="sub">${topCoop.count} pilihan</div></div>
-    <div class="stat-card lead"><div class="label">⭐ Kepemimpinan</div><div class="value">${esc(topLead.name)}</div><div class="sub">${topLead.count} pilihan</div></div>
-    <div class="stat-card uncomfortable"><div class="label">🔎 Kurang Nyaman</div><div class="value">${esc(topUncomfortable.name)}</div><div class="sub">${topUncomfortable.count} pilihan</div></div>
-  </div>`;
-
-  // TABEL SEMUA SISWA
+  // TABEL
   html += `<div class="table-wrap">
     <table class="table-main">
       <thead><tr>
-        <th style="width:28px;">#</th>
-        <th style="text-align:left;">Nama</th>
-        <th>❤️</th>
-        <th>🤝</th>
-        <th>⭐</th>
-        <th>🔎</th>
-        <th>Total</th>
+        <th style="width:25px;">#</th>
+        <th style="text-align:left;min-width:120px;">Nama Siswa</th>
+        <th>❤️<br><span style="font-weight:400;font-size:8px;">Pertemanan</span></th>
+        <th>🤝<br><span style="font-weight:400;font-size:8px;">Kerja Sama</span></th>
+        <th>⭐<br><span style="font-weight:400;font-size:8px;">Kepemimpinan</span></th>
+        <th>🔎<br><span style="font-weight:400;font-size:8px;">Kurang Nyaman</span></th>
+        <th style="font-weight:900;">Total</th>
       </tr></thead><tbody>`;
   
+  // Urutkan berdasarkan total pilihan terbanyak
   const sorted = [...st].map(s => ({
     ...s,
     total: counts.heart[s.id] + counts.coop[s.id] + counts.lead[s.id] + counts.uncomfortable[s.id]
@@ -328,79 +190,31 @@ function renderSimpleResults(r) {
     const u = counts.uncomfortable[s.id] || 0;
     const total = h + c + l + u;
     
+    // Tampilkan semua siswa, termasuk yang total 0
     let rankClass = '';
-    if (idx === 0) rankClass = 'rank-1';
-    else if (idx === 1) rankClass = 'rank-2';
-    else if (idx === 2) rankClass = 'rank-3';
+    if (idx === 0 && total > 0) rankClass = 'rank-1';
+    else if (idx === 1 && total > 0) rankClass = 'rank-2';
+    else if (idx === 2 && total > 0) rankClass = 'rank-3';
+    
+    const displayRank = (total > 0) ? idx + 1 : '-';
     
     html += `<tr>
-      <td><span class="rank-badge ${rankClass}">${idx + 1}</span></td>
+      <td>${total > 0 ? `<span class="rank-badge ${rankClass}">${idx + 1}</span>` : '-'}</td>
       <td class="name-col">${esc(s.name)}</td>
       <td>${h > 0 ? `<span class="count">${h}</span>` : '-'}</td>
       <td>${c > 0 ? `<span class="count">${c}</span>` : '-'}</td>
       <td>${l > 0 ? `<span class="count">${l}</span>` : '-'}</td>
       <td>${u > 0 ? `<span class="count count-low">${u}</span>` : '-'}</td>
-      <td><strong>${total}</strong></td>
+      <td class="total-col">${total}</td>
     </tr>`;
   });
   
   html += `</tbody></table></div>`;
 
-  // GRAFIK BATANG (TOP 5)
-  html += `<div class="bar-chart">`;
-  
-  const makeBar = (rankData, cls, label, icon) => {
-    const top5 = rankData.slice(0, 5).filter(x => x.count > 0);
-    if (top5.length === 0) return '';
-    const maxCount = Math.max(1, ...top5.map(x => x.count));
-    let out = `<div style="margin-bottom:3px;"><strong style="font-size:10px;color:#123a6f;">${icon} ${label}</strong></div>`;
-    top5.forEach(item => {
-      const pct = Math.round((item.count / maxCount) * 100);
-      out += `<div class="bar-row">
-        <span class="bar-label">${esc(item.name)}</span>
-        <div class="bar-track">
-          <div class="bar-fill ${cls}" style="width:${pct}%;"></div>
-        </div>
-        <span class="bar-value">${item.count}</span>
-      </div>`;
-    });
-    return out;
-  };
-
-  html += `<div class="bar-group">`;
-  html += `<div>${makeBar(rankHeart, 'heart', 'Pertemanan', '❤️')}</div>`;
-  html += `<div>${makeBar(rankCoop, 'coop', 'Kerja Sama', '🤝')}</div>`;
-  html += `<div>${makeBar(rankLead, 'lead', 'Kepemimpinan', '⭐')}</div>`;
-  html += `<div>${makeBar(rankUncomfortable, 'uncomfortable', 'Kurang Nyaman', '🔎')}</div>`;
-  html += `</div></div>`;
-
-  // ALASAN (TOP 2)
-  html += `<div style="margin-top:5px;"><h4 style="margin:0 0 3px;font-size:10px;color:#6b7d90;">📝 Alasan</h4>
-  <div class="reason-grid">`;
-  
-  const makeReasons = (rankData, reasonsData, cls) => {
-    const top2 = rankData.slice(0, 2).filter(x => x.count > 0);
-    let out = '';
-    top2.forEach(item => {
-      const r = (reasonsData[item.id] || []).slice(0, 2);
-      if (r.length) {
-        out += `<div class="reason-item ${cls}">
-          <span class="who">${esc(item.name)}</span>
-          ${r.map(x => `<div class="text">"${esc(x.text)}"</div><div class="from">— ${esc(x.from)}</div>`).join('')}
-        </div>`;
-      }
-    });
-    return out;
-  };
-
-  html += makeReasons(rankHeart, reasonsHeart, 'heart');
-  html += makeReasons(rankCoop, reasonsCoop, 'coop');
-  html += makeReasons(rankLead, reasonsLead, 'lead');
-  html += makeReasons(rankUncomfortable, reasonsUncomfortable, 'uncomfortable');
-  
-  html += `</div></div>`;
-
-  html += `<div class="private" style="margin-top:6px;font-size:9px;padding:4px 10px;">🔐 Khusus Guru BK. Gunakan secara bijak.</div>`;
+  // Footer
+  html += `<div class="result-footer">
+    🔐 Khusus Guru BK • Gunakan secara bijak • Dicetak: ${new Date().toLocaleDateString('id-ID')}
+  </div>`;
   
   return html;
 }
@@ -422,54 +236,146 @@ async function results(){
   
   if(!r.session) r.session = session;
   
-  // PASTIKAN memanggil renderSimpleResults
-  document.getElementById('res').innerHTML = renderSimpleResults(r);
+  document.getElementById('res').innerHTML = renderTableOnly(r);
 }
 
-// ===== FUNGSI CETAK - MENGGUNAKAN TAMPILAN YANG SAMA =====
+// ===== FUNGSI CETAK - DIPERBAIKI =====
 function printResults(){
+  // Ambil konten hasil dari div #res
   const source = document.getElementById('res');
   if(!source || !source.innerHTML.trim()){ 
-    alert('Silakan klik "Buka Hasil" terlebih dahulu.'); 
+    alert('⚠️ Silakan klik "Buka Hasil" terlebih dahulu.'); 
     return; 
   }
   
   const code = document.getElementById('rcode')?.value.trim() || '';
-  const w = window.open('','_blank','width=900,height=750');
-  if(!w){ alert('Jendela cetak diblokir. Izinkan pop-up.'); return; }
-  
+  const pin = document.getElementById('rpin')?.value.trim() || '';
   const className = session?.className || '';
   
-  // Ambil CSS dari halaman utama untuk tampilan cetak
+  // Buka jendela baru untuk cetak
+  const w = window.open('', '_blank', 'width=900,height=750');
+  if(!w){ 
+    alert('⚠️ Jendela cetak diblokir. Izinkan pop-up untuk situs ini.'); 
+    return; 
+  }
+  
+  // Ambil semua CSS dari halaman
   const styles = document.querySelector('style').innerHTML;
   
-  w.document.write(`<!doctype html><html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Hasil Sosiometri ${code}</title>
-  <style>${styles}</style>
-  <style>
-    /* TAMBAHAN KHUSUS CETAK */
-    body { padding: 8mm; background: #fff; }
-    .toolbar-print { position: sticky; top: 0; background: #fff; padding: 8px; text-align: center; border-bottom: 2px solid #123a6f; z-index: 10; margin-bottom: 12px; }
-    .toolbar-print button { border: 0; border-radius: 8px; padding: 8px 20px; background: #f4b400; color: #17324d; font-weight: 800; cursor: pointer; font-size: 13px; }
-    .print-header { text-align: center; border-bottom: 2px solid #123a6f; padding-bottom: 6px; margin-bottom: 10px; }
-    .print-header h1 { font-size: 16px; margin: 0; color: #123a6f; }
-    .print-header h2 { font-size: 11px; margin: 2px 0; color: #4a5d70; }
-    .print-meta { display: flex; justify-content: center; gap: 20px; font-size: 9px; color: #6b7d90; margin-top: 2px; }
-    @media print { .toolbar-print { display: none; } body { padding: 3mm; } }
-  </style>
+  w.document.write(`<!doctype html><html lang="id"><head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Hasil Sosiometri ${code}</title>
+    <style>
+      /* Salin semua style dari halaman utama */
+      ${styles}
+      
+      /* Tambahan khusus cetak */
+      body { 
+        padding: 5mm; 
+        background: #fff; 
+        margin: 0;
+        font-family: Arial, sans-serif;
+      }
+      .toolbar-print {
+        position: sticky;
+        top: 0;
+        background: #fff;
+        padding: 8px;
+        text-align: center;
+        border-bottom: 2px solid #123a6f;
+        z-index: 10;
+        margin-bottom: 10px;
+      }
+      .toolbar-print button {
+        border: 0;
+        border-radius: 8px;
+        padding: 8px 20px;
+        background: #f4b400;
+        color: #17324d;
+        font-weight: 800;
+        cursor: pointer;
+        font-size: 13px;
+      }
+      .print-header {
+        text-align: center;
+        border-bottom: 2px solid #123a6f;
+        padding-bottom: 6px;
+        margin-bottom: 10px;
+      }
+      .print-header h1 {
+        font-size: 16px;
+        margin: 0;
+        color: #123a6f;
+      }
+      .print-header h2 {
+        font-size: 12px;
+        margin: 2px 0;
+        color: #4a5d70;
+        font-weight: 400;
+      }
+      .print-meta {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+        font-size: 9px;
+        color: #6b7d90;
+        margin-top: 2px;
+      }
+      
+      /* Perbaikan untuk cetak */
+      @media print {
+        .toolbar-print { display: none; }
+        body { padding: 3mm; }
+        .panel { box-shadow: none !important; border: 1px solid #d0dae6 !important; padding: 6px !important; }
+        .table-main td { padding: 2px 4px; font-size: 8px; }
+        .table-main th { padding: 2px 4px; font-size: 8px; }
+        .result-head { background: #e8edf3 !important; padding: 3px 8px; font-size: 9px; }
+        .result-footer { font-size: 7px; }
+        .table-main tr:nth-child(even) { background: #f5f7fa !important; }
+        .table-main { font-size: 9px; }
+        .stat-card { border: 1px solid #d0dae6 !important; box-shadow: none !important; }
+        .ok, .private { font-size: 8px !important; padding: 3px 6px !important; }
+        header, nav, .actions, #teacher, #student, #paper { display: none !important; }
+      }
+      
+      /* Ukuran kertas */
+      @page { 
+        size: A4; 
+        margin: 5mm; 
+      }
+    </style>
   </head><body>
-  <div class="toolbar-print"><button onclick="window.print()">🖨️ CETAK / SIMPAN PDF</button></div>
-  <div class="print-header">
-    <h1>📊 HASIL SOSIOMETRI</h1>
-    <h2>${esc(className)}</h2>
-    <div class="print-meta"><span>Kode: ${esc(code)}</span></div>
-  </div>
-  <main>${source.innerHTML}</main>
+    <div class="toolbar-print">
+      <button onclick="window.print()">🖨️ CETAK / SIMPAN PDF</button>
+      <button onclick="window.close()" style="background:#e4edf4;margin-left:8px;">✖ Tutup</button>
+    </div>
+    
+    <div class="print-header">
+      <h1>📊 HASIL SOSIOMETRI</h1>
+      <h2>${esc(className)}</h2>
+      <div class="print-meta">
+        <span>Kode Sesi: <strong>${esc(code)}</strong></span>
+        <span>PIN: <strong>${esc(pin)}</strong></span>
+        <span>Tanggal: ${new Date().toLocaleDateString('id-ID')}</span>
+      </div>
+    </div>
+    
+    <main>${source.innerHTML}</main>
+    
+    <script>
+      // Otomatis cetak jika pengguna mengklik tombol cetak
+      console.log('Siap cetak');
+    <\/script>
   </body></html>`);
+  
   w.document.close();
+  
+  // Fokus ke jendela baru
+  w.focus();
 }
 
 // ===== INISIALISASI =====
 showSavedSession(); 
 if(location.hash.startsWith('#sesi=')){page('student');loadStudent()}
-function openPrintPage(){let code=document.getElementById('rcode')?.value.trim()||'';let pin=document.getElementById('rpin')?.value.trim()||'';if(!code||!pin){alert('Masukkan Kode Sesi dan PIN Guru BK terlebih dahulu.');return}let u='cetak-hasil.html?code='+encodeURIComponent(code)+'&pin='+encodeURIComponent(pin);let w=window.open(u,'_blank');if(!w)alert('Izinkan pop-up agar laporan dapat dibuka.')}
 </script></body></html>

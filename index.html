@@ -215,7 +215,7 @@ body{margin:0;font-family:Arial,sans-serif;background:#f4f8fc;color:#18324a}head
 <main><section id="teacher"><div class="panel"><h2>👩‍🏫 Buat Sesi Sosiometri</h2><div class="grid"><div><label>Sekolah</label><input id="school"></div><div><label>Kelas / Rombel</label><input id="className"></div><div><label>Tahun Ajaran</label><input id="year" value="2026/2027"></div><div><label>Guru BK</label><input id="counselor"></div></div><label>Daftar nama siswa — satu nama per baris</label><textarea id="students" placeholder="Aisyah Putri&#10;Bima Aditya&#10;Citra Kirana"></textarea><div class="actions"><button class="green" onclick="create()">💾 Buat Sesi & Bagikan</button></div><div id="tmsg"></div></div><div class="panel"><h2>📱 Sesi Aktif</h2><div id="session">Belum ada sesi.</div></div></section>
 <section id="student" class="hidden"><div class="panel"><h2>📱 Pengisian Siswa</h2><div class="notice">Hasil sosiometri hanya dapat dilihat Guru BK.</div><label>Kode Sesi</label><input id="scode"><label>Nama Kamu</label><select id="me"></select><div id="q"></div><div class="actions"><button class="green" onclick="send()">📨 Kirim Jawaban</button></div><div id="smsg"></div></div></section>
 <section id="paper" class="hidden"><div class="panel"><h2>📄 Mode Tanpa HP</h2><div class="notice"><b>Mode Tanpa HP:</b> siswa mengisi lembar kertas, lalu Guru BK memasukkan hasilnya di sini. <b>Entri tersimpan sementara otomatis di perangkat ini.</b> Jika ada acara/kendala di tengah pengisian, Ibu dapat kembali dan melanjutkan dari data terakhir. Data yang sudah berhasil masuk ke JAWABAN tidak akan dikirim dua kali.</div><div id="paperEntry"></div><div class="actions"><button class="gold" onclick="paper()">🔄 Muat Entri</button><button class="dark" onclick="submitPaper()">💾 Simpan Hasil Entri</button></div><div id="pmsg"></div></div><div class="panel"><h3>🖨️ Lembar Sosiometri untuk Dicetak</h3><div class="notice">Klik <b>🖨️ Cetak Lembar Siswa</b> untuk mencetak lembar yang akan dibagikan kepada siswa. Lembar ini sudah memuat identitas sesi dan seluruh pertanyaan.</div><div id="paperRows"></div><button class="gold" onclick="printSociometry()">🖨️ Cetak Lembar Siswa</button></div></section>
-<section id="result" class="hidden"><div class="panel"><h2>🗺️ Hasil Guru BK</h2><div class="grid"><div><label>Kode Sesi</label><input id="rcode"></div><div><label>PIN Guru BK</label><input id="rpin"></div></div><div class="actions"><button class="dark" onclick="results()">🔐 Buka Hasil</button><button class="soft" onclick="openPrintPage()">🖨️ Cetak / PDF</button></div><div id="res"></div></div></section></main>
+<section id="result" class="hidden"><div class="panel"><h2>🗺️ Hasil Guru BK</h2><div class="grid"><div><label>Kode Sesi</label><input id="rcode"></div><div><label>PIN Guru BK</label><input id="rpin"></div></div><div class="actions"><button class="dark" onclick="results()">🔐 Buka Hasil</button><button class="soft" onclick="printResults()">🖨️ Cetak / PDF</button></div><div id="res"></div></div></section></main>
 <script>
 const SERVER_URL='https://script.google.com/macros/s/AKfycbwawXgXFSwSO7Kj9J35xF7ewGJchGO4TeqL6OuJreGPX2p_Q1klsvvGHx_DQnD0sMfT/exec';let session=null;try{session=JSON.parse(localStorage.getItem('NAFAS_SOSIO_SESSION')||'null')}catch(e){session=null}function saveSession(){if(session)localStorage.setItem('NAFAS_SOSIO_SESSION',JSON.stringify(session))}const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));async function api(action,data){let r=await fetch(SERVER_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(Object.assign({action},data||{}))});return await r.json()}
 function page(id){['teacher','student','paper','result'].forEach(x=>document.getElementById(x).classList.toggle('hidden',x!==id));['t','s','p','r'].forEach(x=>document.getElementById('n'+x)?.classList.remove('active'));let m={teacher:'nt',student:'ns',paper:'np',result:'nr'};document.getElementById(m[id]).classList.add('active');if(id==='student')loadStudent();if(id==='paper')paper();if(id==='teacher')showTeacherSession();if(id==='result'){if(session){document.getElementById('rcode').value=session.code||'';document.getElementById('rpin').value=session.pin||''}}}
@@ -406,7 +406,7 @@ function renderSimpleResults(r) {
   return html;
 }
 
-// ===== FUNGSI RESULTS =====
+// ===== FUNGSI RESULTS - MEMANGGIL renderSimpleResults =====
 async function results(){
   const code = document.getElementById('rcode').value.trim();
   const pin = document.getElementById('rpin').value.trim();
@@ -423,6 +423,7 @@ async function results(){
   
   if(!r.session) r.session = session;
   
+  // PASTIKAN memanggil renderSimpleResults, BUKAN renderCompactResults
   document.getElementById('res').innerHTML = renderSimpleResults(r);
 }
 

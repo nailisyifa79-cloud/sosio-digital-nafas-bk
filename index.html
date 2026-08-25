@@ -12,11 +12,11 @@ body{margin:0;font-family:Arial,sans-serif;background:#f4f8fc;color:#18324a}head
   justify-content: space-between;
   align-items: center;
   flex-wrap: wrap;
-  padding: 8px 14px;
+  padding: 6px 12px;
   background: #eaf1f9;
-  border-radius: 10px;
-  margin-bottom: 12px;
-  font-size: 13px;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  font-size: 12px;
 }
 .result-head .info { color: #4a5d70; }
 .result-head .info strong { color: #123a6f; }
@@ -25,30 +25,30 @@ body{margin:0;font-family:Arial,sans-serif;background:#f4f8fc;color:#18324a}head
 .stat-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 8px;
-  margin-bottom: 12px;
+  gap: 6px;
+  margin-bottom: 10px;
 }
 .stat-card {
   background: #fff;
-  border-radius: 10px;
-  padding: 8px 10px;
+  border-radius: 8px;
+  padding: 6px 8px;
   border: 1px solid #e4edf4;
   text-align: center;
 }
 .stat-card .label {
-  font-size: 10px;
+  font-size: 9px;
   color: #6b7d90;
   text-transform: uppercase;
   letter-spacing: 0.3px;
 }
 .stat-card .value {
-  font-size: 20px;
+  font-size: 18px;
   font-weight: 900;
   color: #123a6f;
-  margin: 2px 0;
+  margin: 1px 0;
 }
 .stat-card .sub {
-  font-size: 10px;
+  font-size: 9px;
   color: #8a9daf;
 }
 .stat-card.heart .value { color: #f4b400; }
@@ -59,23 +59,23 @@ body{margin:0;font-family:Arial,sans-serif;background:#f4f8fc;color:#18324a}head
 /* Tabel Ringkas */
 .table-wrap {
   overflow-x: auto;
-  margin-bottom: 10px;
+  margin-bottom: 8px;
 }
 .table-main {
   width: 100%;
   border-collapse: collapse;
-  font-size: 12px;
+  font-size: 11px;
 }
 .table-main th {
   background: #123a6f;
   color: #fff;
-  padding: 5px 8px;
+  padding: 4px 6px;
   text-align: center;
   font-weight: 700;
-  font-size: 11px;
+  font-size: 10px;
 }
 .table-main td {
-  padding: 4px 8px;
+  padding: 3px 6px;
   border-bottom: 1px solid #eaf0f6;
   text-align: center;
 }
@@ -83,15 +83,15 @@ body{margin:0;font-family:Arial,sans-serif;background:#f4f8fc;color:#18324a}head
 .table-main .name-col { text-align: left; font-weight: 600; color: #18324a; }
 .table-main .rank-badge {
   display: inline-block;
-  min-width: 20px;
-  padding: 0 5px;
-  height: 20px;
-  line-height: 20px;
+  min-width: 18px;
+  padding: 0 4px;
+  height: 18px;
+  line-height: 18px;
   border-radius: 50%;
   background: #e4edf4;
   color: #123a6f;
   font-weight: 700;
-  font-size: 10px;
+  font-size: 9px;
   text-align: center;
 }
 .table-main .rank-1 { background: #f4b400; color: #fff; }
@@ -100,73 +100,72 @@ body{margin:0;font-family:Arial,sans-serif;background:#f4f8fc;color:#18324a}head
 .table-main .count {
   display: inline-block;
   background: #f0f5fb;
-  padding: 0 10px;
-  border-radius: 12px;
+  padding: 0 8px;
+  border-radius: 10px;
   font-weight: 700;
-  font-size: 12px;
+  font-size: 10px;
   color: #123a6f;
 }
-.table-main .count-high { background: #f4b40025; color: #b87c00; }
 .table-main .count-low { background: #d96b7b15; color: #b84a5a; }
 
 /* Grafik Batang */
 .bar-chart {
-  margin: 6px 0 10px;
+  margin: 4px 0 8px;
 }
 .bar-chart .bar-row {
   display: flex;
   align-items: center;
-  padding: 2px 0;
-  font-size: 11px;
-  gap: 8px;
+  padding: 1px 0;
+  font-size: 10px;
+  gap: 6px;
 }
 .bar-chart .bar-label {
-  min-width: 90px;
+  min-width: 80px;
   font-weight: 600;
   color: #18324a;
   text-align: right;
-  font-size: 10px;
+  font-size: 9px;
 }
 .bar-chart .bar-track {
   flex: 1;
-  height: 14px;
+  height: 12px;
   background: #edf2f7;
-  border-radius: 7px;
+  border-radius: 6px;
   overflow: hidden;
 }
 .bar-chart .bar-fill {
   height: 100%;
-  border-radius: 7px;
+  border-radius: 6px;
 }
 .bar-chart .bar-fill.heart { background: #f4b400; }
 .bar-chart .bar-fill.coop { background: #159a7c; }
 .bar-chart .bar-fill.lead { background: #7b61ff; }
 .bar-chart .bar-fill.uncomfortable { background: #d96b7b; }
 .bar-chart .bar-value {
-  min-width: 25px;
+  min-width: 20px;
   font-weight: 700;
   color: #123a6f;
-  font-size: 11px;
+  font-size: 10px;
 }
 .bar-chart .bar-group {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 6px;
+  gap: 4px;
 }
 
 /* Alasan Ringkas */
 .reason-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 5px;
-  margin-top: 5px;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 4px;
+  margin-top: 4px;
 }
 .reason-item {
   background: #f8fafc;
-  border-radius: 5px;
-  padding: 4px 10px;
+  border-radius: 4px;
+  padding: 3px 8px;
   border-left: 3px solid #d9e4ef;
-  font-size: 10px;
+  font-size: 9px;
 }
 .reason-item .who { font-weight: 700; color: #123a6f; }
 .reason-item .text { color: #4a5d70; }
@@ -180,17 +179,17 @@ body{margin:0;font-family:Arial,sans-serif;background:#f4f8fc;color:#18324a}head
 @media(max-width:700px){
   .stat-grid { grid-template-columns: 1fr 1fr; }
   .bar-chart .bar-group { grid-template-columns: 1fr; }
-  .bar-chart .bar-label { min-width: 60px; font-size: 9px; }
+  .bar-chart .bar-label { min-width: 60px; font-size: 8px; }
 }
 @media(max-width:450px){
   .stat-grid { grid-template-columns: 1fr 1fr; }
-  .stat-card .value { font-size: 16px; }
-  .table-main { font-size: 10px; }
-  .table-main th, .table-main td { padding: 3px 4px; }
+  .stat-card .value { font-size: 14px; }
+  .table-main { font-size: 9px; }
+  .table-main th, .table-main td { padding: 2px 3px; }
   .reason-grid { grid-template-columns: 1fr; }
 }
 
-/* Cetak */
+/* CETAK - SANGAT RINGKAS */
 @media print {
   .stat-grid { page-break-after: avoid; }
   .table-wrap { page-break-after: avoid; }
@@ -198,14 +197,15 @@ body{margin:0;font-family:Arial,sans-serif;background:#f4f8fc;color:#18324a}head
   .reason-grid { page-break-after: avoid; }
   .stat-card { border: 1px solid #d0dae6 !important; box-shadow: none !important; }
   .table-main tr:nth-child(even) { background: #f5f7fa !important; }
-  .table-main td { padding: 3px 4px; font-size: 9px; }
-  .table-main th { padding: 3px 4px; font-size: 9px; }
-  .bar-chart .bar-track { height: 10px; }
-  .bar-chart .bar-label { min-width: 70px; font-size: 8px; }
-  .bar-chart .bar-value { font-size: 9px; min-width: 20px; }
-  .reason-item { font-size: 8px; padding: 3px 8px; }
-  .result-head { background: #e8edf3 !important; }
-  .ok, .private { font-size: 9px !important; padding: 4px 8px !important; }
+  .table-main td { padding: 2px 4px; font-size: 8px; }
+  .table-main th { padding: 2px 4px; font-size: 8px; }
+  .bar-chart .bar-track { height: 8px; }
+  .bar-chart .bar-label { min-width: 60px; font-size: 7px; }
+  .bar-chart .bar-value { font-size: 8px; min-width: 18px; }
+  .reason-item { font-size: 7px; padding: 2px 6px; }
+  .result-head { background: #e8edf3 !important; padding: 4px 8px; font-size: 10px; }
+  .ok, .private { font-size: 8px !important; padding: 3px 6px !important; }
+  .panel { padding: 10px !important; }
 }
 
 .print-sheet{background:#fff;color:#172b3a;border:1px solid #d8e2ec;border-radius:12px;padding:12px;margin-top:15px;line-height:1.18}.print-sheet{page-break-after:avoid;break-after:avoid}.print-head{text-align:center;border-bottom:2px solid #123a6f;padding-bottom:12px;margin-bottom:14px}.print-head h1{font-size:18px;margin:0;color:#123a6f}.print-head h2{font-size:14px;margin:3px 0 7px}.print-meta{display:flex;justify-content:space-between;gap:12px;text-align:left;font-size:11px;margin-top:3px}.print-instruction{font-size:10px;background:#f6f9fc;border:1px solid #d9e4ef;border-radius:7px;padding:7px;margin-bottom:8px}.print-q{border:1px solid #cfdbe7;border-radius:7px;padding:6px;margin:4px 0;page-break-inside:avoid}.print-q h3{font-size:12px;margin:0 0 4px;color:#123a6f}.print-q p{font-size:10px;margin:3px 0 5px}.print-q .line{font-size:9px;margin:4px 0;min-height:12px}.print-footer{text-align:center;font-size:7px;color:#647687;margin-top:5px;border-top:1px solid #d9e4ef;padding-top:3px}
@@ -215,7 +215,7 @@ body{margin:0;font-family:Arial,sans-serif;background:#f4f8fc;color:#18324a}head
 <main><section id="teacher"><div class="panel"><h2>👩‍🏫 Buat Sesi Sosiometri</h2><div class="grid"><div><label>Sekolah</label><input id="school"></div><div><label>Kelas / Rombel</label><input id="className"></div><div><label>Tahun Ajaran</label><input id="year" value="2026/2027"></div><div><label>Guru BK</label><input id="counselor"></div></div><label>Daftar nama siswa — satu nama per baris</label><textarea id="students" placeholder="Aisyah Putri&#10;Bima Aditya&#10;Citra Kirana"></textarea><div class="actions"><button class="green" onclick="create()">💾 Buat Sesi & Bagikan</button></div><div id="tmsg"></div></div><div class="panel"><h2>📱 Sesi Aktif</h2><div id="session">Belum ada sesi.</div></div></section>
 <section id="student" class="hidden"><div class="panel"><h2>📱 Pengisian Siswa</h2><div class="notice">Hasil sosiometri hanya dapat dilihat Guru BK.</div><label>Kode Sesi</label><input id="scode"><label>Nama Kamu</label><select id="me"></select><div id="q"></div><div class="actions"><button class="green" onclick="send()">📨 Kirim Jawaban</button></div><div id="smsg"></div></div></section>
 <section id="paper" class="hidden"><div class="panel"><h2>📄 Mode Tanpa HP</h2><div class="notice"><b>Mode Tanpa HP:</b> siswa mengisi lembar kertas, lalu Guru BK memasukkan hasilnya di sini. <b>Entri tersimpan sementara otomatis di perangkat ini.</b> Jika ada acara/kendala di tengah pengisian, Ibu dapat kembali dan melanjutkan dari data terakhir. Data yang sudah berhasil masuk ke JAWABAN tidak akan dikirim dua kali.</div><div id="paperEntry"></div><div class="actions"><button class="gold" onclick="paper()">🔄 Muat Entri</button><button class="dark" onclick="submitPaper()">💾 Simpan Hasil Entri</button></div><div id="pmsg"></div></div><div class="panel"><h3>🖨️ Lembar Sosiometri untuk Dicetak</h3><div class="notice">Klik <b>🖨️ Cetak Lembar Siswa</b> untuk mencetak lembar yang akan dibagikan kepada siswa. Lembar ini sudah memuat identitas sesi dan seluruh pertanyaan.</div><div id="paperRows"></div><button class="gold" onclick="printSociometry()">🖨️ Cetak Lembar Siswa</button></div></section>
-<section id="result" class="hidden"><div class="panel"><h2>🗺️ Hasil Guru BK</h2><div class="grid"><div><label>Kode Sesi</label><input id="rcode"></div><div><label>PIN Guru BK</label><input id="rpin"></div></div><div class="actions"><button class="dark" onclick="results()">🔐 Buka Hasil</button><button class="soft" onclick="openPrintPage()">🖨️ Cetak / PDF</button></div><div id="res"></div></div></section></main>
+<section id="result" class="hidden"><div class="panel"><h2>🗺️ Hasil Guru BK</h2><div class="grid"><div><label>Kode Sesi</label><input id="rcode"></div><div><label>PIN Guru BK</label><input id="rpin"></div></div><div class="actions"><button class="dark" onclick="results()">🔐 Buka Hasil</button><button class="soft" onclick="printResults()">🖨️ Cetak / PDF</button></div><div id="res"></div></div></section></main>
 <script>
 const SERVER_URL='https://script.google.com/macros/s/AKfycbwawXgXFSwSO7Kj9J35xF7ewGJchGO4TeqL6OuJreGPX2p_Q1klsvvGHx_DQnD0sMfT/exec';let session=null;try{session=JSON.parse(localStorage.getItem('NAFAS_SOSIO_SESSION')||'null')}catch(e){session=null}function saveSession(){if(session)localStorage.setItem('NAFAS_SOSIO_SESSION',JSON.stringify(session))}const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));async function api(action,data){let r=await fetch(SERVER_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(Object.assign({action},data||{}))});return await r.json()}
 function page(id){['teacher','student','paper','result'].forEach(x=>document.getElementById(x).classList.toggle('hidden',x!==id));['t','s','p','r'].forEach(x=>document.getElementById('n'+x)?.classList.remove('active'));let m={teacher:'nt',student:'ns',paper:'np',result:'nr'};document.getElementById(m[id]).classList.add('active');if(id==='student')loadStudent();if(id==='paper')paper();if(id==='teacher')showTeacherSession();if(id==='result'){if(session){document.getElementById('rcode').value=session.code||'';document.getElementById('rpin').value=session.pin||''}}}
@@ -281,7 +281,7 @@ function renderSimpleResults(r) {
   const reasonsLead = getReasons('lead', 'leadReason');
   const reasonsUncomfortable = getReasons('uncomfortable', 'uncomfortableReason');
 
-  // --- RENDER ---
+  // --- RENDER HTML ---
   let html = '';
 
   // Header
@@ -290,7 +290,7 @@ function renderSimpleResults(r) {
     <div class="info">Kode: <strong>${esc(code)}</strong></div>
   </div>`;
 
-  // 4 Kartu Statistik - Pemenang Tertinggi
+  // 4 Kartu Statistik
   const topHeart = rankHeart[0] || { name: '-', count: 0 };
   const topCoop = rankCoop[0] || { name: '-', count: 0 };
   const topLead = rankLead[0] || { name: '-', count: 0 };
@@ -307,7 +307,7 @@ function renderSimpleResults(r) {
   html += `<div class="table-wrap">
     <table class="table-main">
       <thead><tr>
-        <th style="width:32px;">#</th>
+        <th style="width:28px;">#</th>
         <th style="text-align:left;">Nama</th>
         <th>❤️</th>
         <th>🤝</th>
@@ -316,7 +316,6 @@ function renderSimpleResults(r) {
         <th>Total</th>
       </tr></thead><tbody>`;
   
-  // Urutkan berdasarkan total pilihan terbanyak
   const sorted = [...st].map(s => ({
     ...s,
     total: counts.heart[s.id] + counts.coop[s.id] + counts.lead[s.id] + counts.uncomfortable[s.id]
@@ -347,14 +346,14 @@ function renderSimpleResults(r) {
   
   html += `</tbody></table></div>`;
 
-  // GRAFIK BATANG (TOP 5 per kategori)
+  // GRAFIK BATANG (TOP 5)
   html += `<div class="bar-chart">`;
   
   const makeBar = (rankData, cls, label, icon) => {
     const top5 = rankData.slice(0, 5).filter(x => x.count > 0);
     if (top5.length === 0) return '';
     const maxCount = Math.max(1, ...top5.map(x => x.count));
-    let out = `<div style="margin-bottom:4px;"><strong style="font-size:11px;color:#123a6f;">${icon} ${label}</strong></div>`;
+    let out = `<div style="margin-bottom:3px;"><strong style="font-size:10px;color:#123a6f;">${icon} ${label}</strong></div>`;
     top5.forEach(item => {
       const pct = Math.round((item.count / maxCount) * 100);
       out += `<div class="bar-row">
@@ -375,8 +374,8 @@ function renderSimpleResults(r) {
   html += `<div>${makeBar(rankUncomfortable, 'uncomfortable', 'Kurang Nyaman', '🔎')}</div>`;
   html += `</div></div>`;
 
-  // ALASAN (TOP 2 per kategori, masing-masing 2 alasan)
-  html += `<div style="margin-top:6px;"><h4 style="margin:0 0 4px;font-size:11px;color:#6b7d90;">📝 Alasan</h4>
+  // ALASAN (TOP 2)
+  html += `<div style="margin-top:5px;"><h4 style="margin:0 0 3px;font-size:10px;color:#6b7d90;">📝 Alasan</h4>
   <div class="reason-grid">`;
   
   const makeReasons = (rankData, reasonsData, cls) => {
@@ -401,12 +400,12 @@ function renderSimpleResults(r) {
   
   html += `</div></div>`;
 
-  html += `<div class="private" style="margin-top:8px;font-size:10px;padding:6px 12px;">🔐 Khusus Guru BK. Gunakan secara bijak.</div>`;
+  html += `<div class="private" style="margin-top:6px;font-size:9px;padding:4px 10px;">🔐 Khusus Guru BK. Gunakan secara bijak.</div>`;
   
   return html;
 }
 
-// ===== FUNGSI RESULTS - MEMANGGIL renderSimpleResults =====
+// ===== FUNGSI RESULTS =====
 async function results(){
   const code = document.getElementById('rcode').value.trim();
   const pin = document.getElementById('rpin').value.trim();
@@ -423,11 +422,11 @@ async function results(){
   
   if(!r.session) r.session = session;
   
-  // PASTIKAN memanggil renderSimpleResults, BUKAN renderCompactResults
+  // PASTIKAN memanggil renderSimpleResults
   document.getElementById('res').innerHTML = renderSimpleResults(r);
 }
 
-// ===== FUNGSI CETAK =====
+// ===== FUNGSI CETAK - MENGGUNAKAN TAMPILAN YANG SAMA =====
 function printResults(){
   const source = document.getElementById('res');
   if(!source || !source.innerHTML.trim()){ 
@@ -436,71 +435,29 @@ function printResults(){
   }
   
   const code = document.getElementById('rcode')?.value.trim() || '';
-  const w = window.open('','_blank','width=950,height=800');
+  const w = window.open('','_blank','width=900,height=750');
   if(!w){ alert('Jendela cetak diblokir. Izinkan pop-up.'); return; }
   
   const className = session?.className || '';
   
-  w.document.write(`<!doctype html><html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Hasil Sosiometri ${code}</title><style>
-    *{box-sizing:border-box}
-    body{margin:0;background:#fff;color:#17324d;font-family:Arial,sans-serif;font-size:11px;padding:10px}
-    .toolbar{position:sticky;top:0;background:#fff;padding:6px;text-align:center;border-bottom:1px solid #d8e2ec;z-index:5;margin-bottom:8px}
-    .toolbar button{border:0;border-radius:6px;padding:6px 14px;background:#f4b400;color:#17324d;font-weight:800;cursor:pointer;font-size:11px}
-    .print-header{text-align:center;border-bottom:2px solid #123a6f;padding-bottom:4px;margin-bottom:6px}
-    .print-header h1{font-size:14px;margin:0;color:#123a6f}
-    .print-header h2{font-size:10px;margin:1px 0;color:#4a5d70}
-    .print-meta{display:flex;justify-content:center;gap:12px;font-size:8px;color:#6b7d90;margin-top:1px}
-    .result-head{display:flex;justify-content:space-between;flex-wrap:wrap;padding:4px 8px;background:#f0f6fc;border-radius:6px;margin-bottom:6px;font-size:10px}
-    .result-head .info{color:#4a5d70}
-    .result-head .info strong{color:#123a6f}
-    .stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:5px;margin-bottom:6px}
-    .stat-card{background:#fff;border-radius:6px;padding:4px 8px;border:1px solid #e4edf4;text-align:center}
-    .stat-card .label{font-size:8px;color:#6b7d90;text-transform:uppercase;letter-spacing:0.2px}
-    .stat-card .value{font-size:16px;font-weight:900;color:#123a6f;margin:1px 0}
-    .stat-card .sub{font-size:8px;color:#8a9daf}
-    .stat-card.heart .value{color:#f4b400}
-    .stat-card.coop .value{color:#159a7c}
-    .stat-card.lead .value{color:#7b61ff}
-    .stat-card.uncomfortable .value{color:#d96b7b}
-    .table-wrap{overflow-x:auto;margin-bottom:6px}
-    .table-main{width:100%;border-collapse:collapse;font-size:9px}
-    .table-main th{background:#123a6f;color:#fff;padding:3px 5px;text-align:center;font-weight:700;font-size:8px}
-    .table-main td{padding:2px 5px;border-bottom:1px solid #eaf0f6;text-align:center}
-    .table-main tr:nth-child(even){background:#f8fafc}
-    .table-main .name-col{text-align:left;font-weight:600;color:#18324a}
-    .table-main .rank-badge{display:inline-block;min-width:16px;padding:0 3px;height:16px;line-height:16px;border-radius:50%;background:#e4edf4;color:#123a6f;font-weight:700;font-size:8px;text-align:center}
-    .table-main .rank-1{background:#f4b400;color:#fff}
-    .table-main .rank-2{background:#b8c6d4;color:#fff}
-    .table-main .rank-3{background:#d9b382;color:#fff}
-    .table-main .count{display:inline-block;background:#f0f5fb;padding:0 6px;border-radius:8px;font-weight:700;font-size:9px;color:#123a6f}
-    .table-main .count-low{background:#d96b7b15;color:#b84a5a}
-    .bar-chart{margin:4px 0 6px}
-    .bar-chart .bar-row{display:flex;align-items:center;padding:1px 0;font-size:9px;gap:5px}
-    .bar-chart .bar-label{min-width:65px;font-weight:600;color:#18324a;text-align:right;font-size:8px}
-    .bar-chart .bar-track{flex:1;height:10px;background:#edf2f7;border-radius:5px;overflow:hidden}
-    .bar-chart .bar-fill{height:100%;border-radius:5px}
-    .bar-chart .bar-fill.heart{background:#f4b400}
-    .bar-chart .bar-fill.coop{background:#159a7c}
-    .bar-chart .bar-fill.lead{background:#7b61ff}
-    .bar-chart .bar-fill.uncomfortable{background:#d96b7b}
-    .bar-chart .bar-value{min-width:20px;font-weight:700;color:#123a6f;font-size:9px}
-    .bar-chart .bar-group{display:grid;grid-template-columns:1fr 1fr;gap:5px}
-    .reason-grid{display:grid;grid-template-columns:1fr 1fr;gap:3px;margin-top:3px}
-    .reason-item{background:#f8fafc;border-radius:4px;padding:2px 8px;border-left:2px solid #d9e4ef;font-size:8px}
-    .reason-item .who{font-weight:700;color:#123a6f}
-    .reason-item .text{color:#4a5d70}
-    .reason-item .from{font-size:7px;color:#8a9daf}
-    .reason-item.heart{border-left-color:#f4b400}
-    .reason-item.coop{border-left-color:#159a7c}
-    .reason-item.lead{border-left-color:#7b61ff}
-    .reason-item.uncomfortable{border-left-color:#d96b7b}
-    .private{background:#fff0f4;border:1px solid #efb3c2;padding:3px 8px;border-radius:4px;margin-top:6px;font-size:8px}
-    .ok{background:#eaf8f2;border:1px solid #9dd9c4;padding:3px 8px;border-radius:4px;margin-bottom:6px;font-size:9px}
-    @media(max-width:650px){.stat-grid{grid-template-columns:1fr 1fr}.bar-chart .bar-group{grid-template-columns:1fr}.bar-chart .bar-label{min-width:50px;font-size:7px}.reason-grid{grid-template-columns:1fr}}
-    @page{size:A4;margin:4mm}
-    @media print{.toolbar{display:none}body{padding:2mm}.stat-card{border:1px solid #d0dae6!important;box-shadow:none!important}.table-main td{padding:1px 3px;font-size:8px}.table-main th{padding:2px 3px;font-size:7px}.bar-chart .bar-track{height:8px}.result-head{background:#e8edf3!important}.ok,.private{font-size:7px!important;padding:2px 6px!important}}
-  </style></head><body>
-  <div class="toolbar"><button onclick="window.print()">🖨️ CETAK / SIMPAN PDF</button></div>
+  // Ambil CSS dari halaman utama untuk tampilan cetak
+  const styles = document.querySelector('style').innerHTML;
+  
+  w.document.write(`<!doctype html><html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Hasil Sosiometri ${code}</title>
+  <style>${styles}</style>
+  <style>
+    /* TAMBAHAN KHUSUS CETAK */
+    body { padding: 8mm; background: #fff; }
+    .toolbar-print { position: sticky; top: 0; background: #fff; padding: 8px; text-align: center; border-bottom: 2px solid #123a6f; z-index: 10; margin-bottom: 12px; }
+    .toolbar-print button { border: 0; border-radius: 8px; padding: 8px 20px; background: #f4b400; color: #17324d; font-weight: 800; cursor: pointer; font-size: 13px; }
+    .print-header { text-align: center; border-bottom: 2px solid #123a6f; padding-bottom: 6px; margin-bottom: 10px; }
+    .print-header h1 { font-size: 16px; margin: 0; color: #123a6f; }
+    .print-header h2 { font-size: 11px; margin: 2px 0; color: #4a5d70; }
+    .print-meta { display: flex; justify-content: center; gap: 20px; font-size: 9px; color: #6b7d90; margin-top: 2px; }
+    @media print { .toolbar-print { display: none; } body { padding: 3mm; } }
+  </style>
+  </head><body>
+  <div class="toolbar-print"><button onclick="window.print()">🖨️ CETAK / SIMPAN PDF</button></div>
   <div class="print-header">
     <h1>📊 HASIL SOSIOMETRI</h1>
     <h2>${esc(className)}</h2>

@@ -179,7 +179,7 @@ body{margin:0;font-family:Arial,sans-serif;background:#f4f8fc;color:#18324a}head
 <div class="panel"><h2>📋 Daftar Sesi</h2><div id="sessionList">Memuat...</div></div></section>
 <section id="student" class="hidden"><div class="panel"><h2>📱 Pengisian Siswa</h2><div class="notice">Hasil sosiometri hanya dapat dilihat Guru BK.</div><label>Kode Sesi</label><input id="scode"><label>Nama Kamu</label><select id="me"></select><div id="q"></div><div class="actions"><button class="green" onclick="send()">📨 Kirim Jawaban</button></div><div id="smsg"></div></div></section>
 <section id="paper" class="hidden"><div class="panel"><h2>📄 Mode Tanpa HP</h2><div class="notice"><b>Mode Tanpa HP:</b> siswa mengisi lembar kertas, lalu Guru BK memasukkan hasilnya di sini. <b>Entri tersimpan sementara otomatis di perangkat ini.</b></div><div id="paperEntry"></div><div class="actions"><button class="gold" onclick="paper()">🔄 Muat Entri</button><button class="dark" onclick="submitPaper()">💾 Simpan Hasil Entri</button></div><div id="pmsg"></div></div><div class="panel"><h3>🖨️ Lembar Sosiometri untuk Dicetak</h3><div id="paperRows"></div><button class="gold" onclick="printSociometry()">🖨️ Cetak Lembar Siswa</button></div></section>
-<section id="result" class="hidden"><div class="panel"><h2>🗺️ Hasil Guru BK</h2><div class="grid"><div><label>Kode Sesi</label><input id="rcode"></div><div><label>PIN Guru BK</label><input id="rpin"></div></div><div class="actions"><button class="dark" onclick="results()">🔐 Buka Hasil</button><button class="gold" onclick="printResults()">🖨️ Cetak / PDF</button></div><div id="res"></div></div></section></main>
+<section id="result" class="hidden"><div class="panel"><h2>🗺️ Hasil Guru BK</h2><div class="grid"><div><label>Kode Sesi</label><input id="rcode"></div><div><label>PIN Guru BK</label><input id="rpin"></div></div><div class="actions"><button class="dark" onclick="results()">🔐 Buka Hasil</button><button class="gold" onclick="openPrintPage()">🖨️ Cetak / PDF</button></div><div id="res"></div></div></section></main>
 <script>
 const SERVER_URL='https://script.google.com/macros/s/AKfycbwawXgXFSwSO7Kj9J35xF7ewGJchGO4TeqL6OuJreGPX2p_Q1klsvvGHx_DQnD0sMfT/exec';
 
@@ -758,4 +758,5 @@ function init() {
 
 // Jalankan saat halaman dimuat
 init();
+function openPrintPage(){let code=document.getElementById('rcode')?.value.trim()||'';let pin=document.getElementById('rpin')?.value.trim()||'';if(!code||!pin){alert('Masukkan Kode Sesi dan PIN Guru BK terlebih dahulu.');return}let u='cetak-hasil.html?code='+encodeURIComponent(code)+'&pin='+encodeURIComponent(pin);let w=window.open(u,'_blank');if(!w)alert('Izinkan pop-up agar laporan dapat dibuka.')}
 </script></body></html>

@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Sosio Digital NaFaS BK - Offline</title>
+<title>Sosio Digital NaFaS BK</title>
 <style>
 * { box-sizing: border-box; }
 body { margin:0; font-family:'Segoe UI',Arial,sans-serif; background:#f0f5fb; color:#18324a; }
@@ -179,15 +179,6 @@ button:hover { transform:translateY(-1px); box-shadow:0 4px 12px rgba(0,0,0,0.10
     </div>
   </div>
 
-  <!-- APLIKASI -->
-  <div id="appContainer">
-    <div class="panel text-center" style="padding:30px 16px;background:#f8faff;">
-      <div style="font-size:40px;margin-bottom:6px;">🔒</div>
-      <div style="font-size:15px;font-weight:600;color:#0d2b4f;">Masukkan kunci akses untuk membuka aplikasi</div>
-      <div style="font-size:11px;color:#6a8aaa;">♾️ Unlimited Siswa • Unlimited Sesi</div>
-    </div>
-  </div>
-
   <!-- KONTEN APLIKASI -->
   <div id="appContent" style="display:none;">
     <section id="teacher">
@@ -251,7 +242,7 @@ button:hover { transform:translateY(-1px); box-shadow:0 4px 12px rgba(0,0,0,0.10
 
 <script>
 // ============================================================
-// KONFIGURASI - GANTI KUNCI SESUAI KEINGINAN
+// KONFIGURASI
 // ============================================================
 const MASTER_KEY = 'NAFAS-2026';
 const GROUP_CODE = 'GRP-001';
@@ -274,7 +265,7 @@ const esc = s => String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>
 // FUNGSI KELUAR
 // ============================================================
 function keluarAplikasi() {
-  if (confirm('Yakin ingin keluar?')) {
+  if (confirm('Yakin ingin keluar dari aplikasi?')) {
     localStorage.removeItem('NAFAS_CURRENT_SESSION');
     location.reload();
   }
@@ -339,7 +330,6 @@ function validateAndOpenApp() {
 function openApp() {
   document.getElementById('loginPanel').style.display = 'none';
   document.getElementById('dashboardPanel').style.display = 'none';
-  document.getElementById('appContainer').style.display = 'none';
   document.getElementById('appContent').style.display = 'block';
   document.getElementById('mainNav').style.display = 'flex';
   document.getElementById('btnLogout').style.display = 'block';
@@ -353,7 +343,7 @@ function openApp() {
 }
 
 // ============================================================
-// MANAJEMEN SESSIONS (OFFLINE)
+// MANAJEMEN SESSIONS
 // ============================================================
 function getStoredSessions() {
   try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || []; } 
@@ -506,7 +496,7 @@ function viewResult(code) {
 }
 
 // ============================================================
-// CREATE SESSION (OFFLINE)
+// CREATE SESSION
 // ============================================================
 function showTeacherSession() {
   const el = document.getElementById('session');
@@ -601,7 +591,7 @@ function printShareCard() {
 }
 
 // ============================================================
-// STUDENT MODE (OFFLINE)
+// STUDENT MODE
 // ============================================================
 function block(cls, title, txt, n) {
   let h = `<div class="panel aspect ${cls}"><h3>${title}</h3><p style="font-size:12px;color:#4a6a8a;margin:0 0 6px;">${txt}</p>`;
@@ -672,7 +662,6 @@ function send() {
     return; 
   }
   
-  // Simpan ke localStorage
   const sessionData = getSessionByCode(document.getElementById('scode').value);
   if (!sessionData) {
     note('smsg','❌ Sesi tidak ditemukan.', 'error');
@@ -680,8 +669,6 @@ function send() {
   }
   
   if (!sessionData.responses) sessionData.responses = [];
-  
-  // Cek apakah sudah mengisi
   if (sessionData.responses.find(r => r.respondent === me)) {
     note('smsg','⚠️ Kamu sudah mengisi sebelumnya.', 'notice');
     return;
@@ -696,7 +683,6 @@ function send() {
     submittedAt: new Date().toISOString()
   });
   
-  // Update storage
   let sessions = getStoredSessions();
   sessions = sessions.map(s => s.code === sessionData.code ? sessionData : s);
   saveStoredSessions(sessions);
@@ -707,7 +693,7 @@ function send() {
 }
 
 // ============================================================
-// PAPER MODE (OFFLINE)
+// PAPER MODE
 // ============================================================
 function paper() {
   if(!session) {
@@ -804,7 +790,6 @@ function submitPaper() {
       return;
     }
     
-    // Cek duplikat
     if (sessionData.responses.find(r => r.respondent === s.id)) continue;
     
     sessionData.responses.push({
@@ -825,7 +810,7 @@ function submitPaper() {
 }
 
 // ============================================================
-// HASIL (OFFLINE)
+// HASIL
 // ============================================================
 function renderResult(data) {
   const rs = data.responses || [];
@@ -990,7 +975,6 @@ function init() {
 }
 
 init();
-function openPrintPage(){let code=document.getElementById('rcode')?.value.trim()||'';let pin=document.getElementById('rpin')?.value.trim()||'';if(!code||!pin){alert('Masukkan Kode Sesi dan PIN Guru BK terlebih dahulu.');return}let u='cetak-hasil.html?code='+encodeURIComponent(code)+'&pin='+encodeURIComponent(pin);let w=window.open(u,'_blank');if(!w)alert('Izinkan pop-up agar laporan dapat dibuka.')}
 </script>
 </body>
 </html>

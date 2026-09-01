@@ -5,7 +5,8 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Sosio Digital NaFaS BK</title>
 <style>
-*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:#eef4fa;color:#18324a}
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:#eef4fa;color:#18324a}
 header{background:linear-gradient(135deg,#0d2b4f,#1a5a9e);color:#fff;padding:8px 16px}
 .wrap{max-width:1100px;margin:auto}
 .flex-header{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap}
@@ -184,7 +185,7 @@ button:hover{transform:translateY(-1px)}
 
 <script>
 // ============================================================
-// KONFIGURASI
+// KONFIGURASI - GANTI KUNCI DI SINI
 // ============================================================
 const KUNCI = 'NAFAS-2026';
 const GRUP = 'GRP-001';
@@ -921,7 +922,6 @@ function cetakHasil() {
 // INISIALISASI
 // ============================================================
 updateDashboard();
-function openPrintPage(){let code=document.getElementById('rcode')?.value.trim()||'';let pin=document.getElementById('rpin')?.value.trim()||'';if(!code||!pin){alert('Masukkan Kode Sesi dan PIN Guru BK terlebih dahulu.');return}let u='cetak-hasil.html?code='+encodeURIComponent(code)+'&pin='+encodeURIComponent(pin);let w=window.open(u,'_blank');if(!w)alert('Izinkan pop-up agar laporan dapat dibuka.')}
 </script>
 </body>
 </html>

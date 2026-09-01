@@ -100,6 +100,8 @@ button:hover{transform:translateY(-1px)}
 .coop{border-left-color:#159a7c}
 .lead{border-left-color:#7b61ff}
 .uncomfortable{border-left-color:#d96b7b}
+.progress-bar{background:#eaf1f9;border-radius:4px;height:4px;width:100%;margin-top:2px;overflow:hidden}
+.progress-fill{background:#159a7c;height:4px;border-radius:4px;transition:width 0.3s}
 @media(max-width:650px){.brand{font-size:15px}}
 </style>
 </head>
@@ -128,9 +130,6 @@ button:hover{transform:translateY(-1px)}
         <div class="toggle-link">
             Belum punya akun? <a onclick="showRegister()">Daftar di sini</a>
         </div>
-        <div class="toggle-link" style="margin-top:6px;font-size:11px;color:#8a9aae;">
-            🔑 Demo: email: demo@nafas.com | pass: 123456
-        </div>
     </div>
     
     <!-- FORM REGISTER -->
@@ -158,7 +157,7 @@ button:hover{transform:translateY(-1px)}
         <div class="wrap flex-header">
             <div><div class="brand">🌟 Sosio Digital <span>NaFaS BK</span></div>
             <div class="tag">Peta Pertemanan • Kolaborasi • Kepemimpinan</div></div>
-            <div style="display:flex;align-items:center;gap:10px;">
+            <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
                 <span style="font-size:11px;opacity:0.8;" id="userDisplay">👤 Guru</span>
                 <button class="btn-logout" onclick="logout()">🚪 Keluar</button>
             </div>
@@ -200,6 +199,16 @@ button:hover{transform:translateY(-1px)}
                     <div id="tmsg"></div>
                 </div>
                 <div class="panel"><h2>📋 Daftar Sesi</h2><div id="sessionList">Memuat...</div></div>
+                <div class="panel">
+                    <h2>💾 Backup & Restore Data</h2>
+                    <div class="actions">
+                        <button class="gold" onclick="exportData()">📤 Ekspor Semua Data (JSON)</button>
+                        <button class="soft" onclick="document.getElementById('importInput').click()">📥 Impor Data (JSON)</button>
+                        <input type="file" id="importInput" accept=".json" style="display:none" onchange="importData(event)">
+                        <button class="soft" onclick="resetAllData()" style="color:#d96b7b;">🗑️ Reset Semua Data</button>
+                    </div>
+                    <div id="backupMsg"></div>
+                </div>
             </section>
 
             <section id="student" class="hidden">
@@ -539,6 +548,9 @@ function renderSessionList() {
         const statusLabel = s.isActive !== false ? '🟢 Aktif' : '🔒 Selesai';
         const createdDate = s.createdAt ? new Date(s.createdAt).toLocaleDateString('id-ID') : '-';
         const studentCount = s.students ? s.students.length : 0;
+        const responses = s.responses || [];
+        const doneCount = responses.length;
+        const progress = studentCount > 0 ? Math.round((doneCount / studentCount) * 100) : 0;
         
         html += `
             <div class="session-item">
@@ -546,6 +558,8 @@ function renderSessionList() {
                 <div class="s-class">${esc(s.className || 'Kelas tidak terisi')}</div>
                 <div class="s-meta">${esc(s.school || '')} • ${esc(s.year || '')} • ${studentCount} siswa</div>
                 <div class="s-meta">📅 ${createdDate}</div>
+                <div class="s-meta">📊 ${doneCount}/${studentCount} mengisi (${progress}%)</div>
+                <div class="progress-bar"><div class="progress-fill" style="width:${progress}%;"></div></div>
                 <span class="s-status ${statusClass}">${statusLabel}</span>
                 <div class="s-actions">
                     <button class="soft" onclick="loadSession('${s.code}')">📂 Buka</button>
@@ -1040,42 +1054,214 @@ function cetakHasil() {
     const found = getSessionByCode(code);
     const className = found?.className || '';
     const school = found?.school || '';
+    const students = found?.students || [];
+    const responses = found?.responses || [];
+    const doneCount = responses.length;
+    const totalCount = students.length;
     
     const w = window.open('', '_blank', 'width=900,height=700');
     if (!w) { alert('⚠️ Izinkan pop-up.'); return; }
     
-    const styles = document.querySelector('style').innerHTML;
-    
     w.document.write(`<!doctype html><html lang="id"><head>
-        <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width,initial-scale=1">
         <title>Hasil Sosiometri ${code}</title>
         <style>
-            ${styles}
-            body { padding: 3mm; background: #fff; margin: 0; }
-            .toolbar-print { position: sticky; top: 0; background: #fff; padding: 4px; text-align: center; border-bottom: 1px solid #d0dae6; z-index: 10; margin-bottom: 4px; }
-            .toolbar-print button { border: 0; border-radius: 4px; padding: 4px 12px; background: #f4b400; color: #17324d; font-weight: 700; cursor: pointer; font-size: 10px; }
-            .toolbar-print button.close-btn { background: #e4edf4; margin-left: 4px; }
-            .print-header { text-align: center; border-bottom: 1px solid #123a6f; padding-bottom: 3px; margin-bottom: 4px; }
-            .print-header h1 { font-size: 12px; margin: 0; color: #123a6f; }
-            .print-header h2 { font-size: 10px; margin: 1px 0; color: #4a5d70; font-weight: 400; }
-            .print-meta { display: flex; justify-content: center; gap: 10px; font-size: 7px; color: #6b7d90; margin-top: 1px; }
-            @media print { .toolbar-print { display: none; } body { padding: 2mm; } .panel { padding: 3px !important; margin-bottom: 3px !important; } }
-            @page { size: A4 landscape; margin: 3mm; }
+            * { box-sizing: border-box; margin: 0; padding: 0; }
+            body { 
+                font-family: Arial, Helvetica, sans-serif; 
+                font-size: 8px; 
+                padding: 4mm; 
+                background: #fff; 
+                color: #1a2a3a;
+                margin: 0;
+            }
+            .print-header {
+                text-align: center;
+                border-bottom: 2px solid #123a6f;
+                padding-bottom: 3px;
+                margin-bottom: 5px;
+            }
+            .print-header h1 { font-size: 14px; color: #123a6f; margin: 0; }
+            .print-header h2 { font-size: 10px; font-weight: 400; color: #4a5d70; margin: 2px 0; }
+            .print-meta { 
+                display: flex; 
+                justify-content: center; 
+                gap: 12px; 
+                font-size: 7px; 
+                color: #6b7d90; 
+                margin-top: 2px; 
+                flex-wrap: wrap;
+            }
+            .print-meta strong { color: #123a6f; }
+            
+            table {
+                width: 100%;
+                border-collapse: collapse;
+                font-size: 7.5px;
+                margin-top: 4px;
+            }
+            th {
+                background: #123a6f;
+                color: #fff;
+                padding: 2px 3px;
+                text-align: center;
+                font-weight: 700;
+                font-size: 6.5px;
+                text-transform: uppercase;
+                letter-spacing: 0.3px;
+            }
+            td {
+                padding: 2px 3px;
+                border-bottom: 1px solid #e8edf2;
+                text-align: center;
+                vertical-align: middle;
+            }
+            .name-col { text-align: left; font-weight: 600; padding-left: 4px; }
+            .rank-badge {
+                display: inline-block;
+                min-width: 14px;
+                height: 14px;
+                line-height: 14px;
+                border-radius: 50%;
+                background: #eef2f6;
+                color: #123a6f;
+                font-weight: 700;
+                font-size: 6.5px;
+                text-align: center;
+            }
+            .rank-1 { background: #f4b400; color: #fff; }
+            .rank-2 { background: #b8c8d8; color: #fff; }
+            .rank-3 { background: #d9b382; color: #fff; }
+            
+            .count {
+                display: inline-block;
+                background: #eaf1f9;
+                padding: 0 4px;
+                border-radius: 4px;
+                font-weight: 700;
+                font-size: 8px;
+                color: #123a6f;
+                min-width: 16px;
+            }
+            .count-low { background: #fde8ec; color: #b84a5a; }
+            .total-col { font-weight: 900; color: #123a6f; font-size: 9px; }
+            
+            .status-done { color: #159a7c; font-weight: 700; }
+            .status-pending { color: #b8a050; }
+            
+            .result-footer {
+                margin-top: 4px;
+                font-size: 5.5px;
+                color: #8a9daf;
+                text-align: center;
+                border-top: 1px solid #d9e4ef;
+                padding-top: 3px;
+            }
+            
+            .summary-bar {
+                display: flex;
+                justify-content: space-between;
+                background: #f6f9fc;
+                padding: 2px 6px;
+                border-radius: 3px;
+                font-size: 7px;
+                color: #4a5d70;
+                margin-bottom: 3px;
+                border: 1px solid #d9e4ef;
+            }
+            .summary-bar strong { color: #123a6f; }
+            
+            @page { 
+                size: A4 landscape; 
+                margin: 4mm; 
+            }
+            @media print {
+                body { padding: 2mm; }
+                .no-print { display: none !important; }
+                table { page-break-inside: auto; }
+                tr { page-break-inside: avoid; }
+            }
         </style>
     </head><body>
-        <div class="toolbar-print">
-            <button onclick="window.print()">🖨️ CETAK / PDF</button>
-            <button class="close-btn" onclick="window.close()">✖ Tutup</button>
+        <div class="no-print" style="position:sticky;top:0;background:#fff;padding:3px 0;text-align:center;border-bottom:1px solid #d0dae6;margin-bottom:4px;z-index:10;">
+            <button onclick="window.print()" style="border:0;border-radius:4px;padding:3px 12px;background:#f4b400;color:#17324d;font-weight:700;cursor:pointer;font-size:9px;">🖨️ CETAK / PDF</button>
+            <button onclick="window.close()" style="border:0;border-radius:4px;padding:3px 12px;background:#e4edf4;color:#17324d;font-weight:700;cursor:pointer;font-size:9px;margin-left:4px;">✖ Tutup</button>
         </div>
+        
         <div class="print-header">
             <h1>📊 HASIL SOSIOMETRI</h1>
             <h2>${esc(school)} • ${esc(className)}</h2>
-            <div class="print-meta"><span>Kode: <strong>${esc(code)}</strong></span><span>PIN: <strong>${esc(pin)}</strong></span><span>${new Date().toLocaleDateString('id-ID')}</span></div>
+            <div class="print-meta">
+                <span>Kode: <strong>${esc(code)}</strong></span>
+                <span>PIN: <strong>${esc(pin)}</strong></span>
+                <span>${new Date().toLocaleDateString('id-ID')}</span>
+                <span>👥 ${doneCount}/${totalCount} mengisi</span>
+            </div>
         </div>
-        <main>${source.innerHTML}</main>
+        
+        <div class="summary-bar">
+            <span>❤️ Pertemanan • 🤝 Kerja Sama • ⭐ Kepemimpinan • 🔎 Kurang Nyaman</span>
+            <span>Total skor = jumlah pemilihan</span>
+        </div>
+        
+        ${source.innerHTML}
+        
+        <div class="result-footer">
+            🔐 Data rahasia • Hanya untuk Guru BK • Dicetak: ${new Date().toLocaleString('id-ID')}
+        </div>
     </body></html>`);
     w.document.close();
     w.focus();
+}
+
+// ============================================================
+// BACKUP & RESTORE
+// ============================================================
+function exportData() {
+    const data = {
+        users: JSON.parse(localStorage.getItem(USER_KEY) || '{}'),
+        sessions: JSON.parse(localStorage.getItem(KEY_SESI) || '[]'),
+        exportedAt: new Date().toISOString()
+    };
+    const blob = new Blob([JSON.stringify(data, null, 2)], {type: 'application/json'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `backup-sosio-${new Date().toISOString().slice(0,10)}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+}
+
+function importData(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        try {
+            const data = JSON.parse(e.target.result);
+            if (data.users) localStorage.setItem(USER_KEY, JSON.stringify(data.users));
+            if (data.sessions) localStorage.setItem(KEY_SESI, JSON.stringify(data.sessions));
+            pesan('backupMsg', '✅ Data berhasil dipulihkan!', 'ok');
+            initApp();
+            renderSessionList();
+        } catch(err) {
+            pesan('backupMsg', '❌ File tidak valid.', 'error');
+        }
+    };
+    reader.readAsText(file);
+    event.target.value = '';
+}
+
+function resetAllData() {
+    if (!confirm('⚠️ Yakin ingin menghapus SEMUA data? (akun, sesi, jawaban)')) return;
+    if (!confirm('⚠️⚠️ Ini tidak bisa dibatalkan! Lanjutkan?')) return;
+    localStorage.removeItem(USER_KEY);
+    localStorage.removeItem(KEY_SESI);
+    localStorage.removeItem('NAFAS_SOSIO_CURRENT_SESSION');
+    localStorage.removeItem(SESSION_KEY);
+    alert('✅ Semua data telah direset. Halaman akan dimuat ulang.');
+    location.reload();
 }
 
 // ============================================================
@@ -1083,15 +1269,8 @@ function cetakHasil() {
 // ============================================================
 if (!checkSession()) {
     showLogin();
-    
-    // Tambahkan akun demo
-    const users = getUsers();
-    if (!users['demo@nafas.com']) {
-        users['demo@nafas.com'] = { password: '123456', name: 'Guru Demo', registeredAt: new Date().toISOString() };
-        saveUsers(users);
-    }
+    // Tidak ada akun demo otomatis - user harus register
 }
-function openPrintPage(){let code=document.getElementById('rcode')?.value.trim()||'';let pin=document.getElementById('rpin')?.value.trim()||'';if(!code||!pin){alert('Masukkan Kode Sesi dan PIN Guru BK terlebih dahulu.');return}let u='cetak-hasil.html?code='+encodeURIComponent(code)+'&pin='+encodeURIComponent(pin);let w=window.open(u,'_blank');if(!w)alert('Izinkan pop-up agar laporan dapat dibuka.')}
 </script>
 </body>
 </html>

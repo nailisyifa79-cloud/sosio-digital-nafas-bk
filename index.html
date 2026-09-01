@@ -8,15 +8,15 @@
 * { box-sizing: border-box; }
 body { margin:0; font-family:'Segoe UI',Arial,sans-serif; background:#f0f5fb; color:#18324a; }
 
-header { background:linear-gradient(135deg,#0d2b4f,#1a5a9e); color:#fff; padding:12px 16px; }
+header { background:linear-gradient(135deg,#0d2b4f,#1a5a9e); color:#fff; padding:10px 16px; }
 .wrap, main { max-width:1100px; margin:auto; }
-.brand { font-size:20px; font-weight:900; display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+.brand { font-size:18px; font-weight:900; display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
 .brand span { color:#f4b400; }
-.tag { font-size:11px; opacity:0.8; }
+.tag { font-size:10px; opacity:0.8; }
 
-main { padding:12px; }
-.panel { background:#fff; border-radius:12px; padding:16px; margin-bottom:12px; box-shadow:0 2px 12px rgba(13,43,79,0.08); border:1px solid #e2ecf5; }
-h2 { font-size:18px; margin:0 0 10px; color:#0d2b4f; display:flex; align-items:center; gap:8px; }
+main { padding:10px; }
+.panel { background:#fff; border-radius:10px; padding:14px; margin-bottom:10px; box-shadow:0 2px 10px rgba(13,43,79,0.08); border:1px solid #e2ecf5; }
+h2 { font-size:16px; margin:0 0 8px; color:#0d2b4f; }
 
 input { width:100%; padding:10px 12px; border:1px solid #d0ddee; border-radius:8px; font:inherit; background:#fafcfe; font-size:14px; }
 input:focus { border-color:#1a5a9e; outline:none; box-shadow:0 0 0 3px rgba(26,90,158,0.12); }
@@ -26,26 +26,26 @@ button:hover { transform:translateY(-1px); box-shadow:0 4px 12px rgba(0,0,0,0.12
 
 .primary { background:#1a5a9e; color:#fff; }
 .primary:hover { background:#0d4a8a; }
-.gold { background:#f4b400; color:#0d2b4f; }
-.gold:hover { background:#e0a300; }
 
 .flex { display:flex; gap:8px; flex-wrap:wrap; align-items:center; }
-.text-muted { color:#6a8aaa; font-size:12px; }
+.text-muted { color:#6a8aaa; font-size:11px; }
 .text-center { text-align:center; }
 .hidden { display:none !important; }
 .mt-8 { margin-top:6px; }
 
-.notice, .ok, .error { padding:10px 14px; border-radius:8px; margin-top:8px; font-size:13px; }
+.notice, .ok, .error { padding:8px 12px; border-radius:6px; margin-top:6px; font-size:12px; }
 .notice { background:#fff8e0; border:1px solid #f0d56a; color:#7a6300; }
 .ok { background:#e6f7f0; border:1px solid #90d5b6; color:#0a6b4a; }
 .error { background:#fde8ec; border:1px solid #f0b8c4; color:#a04050; }
 
-.stat-box { background:#f8faff; padding:10px; border-radius:10px; text-align:center; border:1px solid #e2ecf5; }
-.stat-box .num { font-size:20px; font-weight:900; color:#0d2b4f; }
+.stat-box { background:#f8faff; padding:8px; border-radius:8px; text-align:center; border:1px solid #e2ecf5; }
+.stat-box .num { font-size:18px; font-weight:900; color:#0d2b4f; }
 .stat-box .label { font-size:9px; color:#6a8aaa; }
 
+.grid-stats { display:grid; grid-template-columns:repeat(auto-fit,minmax(100px,1fr)); gap:6px; }
+
 @media(max-width:650px) {
-  .brand { font-size:16px; }
+  .brand { font-size:15px; }
   .flex { flex-direction:column; }
   .flex button { width:100%; }
 }
@@ -57,41 +57,41 @@ button:hover { transform:translateY(-1px); box-shadow:0 4px 12px rgba(0,0,0,0.12
   <div class="wrap">
     <div class="brand">
       🌟 Sosio Digital <span>NaFaS BK</span>
-      <span style="font-size:10px;font-weight:400;opacity:0.7;">♾️ Unlimited</span>
+      <span style="font-size:9px;font-weight:400;opacity:0.7;">♾️ Unlimited</span>
     </div>
     <div class="tag">Aplikasi Sosiometri Digital • Peta Pertemanan • Kolaborasi • Kepemimpinan</div>
   </div>
 </header>
 
 <main>
-  <!-- ===== DASHBOARD ===== -->
+  <!-- DASHBOARD -->
   <div class="panel">
     <h2>📊 Dashboard</h2>
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:8px;">
+    <div class="grid-stats">
       <div class="stat-box"><div class="num" id="totalSessions">0</div><div class="label">Total Sesi</div></div>
       <div class="stat-box"><div class="num" id="totalStudents">0</div><div class="label">Total Siswa</div></div>
       <div class="stat-box"><div class="num" id="totalUsers">0</div><div class="label">Pengguna</div></div>
     </div>
   </div>
 
-  <!-- ===== LOGIN / AKSES ===== -->
+  <!-- LOGIN -->
   <div class="panel">
     <h2>🔑 Masukkan Kunci Akses</h2>
-    <div style="background:#f8faff;border-radius:10px;padding:12px;border:1px solid #e2ecf5;">
+    <div style="background:#f8faff;border-radius:8px;padding:10px;border:1px solid #e2ecf5;">
       <div class="flex">
-        <input id="accessKeyInput" placeholder="Masukkan Kunci Akses" style="flex:1;min-width:180px;">
+        <input id="accessKeyInput" placeholder="Masukkan Kunci Akses" style="flex:1;min-width:160px;">
         <button class="primary" onclick="validateAndOpenApp()">🚀 Buka Aplikasi</button>
       </div>
       <div id="accessMsg"></div>
     </div>
   </div>
 
-  <!-- ===== APLIKASI ===== -->
+  <!-- APLIKASI -->
   <div id="appContainer">
-    <div class="panel text-center" style="padding:40px 16px;background:#f8faff;">
-      <div style="font-size:48px;margin-bottom:8px;">🔒</div>
-      <div style="font-size:16px;font-weight:600;color:#0d2b4f;">Masukkan kunci akses untuk membuka aplikasi</div>
-      <div style="font-size:12px;color:#6a8aaa;">♾️ Unlimited Siswa • Unlimited Sesi</div>
+    <div class="panel text-center" style="padding:30px 16px;background:#f8faff;">
+      <div style="font-size:40px;margin-bottom:6px;">🔒</div>
+      <div style="font-size:15px;font-weight:600;color:#0d2b4f;">Masukkan kunci akses untuk membuka aplikasi</div>
+      <div style="font-size:11px;color:#6a8aaa;">♾️ Unlimited Siswa • Unlimited Sesi</div>
     </div>
   </div>
 </main>
@@ -100,86 +100,41 @@ button:hover { transform:translateY(-1px); box-shadow:0 4px 12px rgba(0,0,0,0.12
 // ============================================================
 // KONFIGURASI - GANTI DENGAN KUNCI ANDA
 // ============================================================
-const MASTER_KEY = 'NAFAS-2026';
-const GROUP_CODE = 'GRP-001';
-
-const STORAGE_KEY_USERS = 'NAFAS_ACCESS_USERS';
-const STORAGE_KEY_ACTIVITY = 'NAFAS_ACTIVITY_LOG';
-
-// ============================================================
-// MANAJEMEN PENGGUNA
-// ============================================================
-function getUsers() {
-  try { return JSON.parse(localStorage.getItem(STORAGE_KEY_USERS)) || []; } 
-  catch(e) { return []; }
-}
-
-function saveUsers(users) {
-  localStorage.setItem(STORAGE_KEY_USERS, JSON.stringify(users));
-  updateDashboard();
-}
-
-function addUser(name) {
-  const users = getUsers();
-  if (users.find(u => u.name === name)) return false;
-  users.push({
-    id: 'U' + String(users.length + 1).padStart(3, '0'),
-    name,
-    status: 'active',
-    joinedAt: new Date().toISOString(),
-    lastAccess: new Date().toISOString()
-  });
-  saveUsers(users);
-  return true;
-}
-
-function updateUserAccess(name) {
-  const users = getUsers();
-  const user = users.find(u => u.name === name);
-  if (user) {
-    user.lastAccess = new Date().toISOString();
-    user.status = 'active';
-    saveUsers(users);
-  }
-}
+const MASTER_KEY = 'NAFAS2026';
+const GROUP_CODE = 'GRP001';
 
 // ============================================================
 // DASHBOARD
 // ============================================================
-function getTotalStudents() {
-  try {
-    const sessions = JSON.parse(localStorage.getItem('NAFAS_SOSIO_SESSIONS')) || [];
-    let total = 0;
-    sessions.forEach(s => {
-      if (s.students) total += s.students.length;
-    });
-    return total;
-  } catch(e) { return 0; }
-}
-
 function updateDashboard() {
-  const users = getUsers();
-  document.getElementById('totalUsers').textContent = users.length;
+  // Total pengguna
+  try {
+    const users = JSON.parse(localStorage.getItem('NAFAS_ACCESS_USERS')) || [];
+    document.getElementById('totalUsers').textContent = users.length;
+  } catch(e) { document.getElementById('totalUsers').textContent = '0'; }
   
+  // Total sesi & siswa
   try {
     const sessions = JSON.parse(localStorage.getItem('NAFAS_SOSIO_SESSIONS')) || [];
     document.getElementById('totalSessions').textContent = sessions.length;
+    let total = 0;
+    sessions.forEach(s => { if (s.students) total += s.students.length; });
+    document.getElementById('totalStudents').textContent = total;
   } catch(e) {
     document.getElementById('totalSessions').textContent = '0';
+    document.getElementById('totalStudents').textContent = '0';
   }
-  
-  document.getElementById('totalStudents').textContent = getTotalStudents();
 }
 
-// ============================================================
-// VALIDASI & BUKA APLIKASI
-// ============================================================
 function note(id, msg, type='notice') {
   const cls = { notice:'notice', ok:'ok', error:'error' }[type] || 'notice';
   document.getElementById(id).innerHTML = `<div class="${cls}">${msg}</div>`;
   setTimeout(() => { document.getElementById(id).innerHTML = ''; }, 4000);
 }
 
+// ============================================================
+// VALIDASI
+// ============================================================
 function validateAndOpenApp() {
   const input = document.getElementById('accessKeyInput').value.trim();
   if (!input) {
@@ -191,35 +146,41 @@ function validateAndOpenApp() {
     note('accessMsg', '✅ Akses diterima!', 'ok');
     
     // Catat pengguna
-    const userName = 'User-' + input.slice(-4);
-    addUser(userName);
-    updateUserAccess(userName);
+    try {
+      const users = JSON.parse(localStorage.getItem('NAFAS_ACCESS_USERS')) || [];
+      const name = 'User-' + input.slice(-4);
+      if (!users.find(u => u.name === name)) {
+        users.push({ id: 'U' + String(users.length+1).padStart(3,'0'), name, status:'active', lastAccess: new Date().toISOString() });
+        localStorage.setItem('NAFAS_ACCESS_USERS', JSON.stringify(users));
+      }
+      updateDashboard();
+    } catch(e) {}
     
     openApp();
   } else {
-    note('accessMsg', '❌ Kunci tidak valid. Periksa kembali.', 'error');
+    note('accessMsg', '❌ Kunci tidak valid.', 'error');
   }
 }
 
 function openApp() {
   const container = document.getElementById('appContainer');
   container.innerHTML = `
-    <div style="background:#fff;border-radius:12px;border:1px solid #e2ecf5;overflow:hidden;">
-      <div style="background:#0d2b4f;color:#fff;padding:8px 14px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:4px;">
-        <span style="font-weight:700;font-size:14px;">🌟 SOSIO DIGITAL NaFaS BK</span>
+    <div style="background:#fff;border-radius:10px;border:1px solid #e2ecf5;overflow:hidden;">
+      <div style="background:#0d2b4f;color:#fff;padding:6px 12px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:4px;">
+        <span style="font-weight:700;font-size:13px;">🌟 SOSIO DIGITAL NaFaS BK</span>
         <div style="display:flex;gap:6px;align-items:center;">
-          <span style="font-size:9px;background:#17a67a;padding:2px 8px;border-radius:10px;">♾️ Unlimited</span>
-          <span style="font-size:10px;opacity:0.7;">✅ Aktif</span>
+          <span style="font-size:8px;background:#17a67a;padding:2px 8px;border-radius:8px;">♾️ Unlimited</span>
+          <span style="font-size:9px;opacity:0.7;">✅ Aktif</span>
         </div>
       </div>
-      <iframe src="aplikasi-utama.html" style="width:100%;height:650px;border:0;"></iframe>
-      <div style="padding:4px 14px;background:#f8faff;font-size:9px;color:#6a8aaa;text-align:center;border-top:1px solid #e2ecf5;">
+      <iframe src="aplikasi-utama.html" style="width:100%;height:600px;border:0;"></iframe>
+      <div style="padding:3px 12px;background:#f8faff;font-size:8px;color:#6a8aaa;text-align:center;border-top:1px solid #e2ecf5;">
         🔒 Akses aman • ♾️ Unlimited Siswa & Sesi • Khusus Guru BK
       </div>
     </div>
   `;
   
-  // Sembunyikan dashboard dan login
+  // Sembunyikan panel lain
   document.querySelectorAll('.panel').forEach(el => {
     if (el.id !== 'appContainer') el.style.display = 'none';
   });
@@ -229,12 +190,6 @@ function openApp() {
 // INISIALISASI
 // ============================================================
 updateDashboard();
-
-// Cek apakah sudah pernah akses (bisa via URL parameter)
-if (window.location.hash === '#akses') {
-  document.getElementById('accessKeyInput').focus();
-}
-function openPrintPage(){let code=document.getElementById('rcode')?.value.trim()||'';let pin=document.getElementById('rpin')?.value.trim()||'';if(!code||!pin){alert('Masukkan Kode Sesi dan PIN Guru BK terlebih dahulu.');return}let u='cetak-hasil.html?code='+encodeURIComponent(code)+'&pin='+encodeURIComponent(pin);let w=window.open(u,'_blank');if(!w)alert('Izinkan pop-up agar laporan dapat dibuka.')}
 </script>
 </body>
 </html>

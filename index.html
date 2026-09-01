@@ -106,32 +106,41 @@ button:hover{transform:translateY(-1px)}
 .paper-layout{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 @media(max-width:650px){.paper-layout{grid-template-columns:1fr}.brand{font-size:15px}}
 
-/* Khusus cetak lembar siswa - HANYA #printArea yang tampil */
+/* ===== PERBAIKAN CETAK LEMBAR SISWA ===== */
 @media print {
-    body * { visibility: hidden; }
-    #printArea, #printArea * { visibility: visible; }
-    #printArea { 
-        position: absolute; 
-        left: 0; 
-        top: 0; 
-        width: 100%; 
-        padding: 8px;
-        background: #fff;
-        border: 0 !important;
+    /* Sembunyikan SEMUA elemen yang TIDAK berada di dalam #printArea */
+    body * {
+        display: none !important;
+    }
+    /* Tampilkan #printArea dan semua isinya */
+    #printArea, #printArea * {
+        display: block !important;
+    }
+    /* Reset styling agar rapi */
+    #printArea {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        padding: 10px;
+        background: white !important;
+        border: none !important;
         box-shadow: none !important;
     }
     #printArea .panel {
-        border: 0 !important;
-        padding: 4px !important;
-        background: #fff !important;
+        border: none !important;
+        padding: 0 !important;
+        background: white !important;
         box-shadow: none !important;
     }
     #printArea h3, #printArea h1, #printArea h2 {
-        margin: 2px 0 !important;
+        margin: 5px 0 !important;
         padding: 0 !important;
     }
-    #printArea .no-print { display: none !important; }
-    #paperEntry, #pmsg, .actions, .no-print { display: none !important; }
+    /* Sembunyikan tombol cetak di dalam area cetak */
+    .no-print, #printArea .no-print {
+        display: none !important;
+    }
 }
 </style>
 </head>
@@ -487,9 +496,11 @@ function generatePin() {
 }
 
 function page(id) {
+    // 1. Tampilkan/Sembunyikan section
     ['teacher','student','paper','result'].forEach(x => {
         document.getElementById(x).classList.toggle('hidden', x!==id);
     });
+    // 2. Update active nav
     ['t','s','p','r'].forEach(x => {
         const el = document.getElementById('n'+x);
         if (el) el.classList.remove('active');
@@ -498,6 +509,7 @@ function page(id) {
     const el = document.getElementById(map[id]);
     if (el) el.classList.add('active');
     
+    // 3. Jalankan fungsi sesuai tab
     if (id === 'student') {
         const hash = window.location.hash;
         if (hash.startsWith('#sesi=')) {
@@ -505,38 +517,49 @@ function page(id) {
         }
         loadStudent();
     }
-    if (id === 'paper') { muatPaper(); renderPaperRows(); }
-    if (id === 'teacher') { showTeacherSession(); renderSessionList(); }
+    if (id === 'paper') { 
+        muatPaper(); 
+        renderPaperRows(); 
+    }
+    if (id === 'teacher') { 
+        showTeacherSession(); 
+        renderSessionList(); 
+    }
     if (id === 'result') {
-        // Auto-load hasil jika ada sesi aktif
+        // >>> PERBAIKAN UTAMA: Otomatis tampilkan hasil saat tab 'Hasil' diklik <<<
         if (sesiAktif) {
             document.getElementById('rcode').value = sesiAktif.code || '';
             document.getElementById('rpin').value = sesiAktif.pin || '';
-            // Tunggu sebentar lalu tampilkan hasil otomatis
-            setTimeout(function() {
-                lihatHasilOtomatis();
-            }, 400);
+            // Panggil fungsi untuk menampilkan hasil otomatis
+            tampilkanHasilOtomatis();
+        } else {
+            document.getElementById('res').innerHTML = '<div class="notice">ℹ️ Belum ada sesi yang dipilih. Buka sesi dulu.</div>';
         }
     }
 }
 
-// ===== FUNGSI KHUSUS UNTUK AUTO-LOAD HASIL =====
-function lihatHasilOtomatis() {
+// ===== FUNGSI BARU UNTUK MENAMPILKAN HASIL OTOMATIS =====
+function tampilkanHasilOtomatis() {
     const code = document.getElementById('rcode').value.trim();
     const pin = document.getElementById('rpin').value.trim();
+    
     if (!code || !pin) {
         document.getElementById('res').innerHTML = '<div class="notice">ℹ️ Masukkan kode sesi dan PIN.</div>';
         return;
     }
+    
     const sessionData = getSessionByCode(code);
     if (!sessionData) {
         document.getElementById('res').innerHTML = '<div class="error">❌ Sesi tidak ditemukan.</div>';
         return;
     }
+    
     if (sessionData.pin !== pin) {
-        document.getElementById('res').innerHTML = '<div class="error">❌ PIN salah.</div>';
+        document.getElementById('res').innerHTML = '<div class="error">❌ PIN salah. Periksa kembali.</div>';
         return;
     }
+    
+    // Jika semua benar, tampilkan hasil
     document.getElementById('res').innerHTML = renderHasil(sessionData);
 }
 
@@ -614,7 +637,8 @@ function viewResult(code) {
     if (found && found.pin) {
         document.getElementById('rpin').value = found.pin;
     }
-    setTimeout(lihatHasilOtomatis, 500);
+    // Tampilkan hasil otomatis
+    tampilkanHasilOtomatis();
 }
 
 function showTeacherSession() {
@@ -897,7 +921,6 @@ function muatPaper() {
 
 function cetakLembar() {
     if(!sesiAktif){ alert('⚠️ Pilih sesi.'); return; }
-    // Hanya cetak area #printArea
     window.print();
 }
 
@@ -998,28 +1021,14 @@ function renderHasil(data) {
 }
 
 function lihatHasil() {
-    const code = document.getElementById('rcode').value.trim();
-    const pin = document.getElementById('rpin').value.trim();
-    if(!code || !pin){ 
-        document.getElementById('res').innerHTML = '<div class="notice">⚠️ Masukkan Kode dan PIN.</div>'; 
-        return; 
-    }
-    const sessionData = getSessionByCode(code);
-    if (!sessionData) { 
-        document.getElementById('res').innerHTML = '<div class="error">❌ Sesi tidak ditemukan.</div>'; 
-        return; 
-    }
-    if (sessionData.pin !== pin) { 
-        document.getElementById('res').innerHTML = '<div class="error">❌ PIN salah.</div>'; 
-        return; 
-    }
-    document.getElementById('res').innerHTML = renderHasil(sessionData);
+    // Fungsi ini tetap ada untuk tombol "Buka Hasil"
+    tampilkanHasilOtomatis();
 }
 
 function cetakHasil() {
     const source = document.getElementById('res');
     if (!source || !source.innerHTML.trim() || source.innerHTML.includes('⚠️') || source.innerHTML.includes('❌')) {
-        alert('⚠️ Klik "Buka Hasil" dulu dengan PIN yang benar.');
+        alert('⚠️ Pastikan hasil sudah terbuka dengan benar (klik "Buka Hasil").');
         return;
     }
     const code = document.getElementById('rcode')?.value.trim() || '';
@@ -1156,7 +1165,6 @@ window.addEventListener('DOMContentLoaded', function() {
 if (!checkSession()) {
     showLogin();
 }
-function openPrintPage(){let code=document.getElementById('rcode')?.value.trim()||'';let pin=document.getElementById('rpin')?.value.trim()||'';if(!code||!pin){alert('Masukkan Kode Sesi dan PIN Guru BK terlebih dahulu.');return}let u='cetak-hasil.html?code='+encodeURIComponent(code)+'&pin='+encodeURIComponent(pin);let w=window.open(u,'_blank');if(!w)alert('Izinkan pop-up agar laporan dapat dibuka.')}
 </script>
 </body>
 </html>

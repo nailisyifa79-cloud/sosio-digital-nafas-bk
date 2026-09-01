@@ -105,6 +105,16 @@ button:hover{transform:translateY(-1px)}
 .share-siswa{background:#e8f5e9;border:2px solid #159a7c;border-radius:10px;padding:12px;margin-top:10px}
 .paper-layout{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 @media(max-width:650px){.paper-layout{grid-template-columns:1fr}.brand{font-size:15px}}
+
+/* Khusus cetak lembar siswa - hanya tampilkan yang ada di #printArea */
+@media print {
+    .no-print{display:none!important}
+    #printArea{display:block!important}
+    #printArea .panel{border:0!important;padding:4px!important;background:#fff!important}
+    #paperEntry,#pmsg,.actions,.panel:not(#printArea){display:none!important}
+    body{background:#fff;padding:4mm}
+    .panel#printArea{display:block!important}
+}
 </style>
 </head>
 <body>
@@ -214,15 +224,15 @@ button:hover{transform:translateY(-1px)}
                 <div class="panel"><h2>📄 Mode Tanpa HP</h2>
                     <div class="notice"><b>Mode Tanpa HP:</b> siswa mengisi lembar kertas, Guru BK memasukkan hasilnya.</div>
                     
-                    <!-- LEMBAR CETAK UNTUK SISWA (DI ATAS) -->
-                    <div class="panel" style="background:#fafffd;border:2px solid #123a6f;">
+                    <!-- LEMBAR CETAK UNTUK SISWA (DI ATAS) - HANYA INI YANG KELUAR SAAT CETAK -->
+                    <div id="printArea" class="panel" style="background:#fafffd;border:2px solid #123a6f;">
                         <h3 style="margin:0 0 6px;color:#123a6f;">🖨️ LEMBAR UNTUK SISWA (CETAK & BAGIKAN)</h3>
                         <div id="paperRows"></div>
-                        <button class="gold" onclick="cetakLembar()" style="margin-top:6px;">🖨️ Cetak Lembar Siswa</button>
+                        <button class="gold no-print" onclick="cetakLembar()" style="margin-top:6px;">🖨️ Cetak Lembar Siswa</button>
                     </div>
 
-                    <!-- ENTRI HASIL GURU (DI BAWAH) -->
-                    <div class="panel" style="background:#f8faff;border:2px solid #f4b400;margin-top:10px;">
+                    <!-- ENTRI HASIL GURU (DI BAWAH) - TIDAK MASUK CETAK -->
+                    <div class="panel no-print" style="background:#f8faff;border:2px solid #f4b400;margin-top:10px;">
                         <h3 style="margin:0 0 6px;color:#b8860b;">📝 ENTRI HASIL SISWA (UNTUK GURU)</h3>
                         <div id="paperEntry"></div>
                         <div class="actions">
@@ -244,7 +254,7 @@ button:hover{transform:translateY(-1px)}
                         <button class="dark" onclick="lihatHasil()">🔐 Buka Hasil</button>
                         <button class="gold" onclick="cetakHasil()">🖨️ Cetak / PDF</button>
                     </div>
-                    <div id="res"></div>
+                    <div id="res"><div class="notice">ℹ️ Masukkan kode sesi dan PIN, lalu klik "Buka Hasil".</div></div>
                 </div>
             </section>
         </div>
@@ -483,6 +493,12 @@ function page(id) {
             document.getElementById('rcode').value = sesiAktif.code || '';
             document.getElementById('rpin').value = sesiAktif.pin || '';
         }
+        // Auto load hasil jika sudah ada kode dan pin
+        const code = document.getElementById('rcode').value.trim();
+        const pin = document.getElementById('rpin').value.trim();
+        if (code && pin) {
+            setTimeout(lihatHasil, 300);
+        }
     }
 }
 
@@ -559,7 +575,7 @@ function viewResult(code) {
     if (found && found.pin) {
         document.getElementById('rpin').value = found.pin;
     }
-    setTimeout(lihatHasil, 200);
+    setTimeout(lihatHasil, 300);
 }
 
 function showTeacherSession() {
@@ -842,6 +858,7 @@ function muatPaper() {
 
 function cetakLembar() {
     if(!sesiAktif){ alert('⚠️ Pilih sesi.'); return; }
+    // Hanya cetak area #printArea
     window.print();
 }
 
@@ -944,10 +961,19 @@ function renderHasil(data) {
 function lihatHasil() {
     const code = document.getElementById('rcode').value.trim();
     const pin = document.getElementById('rpin').value.trim();
-    if(!code || !pin){ document.getElementById('res').innerHTML = '<div class="notice">⚠️ Masukkan Kode dan PIN.</div>'; return; }
+    if(!code || !pin){ 
+        document.getElementById('res').innerHTML = '<div class="notice">⚠️ Masukkan Kode dan PIN.</div>'; 
+        return; 
+    }
     const sessionData = getSessionByCode(code);
-    if (!sessionData) { document.getElementById('res').innerHTML = '<div class="error">❌ Sesi tidak ditemukan.</div>'; return; }
-    if (sessionData.pin !== pin) { document.getElementById('res').innerHTML = '<div class="error">❌ PIN salah.</div>'; return; }
+    if (!sessionData) { 
+        document.getElementById('res').innerHTML = '<div class="error">❌ Sesi tidak ditemukan.</div>'; 
+        return; 
+    }
+    if (sessionData.pin !== pin) { 
+        document.getElementById('res').innerHTML = '<div class="error">❌ PIN salah.</div>'; 
+        return; 
+    }
     document.getElementById('res').innerHTML = renderHasil(sessionData);
 }
 
@@ -1091,7 +1117,6 @@ window.addEventListener('DOMContentLoaded', function() {
 if (!checkSession()) {
     showLogin();
 }
-function openPrintPage(){let code=document.getElementById('rcode')?.value.trim()||'';let pin=document.getElementById('rpin')?.value.trim()||'';if(!code||!pin){alert('Masukkan Kode Sesi dan PIN Guru BK terlebih dahulu.');return}let u='cetak-hasil.html?code='+encodeURIComponent(code)+'&pin='+encodeURIComponent(pin);let w=window.open(u,'_blank');if(!w)alert('Izinkan pop-up agar laporan dapat dibuka.')}
 </script>
 </body>
 </html>

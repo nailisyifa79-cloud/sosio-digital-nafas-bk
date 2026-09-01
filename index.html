@@ -3,13 +3,11 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Sosio Digital NaFaS BK</title>
+<title>Sosio Digital NaFaS BK - Offline</title>
 <style>
-/* ===== STYLE GLOBAL ===== */
 * { box-sizing: border-box; }
 body { margin:0; font-family:'Segoe UI',Arial,sans-serif; background:#f0f5fb; color:#18324a; }
 
-/* ===== HEADER ===== */
 header { background:linear-gradient(135deg,#0d2b4f,#1a5a9e); color:#fff; padding:8px 16px; }
 .wrap { max-width:1100px; margin:auto; }
 .header-flex { display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:6px; }
@@ -19,12 +17,10 @@ header { background:linear-gradient(135deg,#0d2b4f,#1a5a9e); color:#fff; padding
 .btn-logout { background:#d96b7b; color:#fff; border:0; border-radius:6px; padding:6px 14px; font-weight:700; cursor:pointer; font-size:12px; }
 .btn-logout:hover { background:#c45566; }
 
-/* ===== NAV ===== */
 nav { display:flex; gap:4px; flex-wrap:wrap; margin-top:6px; }
 nav button { background:rgba(255,255,255,0.12); color:#fff; border:0; border-radius:6px; padding:6px 12px; font-weight:700; font-size:11px; cursor:pointer; transition:all 0.2s; }
 nav button:hover, nav button.active { background:#f4b400; color:#123a6f; }
 
-/* ===== MAIN ===== */
 main { padding:10px; max-width:1100px; margin:auto; }
 .panel { background:#fff; border:1px solid #d9e4ef; border-radius:10px; padding:14px; margin-bottom:10px; box-shadow:0 2px 10px #123a6f10; }
 .panel h2 { font-size:16px; margin:0 0 10px; color:#123a6f; }
@@ -42,7 +38,6 @@ button:hover { transform:translateY(-1px); box-shadow:0 4px 12px rgba(0,0,0,0.10
 .dark { background:#123a6f; color:#fff; }
 .soft { background:#eaf4ff; color:#123a6f; }
 .primary { background:#1a5a9e; color:#fff; }
-.danger { background:#d96b7b; color:#fff; }
 
 .hidden { display:none!important; }
 .notice, .ok, .error { padding:6px 10px; border-radius:6px; margin-top:6px; font-size:11px; }
@@ -50,28 +45,16 @@ button:hover { transform:translateY(-1px); box-shadow:0 4px 12px rgba(0,0,0,0.10
 .ok { background:#eaf8f2; border:1px solid #9dd9c4; color:#0a6b4a; }
 .error { background:#fde8ec; border:1px solid #f0b8c4; color:#a04050; }
 
-/* ===== DASHBOARD ===== */
 .stat-box { background:#f8faff; padding:8px; border-radius:8px; text-align:center; border:1px solid #e2ecf5; }
 .stat-box .num { font-size:20px; font-weight:900; color:#0d2b4f; }
 .stat-box .label { font-size:9px; color:#6a8aaa; }
 .grid-stats { display:grid; grid-template-columns:repeat(auto-fit,minmax(90px,1fr)); gap:6px; }
 
-/* ===== LOGIN ===== */
 .login-box { background:#f8faff; border-radius:8px; padding:10px; border:1px solid #e2ecf5; }
 .login-flex { display:flex; gap:8px; flex-wrap:wrap; align-items:center; }
 .login-flex input { flex:1; min-width:160px; }
 .login-flex button { white-space:nowrap; }
 
-/* ===== APLIKASI ===== */
-.app-wrapper { background:#fff; border-radius:10px; border:1px solid #e2ecf5; overflow:hidden; }
-.app-header-bar { background:#0d2b4f; color:#fff; padding:5px 12px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:4px; }
-.app-header-bar .title { font-weight:700; font-size:13px; }
-.app-header-bar .badge { font-size:8px; background:#17a67a; padding:2px 8px; border-radius:8px; }
-.app-header-bar .btn-logout-sm { background:#d96b7b; color:#fff; border:0; border-radius:4px; padding:3px 10px; font-size:10px; font-weight:700; cursor:pointer; }
-.app-header-bar .btn-logout-sm:hover { background:#c45566; }
-.app-content { padding:10px; max-height:600px; overflow-y:auto; }
-
-/* ===== SESSION LIST ===== */
 .session-list { display:grid; grid-template-columns:repeat(auto-fill,minmax(240px,1fr)); gap:6px; margin-top:6px; }
 .session-item { background:#f9fbfd; border:1px solid #d9e4ef; border-radius:8px; padding:8px 10px; cursor:pointer; transition:all 0.2s; }
 .session-item:hover { border-color:#123a6f; box-shadow:0 2px 8px rgba(18,58,111,0.08); }
@@ -84,7 +67,6 @@ button:hover { transform:translateY(-1px); box-shadow:0 4px 12px rgba(0,0,0,0.10
 .session-item .s-actions { margin-top:4px; display:flex; gap:3px; flex-wrap:wrap; }
 .session-empty { text-align:center; padding:16px; color:#6b7d90; font-size:13px; }
 
-/* ===== TABEL HASIL ===== */
 .table-wrap { overflow-x:auto; margin-top:4px; border-radius:6px; border:1px solid #d9e4ef; }
 .table-main { width:100%; border-collapse:collapse; font-size:10px; }
 .table-main th { background:#123a6f; color:#fff; padding:4px; text-align:center; font-weight:700; font-size:8px; }
@@ -103,20 +85,6 @@ button:hover { transform:translateY(-1px); box-shadow:0 4px 12px rgba(0,0,0,0.10
 .result-head .info strong { color:#123a6f; }
 .result-footer { margin-top:2px; font-size:6px; color:#8a9daf; text-align:center; border-top:1px solid #e4edf4; padding-top:2px; }
 
-/* ===== CETAK ===== */
-.print-sheet { background:#fff; border:1px solid #d8e2ec; border-radius:8px; padding:8px; margin-top:8px; }
-.print-head { text-align:center; border-bottom:2px solid #123a6f; padding-bottom:6px; margin-bottom:8px; }
-.print-head h1 { font-size:14px; margin:0; color:#123a6f; }
-.print-head h2 { font-size:11px; margin:2px 0; }
-.print-meta { display:flex; justify-content:center; gap:10px; font-size:9px; margin-top:2px; }
-.print-instruction { font-size:8px; background:#f6f9fc; border:1px solid #d9e4ef; border-radius:5px; padding:5px; margin-bottom:5px; }
-.print-q { border:1px solid #cfdbe7; border-radius:5px; padding:4px; margin:3px 0; }
-.print-q h3 { font-size:10px; margin:0 0 2px; color:#123a6f; }
-.print-q p { font-size:8px; margin:2px 0; }
-.print-q .line { font-size:7px; margin:2px 0; min-height:9px; }
-.print-footer { text-align:center; font-size:6px; color:#647687; margin-top:3px; border-top:1px solid #d9e4ef; padding-top:2px; }
-
-/* ===== SHARE ===== */
 .share { background:#f5f9ff; border:1px solid #cddfee; border-radius:10px; padding:10px; margin-top:8px; }
 .shareline { display:flex; gap:6px; flex-wrap:wrap; }
 .qrbox { margin-top:8px; padding:8px; border:1px dashed #b9c9d8; border-radius:8px; background:#f8fbfe; text-align:center; }
@@ -130,7 +98,18 @@ button:hover { transform:translateY(-1px); box-shadow:0 4px 12px rgba(0,0,0,0.10
 .lead { border-left-color:#7b61ff; }
 .uncomfortable { border-left-color:#d96b7b; }
 
-/* ===== RESPONSIVE ===== */
+.print-sheet { background:#fff; border:1px solid #d8e2ec; border-radius:8px; padding:8px; margin-top:8px; }
+.print-head { text-align:center; border-bottom:2px solid #123a6f; padding-bottom:6px; margin-bottom:8px; }
+.print-head h1 { font-size:14px; margin:0; color:#123a6f; }
+.print-head h2 { font-size:11px; margin:2px 0; }
+.print-meta { display:flex; justify-content:center; gap:10px; font-size:9px; margin-top:2px; }
+.print-instruction { font-size:8px; background:#f6f9fc; border:1px solid #d9e4ef; border-radius:5px; padding:5px; margin-bottom:5px; }
+.print-q { border:1px solid #cfdbe7; border-radius:5px; padding:4px; margin:3px 0; }
+.print-q h3 { font-size:10px; margin:0 0 2px; color:#123a6f; }
+.print-q p { font-size:8px; margin:2px 0; }
+.print-q .line { font-size:7px; margin:2px 0; min-height:9px; }
+.print-footer { text-align:center; font-size:6px; color:#647687; margin-top:3px; border-top:1px solid #d9e4ef; padding-top:2px; }
+
 @media(max-width:650px) {
   .brand { font-size:15px; }
   .shareline { flex-direction:column; }
@@ -140,7 +119,6 @@ button:hover { transform:translateY(-1px); box-shadow:0 4px 12px rgba(0,0,0,0.10
   .btn-logout { align-self:flex-end; }
 }
 
-/* ===== PRINT ===== */
 @media print {
   header, nav, .actions, .no-print, #loginPanel, #dashboardPanel { display:none!important; }
   .panel { box-shadow:none!important; border:1px solid #d0ddee!important; padding:4px!important; margin-bottom:3px!important; }
@@ -151,7 +129,6 @@ button:hover { transform:translateY(-1px); box-shadow:0 4px 12px rgba(0,0,0,0.10
   .result-head { font-size:7px!important; padding:2px 4px!important; }
   .result-footer { font-size:5px!important; }
   .session-list { display:none!important; }
-  .app-content { max-height:none!important; overflow:visible!important; }
 }
 </style>
 </head>
@@ -176,7 +153,7 @@ button:hover { transform:translateY(-1px); box-shadow:0 4px 12px rgba(0,0,0,0.10
 </header>
 
 <main>
-  <!-- ===== DASHBOARD ===== -->
+  <!-- DASHBOARD -->
   <div id="dashboardPanel">
     <div class="panel">
       <h2>📊 Dashboard</h2>
@@ -188,7 +165,7 @@ button:hover { transform:translateY(-1px); box-shadow:0 4px 12px rgba(0,0,0,0.10
     </div>
   </div>
 
-  <!-- ===== LOGIN ===== -->
+  <!-- LOGIN -->
   <div id="loginPanel">
     <div class="panel">
       <h2>🔑 Masukkan Kunci Akses</h2>
@@ -202,7 +179,7 @@ button:hover { transform:translateY(-1px); box-shadow:0 4px 12px rgba(0,0,0,0.10
     </div>
   </div>
 
-  <!-- ===== APLIKASI ===== -->
+  <!-- APLIKASI -->
   <div id="appContainer">
     <div class="panel text-center" style="padding:30px 16px;background:#f8faff;">
       <div style="font-size:40px;margin-bottom:6px;">🔒</div>
@@ -211,26 +188,24 @@ button:hover { transform:translateY(-1px); box-shadow:0 4px 12px rgba(0,0,0,0.10
     </div>
   </div>
 
-  <!-- ===== KONTEN APLIKASI (disembunyikan sampai login) ===== -->
+  <!-- KONTEN APLIKASI -->
   <div id="appContent" style="display:none;">
-    <!-- TEACHER -->
     <section id="teacher">
       <div class="panel"><h2>👩‍🏫 Buat Sesi Sosiometri</h2>
         <div class="grid">
           <div><label>Sekolah</label><input id="school"></div>
-          <div><label>Kelas / Rombel</label><input id="className"></div>
+          <div><label>Kelas</label><input id="className"></div>
           <div><label>Tahun Ajaran</label><input id="year" value="2026/2027"></div>
           <div><label>Guru BK</label><input id="counselor"></div>
         </div>
         <label>Daftar nama siswa — satu nama per baris</label>
         <textarea id="students" placeholder="Aisyah Putri&#10;Bima Aditya&#10;Citra Kirana"></textarea>
-        <div class="actions"><button class="green" onclick="create()">💾 Buat Sesi & Bagikan</button></div>
+        <div class="actions"><button class="green" onclick="create()">💾 Buat Sesi</button></div>
         <div id="tmsg"></div>
       </div>
       <div class="panel"><h2>📋 Daftar Sesi</h2><div id="sessionList">Memuat...</div></div>
     </section>
 
-    <!-- STUDENT -->
     <section id="student" class="hidden">
       <div class="panel"><h2>📱 Pengisian Siswa</h2>
         <div class="notice">Hasil sosiometri hanya dapat dilihat Guru BK.</div>
@@ -242,24 +217,22 @@ button:hover { transform:translateY(-1px); box-shadow:0 4px 12px rgba(0,0,0,0.10
       </div>
     </section>
 
-    <!-- PAPER -->
     <section id="paper" class="hidden">
       <div class="panel"><h2>📄 Mode Tanpa HP</h2>
-        <div class="notice"><b>Mode Tanpa HP:</b> siswa mengisi lembar kertas, lalu Guru BK memasukkan hasilnya di sini.</div>
+        <div class="notice"><b>Mode Tanpa HP:</b> siswa mengisi lembar kertas, lalu Guru BK memasukkan hasilnya.</div>
         <div id="paperEntry"></div>
         <div class="actions">
           <button class="gold" onclick="paper()">🔄 Muat Entri</button>
-          <button class="dark" onclick="submitPaper()">💾 Simpan Hasil Entri</button>
+          <button class="dark" onclick="submitPaper()">💾 Simpan Semua</button>
         </div>
         <div id="pmsg"></div>
       </div>
-      <div class="panel"><h3>🖨️ Lembar Sosiometri untuk Dicetak</h3>
+      <div class="panel"><h3>🖨️ Lembar untuk Dicetak</h3>
         <div id="paperRows"></div>
-        <button class="gold" onclick="printSociometry()">🖨️ Cetak Lembar Siswa</button>
+        <button class="gold" onclick="printSociometry()">🖨️ Cetak Lembar</button>
       </div>
     </section>
 
-    <!-- RESULT -->
     <section id="result" class="hidden">
       <div class="panel"><h2>🗺️ Hasil Guru BK</h2>
         <div class="grid">
@@ -278,11 +251,10 @@ button:hover { transform:translateY(-1px); box-shadow:0 4px 12px rgba(0,0,0,0.10
 
 <script>
 // ============================================================
-// KONFIGURASI
+// KONFIGURASI - GANTI KUNCI SESUAI KEINGINAN
 // ============================================================
 const MASTER_KEY = 'NAFAS-2026';
 const GROUP_CODE = 'GRP-001';
-const SERVER_URL = 'https://script.google.com/macros/s/AKfycbwawXgXFSwSO7Kj9J35xF7ewGJchGO4TeqL6OuJreGPX2p_Q1klsvvGHx_DQnD0sMfT/exec';
 const STORAGE_KEY = 'NAFAS_SOSIO_SESSIONS';
 
 // ============================================================
@@ -302,7 +274,7 @@ const esc = s => String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>
 // FUNGSI KELUAR
 // ============================================================
 function keluarAplikasi() {
-  if (confirm('Yakin ingin keluar dari aplikasi?')) {
+  if (confirm('Yakin ingin keluar?')) {
     localStorage.removeItem('NAFAS_CURRENT_SESSION');
     location.reload();
   }
@@ -365,17 +337,13 @@ function validateAndOpenApp() {
 }
 
 function openApp() {
-  // Sembunyikan login dan dashboard
   document.getElementById('loginPanel').style.display = 'none';
   document.getElementById('dashboardPanel').style.display = 'none';
   document.getElementById('appContainer').style.display = 'none';
-  
-  // Tampilkan aplikasi
   document.getElementById('appContent').style.display = 'block';
   document.getElementById('mainNav').style.display = 'flex';
   document.getElementById('btnLogout').style.display = 'block';
   
-  // Inisialisasi
   renderSessionList();
   showTeacherSession();
   if (location.hash.startsWith('#sesi=')) {
@@ -385,7 +353,7 @@ function openApp() {
 }
 
 // ============================================================
-// MANAJEMEN SESSIONS
+// MANAJEMEN SESSIONS (OFFLINE)
 // ============================================================
 function getStoredSessions() {
   try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || []; } 
@@ -419,10 +387,10 @@ function deleteSessionByCode(code) {
 }
 
 function copyText(v) {
-  navigator.clipboard?.writeText(v).then(()=>alert('✅ Berhasil disalin.')).catch(()=>{
+  navigator.clipboard?.writeText(v).then(()=>alert('✅ Disalin!')).catch(()=>{
     const a = document.createElement('textarea');
     a.value = v; document.body.appendChild(a); a.select(); document.execCommand('copy'); a.remove();
-    alert('✅ Berhasil disalin.');
+    alert('✅ Disalin!');
   });
 }
 
@@ -435,22 +403,6 @@ function generateCode() {
 
 function generatePin() {
   return String(Math.floor(1000 + Math.random() * 9000));
-}
-
-// ============================================================
-// API CALL
-// ============================================================
-async function api(action, data) {
-  try {
-    const r = await fetch(SERVER_URL, {
-      method: 'POST',
-      headers: {'Content-Type':'text/plain;charset=utf-8'},
-      body: JSON.stringify(Object.assign({action}, data||{}))
-    });
-    return await r.json();
-  } catch(e) {
-    return { status: 'ERROR', message: 'Gagal terhubung ke server.' };
-  }
 }
 
 // ============================================================
@@ -524,7 +476,7 @@ function loadSession(code) {
     session = found;
     localStorage.setItem('NAFAS_SOSIO_CURRENT_SESSION', JSON.stringify(session));
     showTeacherSession();
-    note('tmsg', '✅ Sesi ' + code + ' berhasil dimuat.', 'ok');
+    note('tmsg', '✅ Sesi ' + code + ' dimuat.', 'ok');
     renderSessionList();
   } else {
     note('tmsg', '❌ Sesi tidak ditemukan.', 'error');
@@ -532,7 +484,7 @@ function loadSession(code) {
 }
 
 function deleteSession(code) {
-  if (!confirm('⚠️ Yakin menghapus sesi ' + code + '?')) return;
+  if (!confirm('⚠️ Hapus sesi ' + code + '?')) return;
   deleteSessionByCode(code);
   if (session && session.code === code) {
     session = null;
@@ -554,13 +506,13 @@ function viewResult(code) {
 }
 
 // ============================================================
-// CREATE SESSION
+// CREATE SESSION (OFFLINE)
 // ============================================================
 function showTeacherSession() {
   const el = document.getElementById('session');
   if (!el) return;
   if (!session) {
-    el.innerHTML = '<div class="notice">ℹ️ Belum ada sesi aktif. Buat sesi baru atau pilih dari daftar.</div>';
+    el.innerHTML = '<div class="notice">ℹ️ Belum ada sesi aktif.</div>';
     return;
   }
   const u = location.href.split('#')[0] + '#sesi=' + encodeURIComponent(session.code);
@@ -587,34 +539,22 @@ function showTeacherSession() {
         <br><button class="soft" onclick="printShareCard()">🖨️ Cetak Kartu QR</button>
       </div>
     </div>
-    <div class="small">✅ Sesi tersimpan di daftar sesi.</div>
+    <div class="small">✅ Data tersimpan di lokal.</div>
   `;
 }
 
-async function create() {
+function create() {
   const names = document.getElementById('students').value.split('\n').map(x=>x.trim()).filter(Boolean);
-  if (names.length < 2) { note('tmsg','⚠️ Minimal 2 nama siswa.', 'error'); return; }
+  if (names.length < 2) { note('tmsg','⚠️ Minimal 2 nama.', 'error'); return; }
   
-  note('tmsg','⏳ Membuat sesi...');
+  const code = generateCode();
+  const pin = generatePin();
   const students = names.map((name,i) => ({ id:'S'+(i+1), name }));
   
-  const r = await api('createSession', {
-    school: document.getElementById('school').value.trim(),
-    className: document.getElementById('className').value.trim(),
-    year: document.getElementById('year').value.trim(),
-    counselor: document.getElementById('counselor').value.trim(),
-    students
-  });
-  
-  if (r.status !== 'OK') { 
-    note('tmsg','❌ ' + esc(r.message), 'error'); 
-    return; 
-  }
-  
   session = {
-    code: r.code,
-    pin: r.pin,
-    students,
+    code: code,
+    pin: pin,
+    students: students,
     school: document.getElementById('school').value.trim(),
     className: document.getElementById('className').value.trim(),
     year: document.getElementById('year').value.trim(),
@@ -628,8 +568,9 @@ async function create() {
   localStorage.setItem('NAFAS_SOSIO_CURRENT_SESSION', JSON.stringify(session));
   showTeacherSession();
   renderSessionList();
+  updateDashboard();
   
-  note('tmsg', '✅ Sesi ' + r.code + ' berhasil dibuat!', 'ok');
+  note('tmsg', '✅ Sesi ' + code + ' berhasil dibuat!', 'ok');
 }
 
 function printShareCard() {
@@ -660,7 +601,7 @@ function printShareCard() {
 }
 
 // ============================================================
-// STUDENT MODE
+// STUDENT MODE (OFFLINE)
 // ============================================================
 function block(cls, title, txt, n) {
   let h = `<div class="panel aspect ${cls}"><h3>${title}</h3><p style="font-size:12px;color:#4a6a8a;margin:0 0 6px;">${txt}</p>`;
@@ -677,21 +618,17 @@ function opts() {
     session.students.map(s => '<option value="'+esc(s.id)+'">'+esc(s.name)+'</option>').join('');
 }
 
-async function loadStudent() {
+function loadStudent() {
   const code = location.hash.startsWith('#sesi=') ? decodeURIComponent(location.hash.slice(6)) : document.getElementById('scode').value.trim();
   if(!code) { 
     document.getElementById('q').innerHTML = '<div class="notice">📝 Masukkan kode sesi.</div>'; 
     return; 
   }
   
-  let sessionData = getSessionByCode(code);
+  const sessionData = getSessionByCode(code);
   if (!sessionData) {
-    const r = await api('getSession', {code});
-    if (r.status !== 'OK') { 
-      document.getElementById('q').innerHTML = '<div class="error">❌ ' + esc(r.message) + '</div>'; 
-      return; 
-    }
-    sessionData = r.session;
+    document.getElementById('q').innerHTML = '<div class="error">❌ Sesi tidak ditemukan.</div>'; 
+    return;
   }
   
   session = sessionData;
@@ -714,13 +651,13 @@ function reas(c) {
   return [...document.querySelectorAll('textarea.rs.'+c)].map(x => x.value.trim()); 
 }
 
-async function send() {
+function send() {
   const me = document.getElementById('me').value;
   const h = vals('heart'), c = vals('coop'), l = vals('lead'), u = vals('uncomfortable');
   const all = [...h, ...c, ...l, ...u];
   const reasons = [...reas('heart'), ...reas('coop'), ...reas('lead'), ...reas('uncomfortable')];
   
-  if(!me){ note('smsg','⚠️ Pilih nama kamu.', 'error'); return; }
+  if(!me){ note('smsg','⚠️ Pilih nama.', 'error'); return; }
   if(h.length < 2 || c.length < 2 || l.length < 1) { 
     note('smsg','⚠️ Lengkapi semua pilihan.', 'error'); 
     return; 
@@ -729,33 +666,48 @@ async function send() {
     note('smsg','⚠️ Isi semua alasan.', 'error'); 
     return; 
   }
-  if(all.includes(me)){ note('smsg','⚠️ Tidak boleh memilih diri sendiri.', 'error'); return; }
+  if(all.includes(me)){ note('smsg','⚠️ Tidak boleh pilih sendiri.', 'error'); return; }
   if(new Set(h).size < 2 || new Set(c).size < 2){ 
-    note('smsg','⚠️ Dua pilihan harus berbeda.', 'error'); 
+    note('smsg','⚠️ Pilihan harus berbeda.', 'error'); 
     return; 
   }
   
-  note('smsg','⏳ Mengirim...');
-  const r = await api('submitResponse', {
-    code: document.getElementById('scode').value,
+  // Simpan ke localStorage
+  const sessionData = getSessionByCode(document.getElementById('scode').value);
+  if (!sessionData) {
+    note('smsg','❌ Sesi tidak ditemukan.', 'error');
+    return;
+  }
+  
+  if (!sessionData.responses) sessionData.responses = [];
+  
+  // Cek apakah sudah mengisi
+  if (sessionData.responses.find(r => r.respondent === me)) {
+    note('smsg','⚠️ Kamu sudah mengisi sebelumnya.', 'notice');
+    return;
+  }
+  
+  sessionData.responses.push({
     respondent: me,
     heart: h, heartReason: reas('heart'),
     coop: c, coopReason: reas('coop'),
     lead: l, leadReason: reas('lead'),
-    uncomfortable: u, uncomfortableReason: reas('uncomfortable')
+    uncomfortable: u, uncomfortableReason: reas('uncomfortable'),
+    submittedAt: new Date().toISOString()
   });
   
-  if (r.status === 'OK') {
-    note('smsg', '✅ Jawaban berhasil dikirim! 🙏', 'ok');
-    document.querySelectorAll('.ch').forEach(x => x.value = '');
-    document.querySelectorAll('.rs').forEach(x => x.value = '');
-  } else {
-    note('smsg', '❌ ' + esc(r.message), 'error');
-  }
+  // Update storage
+  let sessions = getStoredSessions();
+  sessions = sessions.map(s => s.code === sessionData.code ? sessionData : s);
+  saveStoredSessions(sessions);
+  
+  note('smsg', '✅ Jawaban berhasil disimpan! 🙏', 'ok');
+  document.querySelectorAll('.ch').forEach(x => x.value = '');
+  document.querySelectorAll('.rs').forEach(x => x.value = '');
 }
 
 // ============================================================
-// PAPER MODE
+// PAPER MODE (OFFLINE)
 // ============================================================
 function paper() {
   if(!session) {
@@ -776,17 +728,17 @@ function paper() {
     <div class="panel" style="padding:10px;">
       <h3 style="margin:0 0 6px;">👤 ${i+1}. ${esc(s.name)}</h3>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;">
-        <div><label style="font-size:10px;">❤️ Pertemanan 1</label><select class="pe heart">${optsHtml}</select>
+        <div><label style="font-size:10px;">❤️ 1</label><select class="pe heart">${optsHtml}</select>
           <label style="font-size:10px;">Alasan</label><input class="pr heart" placeholder="Alasan..." style="padding:5px;font-size:11px;"></div>
-        <div><label style="font-size:10px;">❤️ Pertemanan 2</label><select class="pe heart">${optsHtml}</select>
+        <div><label style="font-size:10px;">❤️ 2</label><select class="pe heart">${optsHtml}</select>
           <label style="font-size:10px;">Alasan</label><input class="pr heart" placeholder="Alasan..." style="padding:5px;font-size:11px;"></div>
-        <div><label style="font-size:10px;">🤝 Kerja Sama 1</label><select class="pe coop">${optsHtml}</select>
+        <div><label style="font-size:10px;">🤝 1</label><select class="pe coop">${optsHtml}</select>
           <label style="font-size:10px;">Alasan</label><input class="pr coop" placeholder="Alasan..." style="padding:5px;font-size:11px;"></div>
-        <div><label style="font-size:10px;">🤝 Kerja Sama 2</label><select class="pe coop">${optsHtml}</select>
+        <div><label style="font-size:10px;">🤝 2</label><select class="pe coop">${optsHtml}</select>
           <label style="font-size:10px;">Alasan</label><input class="pr coop" placeholder="Alasan..." style="padding:5px;font-size:11px;"></div>
-        <div><label style="font-size:10px;">⭐ Kepemimpinan</label><select class="pe lead">${optsHtml}</select>
+        <div><label style="font-size:10px;">⭐</label><select class="pe lead">${optsHtml}</select>
           <label style="font-size:10px;">Alasan</label><input class="pr lead" placeholder="Alasan..." style="padding:5px;font-size:11px;"></div>
-        <div><label style="font-size:10px;">🔎 Relasi Kurang Nyaman</label><select class="pe uncomfortable">${optsHtml}</select>
+        <div><label style="font-size:10px;">🔎</label><select class="pe uncomfortable">${optsHtml}</select>
           <label style="font-size:10px;">Alasan</label><input class="pr uncomfortable" placeholder="Alasan..." style="padding:5px;font-size:11px;"></div>
       </div>
     </div>
@@ -819,17 +771,20 @@ function paper() {
 }
 
 function printSociometry() {
-  if(!session){ alert('⚠️ Pilih sesi terlebih dahulu.'); return; }
-  const oldTitle = document.title;
-  document.title = 'Lembar Sosiometri - ' + (session.className||'NaFaS BK');
+  if(!session){ alert('⚠️ Pilih sesi.'); return; }
   window.print();
-  document.title = oldTitle;
 }
 
-async function submitPaper() {
+function submitPaper() {
   if(!session){ note('pmsg','⚠️ Pilih sesi.', 'error'); return; }
   const cards = [...document.querySelectorAll('#paperEntry .panel')];
-  note('pmsg','⏳ Menyimpan...');
+  
+  const sessionData = getSessionByCode(session.code);
+  if (!sessionData) {
+    note('pmsg','❌ Sesi tidak ditemukan.', 'error');
+    return;
+  }
+  if (!sessionData.responses) sessionData.responses = [];
   
   for(let i=0; i<cards.length; i++) {
     const s = session.students[i];
@@ -845,29 +800,32 @@ async function submitPaper() {
     const ur = ins[5]?.value.trim() ? [ins[5].value.trim()] : [];
     
     if(h.length!==2 || c.length!==2 || !l.length || hr.some(x=>!x) || cr.some(x=>!x) || !lr.length) {
-      note('pmsg','⚠️ Entri '+(i+1)+' ('+esc(s.name)+') belum lengkap.', 'error');
+      note('pmsg','⚠️ Entri '+(i+1)+' belum lengkap.', 'error');
       return;
     }
     
-    const r = await api('submitResponse', {
-      code: session.code,
+    // Cek duplikat
+    if (sessionData.responses.find(r => r.respondent === s.id)) continue;
+    
+    sessionData.responses.push({
       respondent: s.id,
       heart: h, heartReason: hr,
       coop: c, coopReason: cr,
       lead: l, leadReason: lr,
-      uncomfortable: u, uncomfortableReason: ur
+      uncomfortable: u, uncomfortableReason: ur,
+      submittedAt: new Date().toISOString()
     });
-    
-    if(r.status !== 'OK' && !(r.message && r.message.includes('sudah diterima'))) {
-      note('pmsg','❌ Entri '+(i+1)+' gagal.', 'error');
-      return;
-    }
   }
+  
+  let sessions = getStoredSessions();
+  sessions = sessions.map(s => s.code === sessionData.code ? sessionData : s);
+  saveStoredSessions(sessions);
+  
   note('pmsg','✅ Semua entri berhasil disimpan!', 'ok');
 }
 
 // ============================================================
-// HASIL
+// HASIL (OFFLINE)
 // ============================================================
 function renderResult(data) {
   const rs = data.responses || [];
@@ -948,7 +906,7 @@ function renderResult(data) {
   return html;
 }
 
-async function results() {
+function results() {
   const code = document.getElementById('rcode').value.trim();
   const pin = document.getElementById('rpin').value.trim();
   if(!code || !pin){ 
@@ -956,32 +914,19 @@ async function results() {
     return; 
   }
   
-  const r = await api('getResults', { code, pin });
-  
-  if (r.status !== 'OK') {
-    const local = getSessionByCode(code);
-    if (local && local.pin === pin) {
-      const fakeData = { session: local, responses: local.responses || [] };
-      document.getElementById('res').innerHTML = renderResult(fakeData);
-      currentResults = fakeData;
-      return;
-    }
-    document.getElementById('res').innerHTML = '<div class="error">❌ ' + esc(r.message) + '</div>'; 
-    return; 
+  const sessionData = getSessionByCode(code);
+  if (!sessionData) {
+    document.getElementById('res').innerHTML = '<div class="error">❌ Sesi tidak ditemukan.</div>';
+    return;
   }
   
-  if (r.session) {
-    const local = getSessionByCode(code);
-    if (local) {
-      local.responses = r.responses || [];
-      let sessions = getStoredSessions();
-      sessions = sessions.map(s => s.code === code ? local : s);
-      saveStoredSessions(sessions);
-    }
+  if (sessionData.pin !== pin) {
+    document.getElementById('res').innerHTML = '<div class="error">❌ PIN salah.</div>';
+    return;
   }
   
-  document.getElementById('res').innerHTML = renderResult(r);
-  currentResults = r;
+  document.getElementById('res').innerHTML = renderResult(sessionData);
+  currentResults = sessionData;
 }
 
 // ============================================================
@@ -990,7 +935,7 @@ async function results() {
 function printResult() {
   const source = document.getElementById('res');
   if (!source || !source.innerHTML.trim()) { 
-    alert('⚠️ Silakan klik "Buka Hasil" terlebih dahulu.'); 
+    alert('⚠️ Klik "Buka Hasil" dulu.'); 
     return; 
   }
   
@@ -1042,15 +987,9 @@ function printResult() {
 // ============================================================
 function init() {
   updateDashboard();
-  
-  // Cek apakah sudah login
-  if (localStorage.getItem('NAFAS_IS_LOGGED_IN') === 'true') {
-    // Tapi kita biarkan user input ulang untuk keamanan
-  }
 }
 
 init();
-function openPrintPage(){let code=document.getElementById('rcode')?.value.trim()||'';let pin=document.getElementById('rpin')?.value.trim()||'';if(!code||!pin){alert('Masukkan Kode Sesi dan PIN Guru BK terlebih dahulu.');return}let u='cetak-hasil.html?code='+encodeURIComponent(code)+'&pin='+encodeURIComponent(pin);let w=window.open(u,'_blank');if(!w)alert('Izinkan pop-up agar laporan dapat dibuka.')}
 </script>
 </body>
 </html>

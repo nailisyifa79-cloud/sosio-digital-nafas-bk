@@ -3,111 +3,170 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Sosio Digital NaFaS BK - Sosiometri</title>
+<title>Sosio Digital NaFaS BK</title>
 <style>
-body{margin:0;font-family:Arial,sans-serif;background:#f4f8fc;color:#18324a}
-header{background:linear-gradient(135deg,#123a6f,#1c5c9e);color:#fff;padding:10px 16px}
-header .wrap{max-width:1100px;margin:auto;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap}
-header .brand{font-size:22px;font-weight:900}
-header .brand span{color:#f4b400}
-header .tag{font-size:11px;opacity:0.8}
-.btn-logout{background:#d96b7b;color:#fff;border:0;border-radius:6px;padding:6px 14px;font-weight:700;cursor:pointer;font-size:12px}
-.btn-logout:hover{background:#c45566}
+/* ===== STYLE GLOBAL ===== */
+* { box-sizing: border-box; }
+body { margin:0; font-family:'Segoe UI',Arial,sans-serif; background:#f0f5fb; color:#18324a; }
 
-.wrap,main{max-width:1100px;margin:auto}
-nav{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
-nav button{background:rgba(255,255,255,0.15);color:#fff;border:0;border-radius:8px;padding:8px 14px;font-weight:700;font-size:12px;cursor:pointer;transition:all 0.2s}
-nav button:hover,nav button.active{background:#f4b400;color:#123a6f}
-main{padding:12px}
-.panel{background:#fff;border:1px solid #d9e4ef;border-radius:12px;padding:16px;margin-bottom:12px;box-shadow:0 2px 10px #123a6f10}
-.panel h2{font-size:17px;margin:0 0 12px;color:#123a6f}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px}
-label{display:block;font-weight:700;font-size:12px;margin:8px 0 3px;color:#2a4a6a}
-input,select,textarea{width:100%;padding:8px 10px;border:1px solid #c9d8e6;border-radius:8px;box-sizing:border-box;font:inherit;background:#fafcfe;font-size:13px}
-input:focus,select:focus,textarea:focus{border-color:#1a5a9e;outline:none;box-shadow:0 0 0 3px rgba(26,90,158,0.12)}
-textarea{min-height:60px;resize:vertical}
-button{border:0;border-radius:8px;padding:8px 16px;font-weight:700;font-size:12px;cursor:pointer;transition:all 0.2s}
-button:hover{transform:translateY(-1px);box-shadow:0 4px 12px rgba(0,0,0,0.12)}
-.actions{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
-.green{background:#159a7c;color:#fff}
-.gold{background:#f4b400;color:#17324d}
-.dark{background:#123a6f;color:#fff}
-.soft{background:#eaf4ff;color:#123a6f}
-.hidden{display:none!important}
-.notice,.ok,.error{padding:8px 12px;border-radius:6px;margin-top:8px;font-size:12px}
-.notice{background:#fff8df;border:1px solid #efd36a;color:#7a6300}
-.ok{background:#eaf8f2;border:1px solid #9dd9c4;color:#0a6b4a}
-.error{background:#fde8ec;border:1px solid #f0b8c4;color:#a04050}
-.aspect{border-left:5px solid #f4b400}
-.coop{border-left-color:#159a7c}
-.lead{border-left-color:#7b61ff}
-.uncomfortable{border-left-color:#d96b7b}
-.big{font-size:24px;font-weight:900;color:#123a6f;margin-top:4px}
-.share{background:#f5f9ff;border:1px solid #cddfee;border-radius:12px;padding:12px;margin-top:10px}
-.shareline{display:flex;gap:6px;flex-wrap:wrap}
-.qrbox{margin-top:10px;padding:10px;border:1px dashed #b9c9d8;border-radius:10px;background:#f8fbfe;text-align:center}
-.qrbox img{display:block;margin:6px auto;width:140px;height:140px}
-.small{font-size:11px;color:#6b7d90}
-.session-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:8px;margin-top:8px}
-.session-item{background:#f9fbfd;border:1px solid #d9e4ef;border-radius:10px;padding:10px 12px;cursor:pointer;transition:all 0.2s}
-.session-item:hover{border-color:#123a6f;box-shadow:0 2px 8px rgba(18,58,111,0.08)}
-.session-item .s-code{font-size:16px;font-weight:900;color:#123a6f}
-.session-item .s-class{font-size:13px;font-weight:600}
-.session-item .s-meta{font-size:10px;color:#6b7d90;margin-top:2px}
-.session-item .s-status{display:inline-block;padding:1px 10px;border-radius:12px;font-size:9px;font-weight:700;margin-top:3px}
-.session-item .s-status.active{background:#eaf8f2;color:#159a7c}
-.session-item .s-status.closed{background:#f0f0f0;color:#6b7d90}
-.session-item .s-actions{margin-top:6px;display:flex;gap:4px;flex-wrap:wrap}
-.session-empty{text-align:center;padding:20px;color:#6b7d90}
+/* ===== HEADER ===== */
+header { background:linear-gradient(135deg,#0d2b4f,#1a5a9e); color:#fff; padding:8px 16px; }
+.wrap { max-width:1100px; margin:auto; }
+.header-flex { display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:6px; }
+.brand { font-size:18px; font-weight:900; }
+.brand span { color:#f4b400; }
+.tag { font-size:10px; opacity:0.8; }
+.btn-logout { background:#d96b7b; color:#fff; border:0; border-radius:6px; padding:6px 14px; font-weight:700; cursor:pointer; font-size:12px; }
+.btn-logout:hover { background:#c45566; }
 
-/* TABEL HASIL */
-.table-wrap{overflow-x:auto;margin-top:4px;border-radius:8px;border:1px solid #d9e4ef}
-.table-main{width:100%;border-collapse:collapse;font-size:11px}
-.table-main th{background:#123a6f;color:#fff;padding:5px 4px;text-align:center;font-weight:700;font-size:9px}
-.table-main td{padding:4px;border-bottom:1px solid #eef2f6;text-align:center;font-size:10px}
-.table-main tr:nth-child(even){background:#f8fafc}
-.table-main .name-col{text-align:left;font-weight:600;padding-left:8px}
-.table-main .rank-badge{display:inline-block;min-width:18px;height:18px;line-height:18px;border-radius:50%;background:#eef2f6;color:#123a6f;font-weight:700;font-size:8px;text-align:center}
-.table-main .rank-1{background:#f4b400;color:#fff}
-.table-main .rank-2{background:#b8c8d8;color:#fff}
-.table-main .rank-3{background:#d9b382;color:#fff}
-.table-main .count{display:inline-block;background:#eaf1f9;padding:0 6px;border-radius:8px;font-weight:700;font-size:10px;color:#123a6f}
-.table-main .count-low{background:#fde8ec;color:#b84a5a}
-.table-main .total-col{font-weight:900;color:#123a6f;font-size:11px}
-.result-head{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;padding:4px 10px;background:#eaf1f9;border-radius:6px;margin-bottom:4px;font-size:11px}
-.result-head .info{color:#4a6a8a}
-.result-head .info strong{color:#123a6f}
-.result-footer{margin-top:3px;font-size:7px;color:#8a9daf;text-align:center;border-top:1px solid #e4edf4;padding-top:3px}
+/* ===== NAV ===== */
+nav { display:flex; gap:4px; flex-wrap:wrap; margin-top:6px; }
+nav button { background:rgba(255,255,255,0.12); color:#fff; border:0; border-radius:6px; padding:6px 12px; font-weight:700; font-size:11px; cursor:pointer; transition:all 0.2s; }
+nav button:hover, nav button.active { background:#f4b400; color:#123a6f; }
 
-/* CETAK */
-.print-sheet{background:#fff;color:#172b3a;border:1px solid #d8e2ec;border-radius:10px;padding:10px;margin-top:10px}
-.print-head{text-align:center;border-bottom:2px solid #123a6f;padding-bottom:8px;margin-bottom:10px}
-.print-head h1{font-size:16px;margin:0;color:#123a6f}
-.print-head h2{font-size:12px;margin:2px 0}
-.print-meta{display:flex;justify-content:center;gap:12px;font-size:10px;margin-top:2px}
-.print-instruction{font-size:9px;background:#f6f9fc;border:1px solid #d9e4ef;border-radius:6px;padding:6px;margin-bottom:6px}
-.print-q{border:1px solid #cfdbe7;border-radius:6px;padding:5px;margin:3px 0}
-.print-q h3{font-size:11px;margin:0 0 3px;color:#123a6f}
-.print-q p{font-size:9px;margin:2px 0}
-.print-q .line{font-size:8px;margin:2px 0;min-height:10px}
-.print-footer{text-align:center;font-size:7px;color:#647687;margin-top:4px;border-top:1px solid #d9e4ef;padding-top:3px}
+/* ===== MAIN ===== */
+main { padding:10px; max-width:1100px; margin:auto; }
+.panel { background:#fff; border:1px solid #d9e4ef; border-radius:10px; padding:14px; margin-bottom:10px; box-shadow:0 2px 10px #123a6f10; }
+.panel h2 { font-size:16px; margin:0 0 10px; color:#123a6f; }
+.grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:8px; }
+label { display:block; font-weight:700; font-size:11px; margin:6px 0 2px; color:#2a4a6a; }
+input, select, textarea { width:100%; padding:7px 10px; border:1px solid #c9d8e6; border-radius:6px; box-sizing:border-box; font:inherit; background:#fafcfe; font-size:13px; }
+input:focus, select:focus, textarea:focus { border-color:#1a5a9e; outline:none; box-shadow:0 0 0 3px rgba(26,90,158,0.10); }
+textarea { min-height:50px; resize:vertical; }
 
-@media(max-width:650px){.shareline{flex-direction:column}}
-@media print{header,nav,.actions,.no-print{display:none!important}.panel{box-shadow:none!important;border:1px solid #d0ddee!important;padding:6px!important;margin-bottom:4px!important}.table-main th{font-size:7px!important;padding:2px!important}.table-main td{font-size:7px!important;padding:2px!important}.table-main .name-col{font-size:7px!important}.table-main .count{font-size:7px!important;padding:0 3px!important}.result-head{font-size:8px!important;padding:2px 6px!important}.result-footer{font-size:6px!important}.session-list{display:none!important}}
+button { border:0; border-radius:6px; padding:7px 14px; font-weight:700; font-size:12px; cursor:pointer; transition:all 0.2s; }
+button:hover { transform:translateY(-1px); box-shadow:0 4px 12px rgba(0,0,0,0.10); }
+.actions { display:flex; gap:6px; flex-wrap:wrap; margin-top:8px; }
+.green { background:#159a7c; color:#fff; }
+.gold { background:#f4b400; color:#17324d; }
+.dark { background:#123a6f; color:#fff; }
+.soft { background:#eaf4ff; color:#123a6f; }
+.primary { background:#1a5a9e; color:#fff; }
+.danger { background:#d96b7b; color:#fff; }
+
+.hidden { display:none!important; }
+.notice, .ok, .error { padding:6px 10px; border-radius:6px; margin-top:6px; font-size:11px; }
+.notice { background:#fff8df; border:1px solid #efd36a; color:#7a6300; }
+.ok { background:#eaf8f2; border:1px solid #9dd9c4; color:#0a6b4a; }
+.error { background:#fde8ec; border:1px solid #f0b8c4; color:#a04050; }
+
+/* ===== DASHBOARD ===== */
+.stat-box { background:#f8faff; padding:8px; border-radius:8px; text-align:center; border:1px solid #e2ecf5; }
+.stat-box .num { font-size:20px; font-weight:900; color:#0d2b4f; }
+.stat-box .label { font-size:9px; color:#6a8aaa; }
+.grid-stats { display:grid; grid-template-columns:repeat(auto-fit,minmax(90px,1fr)); gap:6px; }
+
+/* ===== LOGIN ===== */
+.login-box { background:#f8faff; border-radius:8px; padding:10px; border:1px solid #e2ecf5; }
+.login-flex { display:flex; gap:8px; flex-wrap:wrap; align-items:center; }
+.login-flex input { flex:1; min-width:160px; }
+.login-flex button { white-space:nowrap; }
+
+/* ===== APLIKASI ===== */
+.app-wrapper { background:#fff; border-radius:10px; border:1px solid #e2ecf5; overflow:hidden; }
+.app-header-bar { background:#0d2b4f; color:#fff; padding:5px 12px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:4px; }
+.app-header-bar .title { font-weight:700; font-size:13px; }
+.app-header-bar .badge { font-size:8px; background:#17a67a; padding:2px 8px; border-radius:8px; }
+.app-header-bar .btn-logout-sm { background:#d96b7b; color:#fff; border:0; border-radius:4px; padding:3px 10px; font-size:10px; font-weight:700; cursor:pointer; }
+.app-header-bar .btn-logout-sm:hover { background:#c45566; }
+.app-content { padding:10px; max-height:600px; overflow-y:auto; }
+
+/* ===== SESSION LIST ===== */
+.session-list { display:grid; grid-template-columns:repeat(auto-fill,minmax(240px,1fr)); gap:6px; margin-top:6px; }
+.session-item { background:#f9fbfd; border:1px solid #d9e4ef; border-radius:8px; padding:8px 10px; cursor:pointer; transition:all 0.2s; }
+.session-item:hover { border-color:#123a6f; box-shadow:0 2px 8px rgba(18,58,111,0.08); }
+.session-item .s-code { font-size:15px; font-weight:900; color:#123a6f; }
+.session-item .s-class { font-size:12px; font-weight:600; }
+.session-item .s-meta { font-size:9px; color:#6b7d90; margin-top:2px; }
+.session-item .s-status { display:inline-block; padding:1px 8px; border-radius:10px; font-size:8px; font-weight:700; margin-top:2px; }
+.session-item .s-status.active { background:#eaf8f2; color:#159a7c; }
+.session-item .s-status.closed { background:#f0f0f0; color:#6b7d90; }
+.session-item .s-actions { margin-top:4px; display:flex; gap:3px; flex-wrap:wrap; }
+.session-empty { text-align:center; padding:16px; color:#6b7d90; font-size:13px; }
+
+/* ===== TABEL HASIL ===== */
+.table-wrap { overflow-x:auto; margin-top:4px; border-radius:6px; border:1px solid #d9e4ef; }
+.table-main { width:100%; border-collapse:collapse; font-size:10px; }
+.table-main th { background:#123a6f; color:#fff; padding:4px; text-align:center; font-weight:700; font-size:8px; }
+.table-main td { padding:3px 4px; border-bottom:1px solid #eef2f6; text-align:center; font-size:9px; }
+.table-main tr:nth-child(even) { background:#f8fafc; }
+.table-main .name-col { text-align:left; font-weight:600; padding-left:6px; }
+.table-main .rank-badge { display:inline-block; min-width:16px; height:16px; line-height:16px; border-radius:50%; background:#eef2f6; color:#123a6f; font-weight:700; font-size:7px; text-align:center; }
+.table-main .rank-1 { background:#f4b400; color:#fff; }
+.table-main .rank-2 { background:#b8c8d8; color:#fff; }
+.table-main .rank-3 { background:#d9b382; color:#fff; }
+.table-main .count { display:inline-block; background:#eaf1f9; padding:0 5px; border-radius:6px; font-weight:700; font-size:9px; color:#123a6f; }
+.table-main .count-low { background:#fde8ec; color:#b84a5a; }
+.table-main .total-col { font-weight:900; color:#123a6f; font-size:10px; }
+.result-head { display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; padding:3px 8px; background:#eaf1f9; border-radius:4px; margin-bottom:3px; font-size:10px; }
+.result-head .info { color:#4a6a8a; }
+.result-head .info strong { color:#123a6f; }
+.result-footer { margin-top:2px; font-size:6px; color:#8a9daf; text-align:center; border-top:1px solid #e4edf4; padding-top:2px; }
+
+/* ===== CETAK ===== */
+.print-sheet { background:#fff; border:1px solid #d8e2ec; border-radius:8px; padding:8px; margin-top:8px; }
+.print-head { text-align:center; border-bottom:2px solid #123a6f; padding-bottom:6px; margin-bottom:8px; }
+.print-head h1 { font-size:14px; margin:0; color:#123a6f; }
+.print-head h2 { font-size:11px; margin:2px 0; }
+.print-meta { display:flex; justify-content:center; gap:10px; font-size:9px; margin-top:2px; }
+.print-instruction { font-size:8px; background:#f6f9fc; border:1px solid #d9e4ef; border-radius:5px; padding:5px; margin-bottom:5px; }
+.print-q { border:1px solid #cfdbe7; border-radius:5px; padding:4px; margin:3px 0; }
+.print-q h3 { font-size:10px; margin:0 0 2px; color:#123a6f; }
+.print-q p { font-size:8px; margin:2px 0; }
+.print-q .line { font-size:7px; margin:2px 0; min-height:9px; }
+.print-footer { text-align:center; font-size:6px; color:#647687; margin-top:3px; border-top:1px solid #d9e4ef; padding-top:2px; }
+
+/* ===== SHARE ===== */
+.share { background:#f5f9ff; border:1px solid #cddfee; border-radius:10px; padding:10px; margin-top:8px; }
+.shareline { display:flex; gap:6px; flex-wrap:wrap; }
+.qrbox { margin-top:8px; padding:8px; border:1px dashed #b9c9d8; border-radius:8px; background:#f8fbfe; text-align:center; }
+.qrbox img { display:block; margin:4px auto; width:120px; height:120px; }
+.big { font-size:20px; font-weight:900; color:#123a6f; margin-top:2px; }
+.small { font-size:10px; color:#6b7d90; }
+.text-center { text-align:center; }
+
+.aspect { border-left:4px solid #f4b400; }
+.coop { border-left-color:#159a7c; }
+.lead { border-left-color:#7b61ff; }
+.uncomfortable { border-left-color:#d96b7b; }
+
+/* ===== RESPONSIVE ===== */
+@media(max-width:650px) {
+  .brand { font-size:15px; }
+  .shareline { flex-direction:column; }
+  .login-flex { flex-direction:column; }
+  .login-flex button { width:100%; }
+  .header-flex { flex-direction:column; align-items:stretch; }
+  .btn-logout { align-self:flex-end; }
+}
+
+/* ===== PRINT ===== */
+@media print {
+  header, nav, .actions, .no-print, #loginPanel, #dashboardPanel { display:none!important; }
+  .panel { box-shadow:none!important; border:1px solid #d0ddee!important; padding:4px!important; margin-bottom:3px!important; }
+  .table-main th { font-size:6px!important; padding:1px!important; }
+  .table-main td { font-size:6px!important; padding:1px!important; }
+  .table-main .name-col { font-size:6px!important; }
+  .table-main .count { font-size:6px!important; padding:0 2px!important; }
+  .result-head { font-size:7px!important; padding:2px 4px!important; }
+  .result-footer { font-size:5px!important; }
+  .session-list { display:none!important; }
+  .app-content { max-height:none!important; overflow:visible!important; }
+}
 </style>
 </head>
 <body>
 
 <header>
-  <div class="wrap">
+  <div class="wrap header-flex">
     <div>
       <div class="brand">🌟 Sosio Digital <span>NaFaS BK</span></div>
       <div class="tag">Peta Pertemanan • Kolaborasi • Kepemimpinan</div>
     </div>
-    <button class="btn-logout" onclick="keluarAplikasi()">🚪 Keluar</button>
+    <button class="btn-logout" id="btnLogout" onclick="keluarAplikasi()" style="display:none;">🚪 Keluar</button>
   </div>
-  <div class="wrap" style="margin-top:6px;">
-    <nav>
+  <div class="wrap" style="margin-top:4px;">
+    <nav id="mainNav" style="display:none;">
       <button id="nt" class="active" onclick="page('teacher')">👩‍🏫 Guru BK</button>
       <button id="ns" onclick="page('student')">📱 Mode HP</button>
       <button id="np" onclick="page('paper')">📄 Mode Tanpa HP</button>
@@ -117,65 +176,127 @@ button:hover{transform:translateY(-1px);box-shadow:0 4px 12px rgba(0,0,0,0.12)}
 </header>
 
 <main>
-<section id="teacher">
-<div class="panel"><h2>👩‍🏫 Buat Sesi Sosiometri</h2>
-<div class="grid">
-<div><label>Sekolah</label><input id="school"></div>
-<div><label>Kelas / Rombel</label><input id="className"></div>
-<div><label>Tahun Ajaran</label><input id="year" value="2026/2027"></div>
-<div><label>Guru BK</label><input id="counselor"></div>
-</div>
-<label>Daftar nama siswa — satu nama per baris</label>
-<textarea id="students" placeholder="Aisyah Putri&#10;Bima Aditya&#10;Citra Kirana"></textarea>
-<div class="actions"><button class="green" onclick="create()">💾 Buat Sesi & Bagikan</button></div>
-<div id="tmsg"></div></div>
-<div class="panel"><h2>📋 Daftar Sesi</h2><div id="sessionList">Memuat...</div></div>
-</section>
+  <!-- ===== DASHBOARD ===== -->
+  <div id="dashboardPanel">
+    <div class="panel">
+      <h2>📊 Dashboard</h2>
+      <div class="grid-stats">
+        <div class="stat-box"><div class="num" id="totalSessions">0</div><div class="label">Total Sesi</div></div>
+        <div class="stat-box"><div class="num" id="totalStudents">0</div><div class="label">Total Siswa</div></div>
+        <div class="stat-box"><div class="num" id="totalUsers">0</div><div class="label">Pengguna</div></div>
+      </div>
+    </div>
+  </div>
 
-<section id="student" class="hidden">
-<div class="panel"><h2>📱 Pengisian Siswa</h2>
-<div class="notice">Hasil sosiometri hanya dapat dilihat Guru BK.</div>
-<label>Kode Sesi</label><input id="scode">
-<label>Nama Kamu</label><select id="me"></select>
-<div id="q"></div>
-<div class="actions"><button class="green" onclick="send()">📨 Kirim Jawaban</button></div>
-<div id="smsg"></div></div>
-</section>
+  <!-- ===== LOGIN ===== -->
+  <div id="loginPanel">
+    <div class="panel">
+      <h2>🔑 Masukkan Kunci Akses</h2>
+      <div class="login-box">
+        <div class="login-flex">
+          <input id="accessKeyInput" placeholder="Masukkan Kunci Akses">
+          <button class="primary" onclick="validateAndOpenApp()">🚀 Buka Aplikasi</button>
+        </div>
+        <div id="accessMsg"></div>
+      </div>
+    </div>
+  </div>
 
-<section id="paper" class="hidden">
-<div class="panel"><h2>📄 Mode Tanpa HP</h2>
-<div class="notice"><b>Mode Tanpa HP:</b> siswa mengisi lembar kertas, lalu Guru BK memasukkan hasilnya di sini.</div>
-<div id="paperEntry"></div>
-<div class="actions">
-<button class="gold" onclick="paper()">🔄 Muat Entri</button>
-<button class="dark" onclick="submitPaper()">💾 Simpan Hasil Entri</button>
-</div>
-<div id="pmsg"></div></div>
-<div class="panel"><h3>🖨️ Lembar Sosiometri untuk Dicetak</h3>
-<div id="paperRows"></div>
-<button class="gold" onclick="printSociometry()">🖨️ Cetak Lembar Siswa</button></div>
-</section>
+  <!-- ===== APLIKASI ===== -->
+  <div id="appContainer">
+    <div class="panel text-center" style="padding:30px 16px;background:#f8faff;">
+      <div style="font-size:40px;margin-bottom:6px;">🔒</div>
+      <div style="font-size:15px;font-weight:600;color:#0d2b4f;">Masukkan kunci akses untuk membuka aplikasi</div>
+      <div style="font-size:11px;color:#6a8aaa;">♾️ Unlimited Siswa • Unlimited Sesi</div>
+    </div>
+  </div>
 
-<section id="result" class="hidden">
-<div class="panel"><h2>🗺️ Hasil Guru BK</h2>
-<div class="grid">
-<div><label>Kode Sesi</label><input id="rcode"></div>
-<div><label>PIN Guru BK</label><input id="rpin"></div>
-</div>
-<div class="actions">
-<button class="dark" onclick="results()">🔐 Buka Hasil</button>
-<button class="gold" onclick="printResult()">🖨️ Cetak / PDF</button>
-</div>
-<div id="res"></div></div>
-</section>
+  <!-- ===== KONTEN APLIKASI (disembunyikan sampai login) ===== -->
+  <div id="appContent" style="display:none;">
+    <!-- TEACHER -->
+    <section id="teacher">
+      <div class="panel"><h2>👩‍🏫 Buat Sesi Sosiometri</h2>
+        <div class="grid">
+          <div><label>Sekolah</label><input id="school"></div>
+          <div><label>Kelas / Rombel</label><input id="className"></div>
+          <div><label>Tahun Ajaran</label><input id="year" value="2026/2027"></div>
+          <div><label>Guru BK</label><input id="counselor"></div>
+        </div>
+        <label>Daftar nama siswa — satu nama per baris</label>
+        <textarea id="students" placeholder="Aisyah Putri&#10;Bima Aditya&#10;Citra Kirana"></textarea>
+        <div class="actions"><button class="green" onclick="create()">💾 Buat Sesi & Bagikan</button></div>
+        <div id="tmsg"></div>
+      </div>
+      <div class="panel"><h2>📋 Daftar Sesi</h2><div id="sessionList">Memuat...</div></div>
+    </section>
+
+    <!-- STUDENT -->
+    <section id="student" class="hidden">
+      <div class="panel"><h2>📱 Pengisian Siswa</h2>
+        <div class="notice">Hasil sosiometri hanya dapat dilihat Guru BK.</div>
+        <label>Kode Sesi</label><input id="scode">
+        <label>Nama Kamu</label><select id="me"></select>
+        <div id="q"></div>
+        <div class="actions"><button class="green" onclick="send()">📨 Kirim Jawaban</button></div>
+        <div id="smsg"></div>
+      </div>
+    </section>
+
+    <!-- PAPER -->
+    <section id="paper" class="hidden">
+      <div class="panel"><h2>📄 Mode Tanpa HP</h2>
+        <div class="notice"><b>Mode Tanpa HP:</b> siswa mengisi lembar kertas, lalu Guru BK memasukkan hasilnya di sini.</div>
+        <div id="paperEntry"></div>
+        <div class="actions">
+          <button class="gold" onclick="paper()">🔄 Muat Entri</button>
+          <button class="dark" onclick="submitPaper()">💾 Simpan Hasil Entri</button>
+        </div>
+        <div id="pmsg"></div>
+      </div>
+      <div class="panel"><h3>🖨️ Lembar Sosiometri untuk Dicetak</h3>
+        <div id="paperRows"></div>
+        <button class="gold" onclick="printSociometry()">🖨️ Cetak Lembar Siswa</button>
+      </div>
+    </section>
+
+    <!-- RESULT -->
+    <section id="result" class="hidden">
+      <div class="panel"><h2>🗺️ Hasil Guru BK</h2>
+        <div class="grid">
+          <div><label>Kode Sesi</label><input id="rcode"></div>
+          <div><label>PIN Guru BK</label><input id="rpin"></div>
+        </div>
+        <div class="actions">
+          <button class="dark" onclick="results()">🔐 Buka Hasil</button>
+          <button class="gold" onclick="printResult()">🖨️ Cetak / PDF</button>
+        </div>
+        <div id="res"></div>
+      </div>
+    </section>
+  </div>
 </main>
 
 <script>
 // ============================================================
 // KONFIGURASI
 // ============================================================
-const SERVER_URL='https://script.google.com/macros/s/AKfycbwawXgXFSwSO7Kj9J35xF7ewGJchGO4TeqL6OuJreGPX2p_Q1klsvvGHx_DQnD0sMfT/exec';
+const MASTER_KEY = 'NAFAS-2026';
+const GROUP_CODE = 'GRP-001';
+const SERVER_URL = 'https://script.google.com/macros/s/AKfycbwawXgXFSwSO7Kj9J35xF7ewGJchGO4TeqL6OuJreGPX2p_Q1klsvvGHx_DQnD0sMfT/exec';
 const STORAGE_KEY = 'NAFAS_SOSIO_SESSIONS';
+
+// ============================================================
+// VARIABLE GLOBAL
+// ============================================================
+let session = null;
+let currentResults = null;
+
+try {
+  const saved = localStorage.getItem('NAFAS_SOSIO_CURRENT_SESSION');
+  if (saved) session = JSON.parse(saved);
+} catch(e) { session = null; }
+
+const esc = s => String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 
 // ============================================================
 // FUNGSI KELUAR
@@ -183,12 +304,88 @@ const STORAGE_KEY = 'NAFAS_SOSIO_SESSIONS';
 function keluarAplikasi() {
   if (confirm('Yakin ingin keluar dari aplikasi?')) {
     localStorage.removeItem('NAFAS_CURRENT_SESSION');
-    window.location.href = 'index.html';
+    location.reload();
   }
 }
 
 // ============================================================
-// MANAJEMEN SESSIONS DI LOCAL STORAGE
+// DASHBOARD
+// ============================================================
+function updateDashboard() {
+  try {
+    const users = JSON.parse(localStorage.getItem('NAFAS_ACCESS_USERS')) || [];
+    document.getElementById('totalUsers').textContent = users.length;
+  } catch(e) { document.getElementById('totalUsers').textContent = '0'; }
+  
+  try {
+    const sessions = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+    document.getElementById('totalSessions').textContent = sessions.length;
+    let total = 0;
+    sessions.forEach(s => { if (s.students) total += s.students.length; });
+    document.getElementById('totalStudents').textContent = total;
+  } catch(e) {
+    document.getElementById('totalSessions').textContent = '0';
+    document.getElementById('totalStudents').textContent = '0';
+  }
+}
+
+function note(id, msg, type='notice') {
+  const cls = { notice:'notice', ok:'ok', error:'error' }[type] || 'notice';
+  document.getElementById(id).innerHTML = `<div class="${cls}">${msg}</div>`;
+  setTimeout(() => { document.getElementById(id).innerHTML = ''; }, 4000);
+}
+
+// ============================================================
+// VALIDASI & BUKA APLIKASI
+// ============================================================
+function validateAndOpenApp() {
+  const input = document.getElementById('accessKeyInput').value.trim();
+  if (!input) {
+    note('accessMsg', '⚠️ Masukkan kunci akses.', 'error');
+    return;
+  }
+  
+  if (input === MASTER_KEY || input === GROUP_CODE) {
+    note('accessMsg', '✅ Akses diterima!', 'ok');
+    
+    try {
+      const users = JSON.parse(localStorage.getItem('NAFAS_ACCESS_USERS')) || [];
+      const name = 'User-' + input.slice(-4);
+      if (!users.find(u => u.name === name)) {
+        users.push({ id: 'U' + String(users.length+1).padStart(3,'0'), name, status:'active', lastAccess: new Date().toISOString() });
+        localStorage.setItem('NAFAS_ACCESS_USERS', JSON.stringify(users));
+      }
+      updateDashboard();
+    } catch(e) {}
+    
+    openApp();
+  } else {
+    note('accessMsg', '❌ Kunci tidak valid.', 'error');
+  }
+}
+
+function openApp() {
+  // Sembunyikan login dan dashboard
+  document.getElementById('loginPanel').style.display = 'none';
+  document.getElementById('dashboardPanel').style.display = 'none';
+  document.getElementById('appContainer').style.display = 'none';
+  
+  // Tampilkan aplikasi
+  document.getElementById('appContent').style.display = 'block';
+  document.getElementById('mainNav').style.display = 'flex';
+  document.getElementById('btnLogout').style.display = 'block';
+  
+  // Inisialisasi
+  renderSessionList();
+  showTeacherSession();
+  if (location.hash.startsWith('#sesi=')) {
+    page('student');
+    setTimeout(loadStudent, 300);
+  }
+}
+
+// ============================================================
+// MANAJEMEN SESSIONS
 // ============================================================
 function getStoredSessions() {
   try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || []; } 
@@ -219,24 +416,6 @@ function deleteSessionByCode(code) {
   sessions = sessions.filter(s => s.code !== code);
   saveStoredSessions(sessions);
   return sessions;
-}
-
-// ============================================================
-// VARIABLE GLOBAL
-// ============================================================
-let session = null;
-let currentResults = null;
-
-try {
-  const saved = localStorage.getItem('NAFAS_SOSIO_CURRENT_SESSION');
-  if (saved) session = JSON.parse(saved);
-} catch(e) { session = null; }
-
-const esc = s => String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-
-function note(id, msg, type='notice') {
-  const cls = { notice:'notice', ok:'ok', error:'error' }[type] || 'notice';
-  document.getElementById(id).innerHTML = `<div class="${cls}">${msg}</div>`;
 }
 
 function copyText(v) {
@@ -714,11 +893,6 @@ function renderResult(data) {
     statusMap[s.id] = respondedIds.has(s.id) ? '✅ Sudah' : '⏳ Belum';
   });
   
-  const name = id => {
-    const found = st.find(s => String(s.id) === String(id));
-    return found ? found.name : id;
-  };
-  
   const sorted = st.map(s => ({
     ...s,
     heart: counts.heart[s.id] || 0,
@@ -867,16 +1041,15 @@ function printResult() {
 // INISIALISASI
 // ============================================================
 function init() {
-  renderSessionList();
-  showTeacherSession();
-  if (location.hash.startsWith('#sesi=')) {
-    page('student');
-    setTimeout(loadStudent, 300);
+  updateDashboard();
+  
+  // Cek apakah sudah login
+  if (localStorage.getItem('NAFAS_IS_LOGGED_IN') === 'true') {
+    // Tapi kita biarkan user input ulang untuk keamanan
   }
 }
 
 init();
-function openPrintPage(){let code=document.getElementById('rcode')?.value.trim()||'';let pin=document.getElementById('rpin')?.value.trim()||'';if(!code||!pin){alert('Masukkan Kode Sesi dan PIN Guru BK terlebih dahulu.');return}let u='cetak-hasil.html?code='+encodeURIComponent(code)+'&pin='+encodeURIComponent(pin);let w=window.open(u,'_blank');if(!w)alert('Izinkan pop-up agar laporan dapat dibuka.')}
 </script>
 </body>
 </html>

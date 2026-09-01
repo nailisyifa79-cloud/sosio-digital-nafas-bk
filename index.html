@@ -106,14 +106,32 @@ button:hover{transform:translateY(-1px)}
 .paper-layout{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 @media(max-width:650px){.paper-layout{grid-template-columns:1fr}.brand{font-size:15px}}
 
-/* Khusus cetak lembar siswa - hanya tampilkan yang ada di #printArea */
+/* Khusus cetak lembar siswa - HANYA #printArea yang tampil */
 @media print {
-    .no-print{display:none!important}
-    #printArea{display:block!important}
-    #printArea .panel{border:0!important;padding:4px!important;background:#fff!important}
-    #paperEntry,#pmsg,.actions,.panel:not(#printArea){display:none!important}
-    body{background:#fff;padding:4mm}
-    .panel#printArea{display:block!important}
+    body * { visibility: hidden; }
+    #printArea, #printArea * { visibility: visible; }
+    #printArea { 
+        position: absolute; 
+        left: 0; 
+        top: 0; 
+        width: 100%; 
+        padding: 8px;
+        background: #fff;
+        border: 0 !important;
+        box-shadow: none !important;
+    }
+    #printArea .panel {
+        border: 0 !important;
+        padding: 4px !important;
+        background: #fff !important;
+        box-shadow: none !important;
+    }
+    #printArea h3, #printArea h1, #printArea h2 {
+        margin: 2px 0 !important;
+        padding: 0 !important;
+    }
+    #printArea .no-print { display: none !important; }
+    #paperEntry, #pmsg, .actions, .no-print { display: none !important; }
 }
 </style>
 </head>
@@ -224,14 +242,14 @@ button:hover{transform:translateY(-1px)}
                 <div class="panel"><h2>📄 Mode Tanpa HP</h2>
                     <div class="notice"><b>Mode Tanpa HP:</b> siswa mengisi lembar kertas, Guru BK memasukkan hasilnya.</div>
                     
-                    <!-- LEMBAR CETAK UNTUK SISWA (DI ATAS) - HANYA INI YANG KELUAR SAAT CETAK -->
+                    <!-- LEMBAR CETAK UNTUK SISWA - HANYA INI YANG KELUAR SAAT CETAK -->
                     <div id="printArea" class="panel" style="background:#fafffd;border:2px solid #123a6f;">
                         <h3 style="margin:0 0 6px;color:#123a6f;">🖨️ LEMBAR UNTUK SISWA (CETAK & BAGIKAN)</h3>
                         <div id="paperRows"></div>
                         <button class="gold no-print" onclick="cetakLembar()" style="margin-top:6px;">🖨️ Cetak Lembar Siswa</button>
                     </div>
 
-                    <!-- ENTRI HASIL GURU (DI BAWAH) - TIDAK MASUK CETAK -->
+                    <!-- ENTRI HASIL GURU - TIDAK MASUK CETAK -->
                     <div class="panel no-print" style="background:#f8faff;border:2px solid #f4b400;margin-top:10px;">
                         <h3 style="margin:0 0 6px;color:#b8860b;">📝 ENTRI HASIL SISWA (UNTUK GURU)</h3>
                         <div id="paperEntry"></div>
@@ -479,6 +497,7 @@ function page(id) {
     const map = { teacher:'nt', student:'ns', paper:'np', result:'nr' };
     const el = document.getElementById(map[id]);
     if (el) el.classList.add('active');
+    
     if (id === 'student') {
         const hash = window.location.hash;
         if (hash.startsWith('#sesi=')) {
@@ -489,19 +508,39 @@ function page(id) {
     if (id === 'paper') { muatPaper(); renderPaperRows(); }
     if (id === 'teacher') { showTeacherSession(); renderSessionList(); }
     if (id === 'result') {
+        // Auto-load hasil jika ada sesi aktif
         if (sesiAktif) {
             document.getElementById('rcode').value = sesiAktif.code || '';
             document.getElementById('rpin').value = sesiAktif.pin || '';
-        }
-        // Auto load hasil jika sudah ada kode dan pin
-        const code = document.getElementById('rcode').value.trim();
-        const pin = document.getElementById('rpin').value.trim();
-        if (code && pin) {
-            setTimeout(lihatHasil, 300);
+            // Tunggu sebentar lalu tampilkan hasil otomatis
+            setTimeout(function() {
+                lihatHasilOtomatis();
+            }, 400);
         }
     }
 }
 
+// ===== FUNGSI KHUSUS UNTUK AUTO-LOAD HASIL =====
+function lihatHasilOtomatis() {
+    const code = document.getElementById('rcode').value.trim();
+    const pin = document.getElementById('rpin').value.trim();
+    if (!code || !pin) {
+        document.getElementById('res').innerHTML = '<div class="notice">ℹ️ Masukkan kode sesi dan PIN.</div>';
+        return;
+    }
+    const sessionData = getSessionByCode(code);
+    if (!sessionData) {
+        document.getElementById('res').innerHTML = '<div class="error">❌ Sesi tidak ditemukan.</div>';
+        return;
+    }
+    if (sessionData.pin !== pin) {
+        document.getElementById('res').innerHTML = '<div class="error">❌ PIN salah.</div>';
+        return;
+    }
+    document.getElementById('res').innerHTML = renderHasil(sessionData);
+}
+
+// ===== SESSION LIST =====
 function renderSessionList() {
     const container = document.getElementById('sessionList');
     const sessions = getSessions();
@@ -575,7 +614,7 @@ function viewResult(code) {
     if (found && found.pin) {
         document.getElementById('rpin').value = found.pin;
     }
-    setTimeout(lihatHasil, 300);
+    setTimeout(lihatHasilOtomatis, 500);
 }
 
 function showTeacherSession() {
@@ -779,7 +818,7 @@ function renderPaperRows() {
         return;
     }
     document.getElementById('paperRows').innerHTML = `
-        <div style="background:#fff;border:1px solid #d8e2ec;border-radius:8px;padding:8px;margin-top:4px;">
+        <div style="background:#fff;border:1px solid #d8e2ec;border-radius:8px;padding:8px;margin-top:4px;max-width:100%;">
             <div style="text-align:center;border-bottom:2px solid #123a6f;padding-bottom:6px;margin-bottom:8px;">
                 <h1 style="font-size:14px;margin:0;color:#123a6f;">SOSIO DIGITAL NaFaS BK</h1>
                 <h2 style="font-size:11px;margin:2px 0;font-weight:400;">LEMBAR SOSIOMETRI</h2>
@@ -1117,7 +1156,6 @@ window.addEventListener('DOMContentLoaded', function() {
 if (!checkSession()) {
     showLogin();
 }
-function openPrintPage(){let code=document.getElementById('rcode')?.value.trim()||'';let pin=document.getElementById('rpin')?.value.trim()||'';if(!code||!pin){alert('Masukkan Kode Sesi dan PIN Guru BK terlebih dahulu.');return}let u='cetak-hasil.html?code='+encodeURIComponent(code)+'&pin='+encodeURIComponent(pin);let w=window.open(u,'_blank');if(!w)alert('Izinkan pop-up agar laporan dapat dibuka.')}
 </script>
 </body>
 </html>

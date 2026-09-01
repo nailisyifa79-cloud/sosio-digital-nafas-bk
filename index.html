@@ -5,267 +5,208 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Sosio Digital NaFaS BK</title>
 <style>
-* { box-sizing: border-box; }
-body { margin:0; font-family:'Segoe UI',Arial,sans-serif; background:#f0f5fb; color:#18324a; }
-
-header { background:linear-gradient(135deg,#0d2b4f,#1a5a9e); color:#fff; padding:8px 16px; }
-.wrap { max-width:1100px; margin:auto; }
-.header-flex { display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:6px; }
-.brand { font-size:18px; font-weight:900; }
-.brand span { color:#f4b400; }
-.tag { font-size:10px; opacity:0.8; }
-.btn-logout { background:#d96b7b; color:#fff; border:0; border-radius:6px; padding:6px 14px; font-weight:700; cursor:pointer; font-size:12px; }
-.btn-logout:hover { background:#c45566; }
-
-nav { display:flex; gap:4px; flex-wrap:wrap; margin-top:6px; }
-nav button { background:rgba(255,255,255,0.12); color:#fff; border:0; border-radius:6px; padding:6px 12px; font-weight:700; font-size:11px; cursor:pointer; transition:all 0.2s; }
-nav button:hover, nav button.active { background:#f4b400; color:#123a6f; }
-
-main { padding:10px; max-width:1100px; margin:auto; }
-.panel { background:#fff; border:1px solid #d9e4ef; border-radius:10px; padding:14px; margin-bottom:10px; box-shadow:0 2px 10px #123a6f10; }
-.panel h2 { font-size:16px; margin:0 0 10px; color:#123a6f; }
-.grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:8px; }
-label { display:block; font-weight:700; font-size:11px; margin:6px 0 2px; color:#2a4a6a; }
-input, select, textarea { width:100%; padding:7px 10px; border:1px solid #c9d8e6; border-radius:6px; box-sizing:border-box; font:inherit; background:#fafcfe; font-size:13px; }
-input:focus, select:focus, textarea:focus { border-color:#1a5a9e; outline:none; box-shadow:0 0 0 3px rgba(26,90,158,0.10); }
-textarea { min-height:50px; resize:vertical; }
-
-button { border:0; border-radius:6px; padding:7px 14px; font-weight:700; font-size:12px; cursor:pointer; transition:all 0.2s; }
-button:hover { transform:translateY(-1px); box-shadow:0 4px 12px rgba(0,0,0,0.10); }
-.actions { display:flex; gap:6px; flex-wrap:wrap; margin-top:8px; }
-.green { background:#159a7c; color:#fff; }
-.gold { background:#f4b400; color:#17324d; }
-.dark { background:#123a6f; color:#fff; }
-.soft { background:#eaf4ff; color:#123a6f; }
-.primary { background:#1a5a9e; color:#fff; }
-
-.hidden { display:none!important; }
-.notice, .ok, .error { padding:6px 10px; border-radius:6px; margin-top:6px; font-size:11px; }
-.notice { background:#fff8df; border:1px solid #efd36a; color:#7a6300; }
-.ok { background:#eaf8f2; border:1px solid #9dd9c4; color:#0a6b4a; }
-.error { background:#fde8ec; border:1px solid #f0b8c4; color:#a04050; }
-
-.stat-box { background:#f8faff; padding:8px; border-radius:8px; text-align:center; border:1px solid #e2ecf5; }
-.stat-box .num { font-size:20px; font-weight:900; color:#0d2b4f; }
-.stat-box .label { font-size:9px; color:#6a8aaa; }
-.grid-stats { display:grid; grid-template-columns:repeat(auto-fit,minmax(90px,1fr)); gap:6px; }
-
-.login-box { background:#f8faff; border-radius:8px; padding:10px; border:1px solid #e2ecf5; }
-.login-flex { display:flex; gap:8px; flex-wrap:wrap; align-items:center; }
-.login-flex input { flex:1; min-width:160px; }
-.login-flex button { white-space:nowrap; }
-
-.session-list { display:grid; grid-template-columns:repeat(auto-fill,minmax(240px,1fr)); gap:6px; margin-top:6px; }
-.session-item { background:#f9fbfd; border:1px solid #d9e4ef; border-radius:8px; padding:8px 10px; cursor:pointer; transition:all 0.2s; }
-.session-item:hover { border-color:#123a6f; box-shadow:0 2px 8px rgba(18,58,111,0.08); }
-.session-item .s-code { font-size:15px; font-weight:900; color:#123a6f; }
-.session-item .s-class { font-size:12px; font-weight:600; }
-.session-item .s-meta { font-size:9px; color:#6b7d90; margin-top:2px; }
-.session-item .s-status { display:inline-block; padding:1px 8px; border-radius:10px; font-size:8px; font-weight:700; margin-top:2px; }
-.session-item .s-status.active { background:#eaf8f2; color:#159a7c; }
-.session-item .s-status.closed { background:#f0f0f0; color:#6b7d90; }
-.session-item .s-actions { margin-top:4px; display:flex; gap:3px; flex-wrap:wrap; }
-.session-empty { text-align:center; padding:16px; color:#6b7d90; font-size:13px; }
-
-.table-wrap { overflow-x:auto; margin-top:4px; border-radius:6px; border:1px solid #d9e4ef; }
-.table-main { width:100%; border-collapse:collapse; font-size:10px; }
-.table-main th { background:#123a6f; color:#fff; padding:4px; text-align:center; font-weight:700; font-size:8px; }
-.table-main td { padding:3px 4px; border-bottom:1px solid #eef2f6; text-align:center; font-size:9px; }
-.table-main tr:nth-child(even) { background:#f8fafc; }
-.table-main .name-col { text-align:left; font-weight:600; padding-left:6px; }
-.table-main .rank-badge { display:inline-block; min-width:16px; height:16px; line-height:16px; border-radius:50%; background:#eef2f6; color:#123a6f; font-weight:700; font-size:7px; text-align:center; }
-.table-main .rank-1 { background:#f4b400; color:#fff; }
-.table-main .rank-2 { background:#b8c8d8; color:#fff; }
-.table-main .rank-3 { background:#d9b382; color:#fff; }
-.table-main .count { display:inline-block; background:#eaf1f9; padding:0 5px; border-radius:6px; font-weight:700; font-size:9px; color:#123a6f; }
-.table-main .count-low { background:#fde8ec; color:#b84a5a; }
-.table-main .total-col { font-weight:900; color:#123a6f; font-size:10px; }
-.result-head { display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; padding:3px 8px; background:#eaf1f9; border-radius:4px; margin-bottom:3px; font-size:10px; }
-.result-head .info { color:#4a6a8a; }
-.result-head .info strong { color:#123a6f; }
-.result-footer { margin-top:2px; font-size:6px; color:#8a9daf; text-align:center; border-top:1px solid #e4edf4; padding-top:2px; }
-
-.share { background:#f5f9ff; border:1px solid #cddfee; border-radius:10px; padding:10px; margin-top:8px; }
-.shareline { display:flex; gap:6px; flex-wrap:wrap; }
-.qrbox { margin-top:8px; padding:8px; border:1px dashed #b9c9d8; border-radius:8px; background:#f8fbfe; text-align:center; }
-.qrbox img { display:block; margin:4px auto; width:120px; height:120px; }
-.big { font-size:20px; font-weight:900; color:#123a6f; margin-top:2px; }
-.small { font-size:10px; color:#6b7d90; }
-.text-center { text-align:center; }
-
-.aspect { border-left:4px solid #f4b400; }
-.coop { border-left-color:#159a7c; }
-.lead { border-left-color:#7b61ff; }
-.uncomfortable { border-left-color:#d96b7b; }
-
-.print-sheet { background:#fff; border:1px solid #d8e2ec; border-radius:8px; padding:8px; margin-top:8px; }
-.print-head { text-align:center; border-bottom:2px solid #123a6f; padding-bottom:6px; margin-bottom:8px; }
-.print-head h1 { font-size:14px; margin:0; color:#123a6f; }
-.print-head h2 { font-size:11px; margin:2px 0; }
-.print-meta { display:flex; justify-content:center; gap:10px; font-size:9px; margin-top:2px; }
-.print-instruction { font-size:8px; background:#f6f9fc; border:1px solid #d9e4ef; border-radius:5px; padding:5px; margin-bottom:5px; }
-.print-q { border:1px solid #cfdbe7; border-radius:5px; padding:4px; margin:3px 0; }
-.print-q h3 { font-size:10px; margin:0 0 2px; color:#123a6f; }
-.print-q p { font-size:8px; margin:2px 0; }
-.print-q .line { font-size:7px; margin:2px 0; min-height:9px; }
-.print-footer { text-align:center; font-size:6px; color:#647687; margin-top:3px; border-top:1px solid #d9e4ef; padding-top:2px; }
-
-@media(max-width:650px) {
-  .brand { font-size:15px; }
-  .shareline { flex-direction:column; }
-  .login-flex { flex-direction:column; }
-  .login-flex button { width:100%; }
-  .header-flex { flex-direction:column; align-items:stretch; }
-  .btn-logout { align-self:flex-end; }
-}
-
-@media print {
-  header, nav, .actions, .no-print, #loginPanel, #dashboardPanel { display:none!important; }
-  .panel { box-shadow:none!important; border:1px solid #d0ddee!important; padding:4px!important; margin-bottom:3px!important; }
-  .table-main th { font-size:6px!important; padding:1px!important; }
-  .table-main td { font-size:6px!important; padding:1px!important; }
-  .table-main .name-col { font-size:6px!important; }
-  .table-main .count { font-size:6px!important; padding:0 2px!important; }
-  .result-head { font-size:7px!important; padding:2px 4px!important; }
-  .result-footer { font-size:5px!important; }
-  .session-list { display:none!important; }
-}
+*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:#eef4fa;color:#18324a}
+header{background:linear-gradient(135deg,#0d2b4f,#1a5a9e);color:#fff;padding:8px 16px}
+.wrap{max-width:1100px;margin:auto}
+.flex-header{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap}
+.brand{font-size:18px;font-weight:900}
+.brand span{color:#f4b400}
+.tag{font-size:10px;opacity:.8}
+.btn-logout{background:#d96b7b;color:#fff;border:0;border-radius:6px;padding:5px 14px;font-weight:700;cursor:pointer;font-size:12px}
+.btn-logout:hover{background:#c45566}
+nav{display:flex;gap:4px;flex-wrap:wrap;margin-top:6px}
+nav button{background:rgba(255,255,255,.15);color:#fff;border:0;border-radius:6px;padding:5px 12px;font-weight:700;font-size:11px;cursor:pointer}
+nav button:hover,nav button.active{background:#f4b400;color:#123a6f}
+main{padding:10px;max-width:1100px;margin:auto}
+.panel{background:#fff;border:1px solid #d9e4ef;border-radius:10px;padding:14px;margin-bottom:10px;box-shadow:0 2px 10px #123a6f10}
+.panel h2{font-size:16px;margin:0 0 10px;color:#123a6f}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:8px}
+label{display:block;font-weight:700;font-size:11px;margin:6px 0 2px;color:#2a4a6a}
+input,select,textarea{width:100%;padding:7px 10px;border:1px solid #c9d8e6;border-radius:6px;font:inherit;background:#fafcfe;font-size:13px}
+input:focus,select:focus,textarea:focus{border-color:#1a5a9e;outline:none;box-shadow:0 0 0 3px rgba(26,90,158,.1)}
+textarea{min-height:50px}
+button{border:0;border-radius:6px;padding:7px 14px;font-weight:700;font-size:12px;cursor:pointer}
+button:hover{transform:translateY(-1px)}
+.actions{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.green{background:#159a7c;color:#fff}
+.gold{background:#f4b400;color:#17324d}
+.dark{background:#123a6f;color:#fff}
+.soft{background:#eaf4ff;color:#123a6f}
+.primary{background:#1a5a9e;color:#fff}
+.hidden{display:none!important}
+.notice,.ok,.error{padding:6px 10px;border-radius:6px;margin-top:6px;font-size:11px}
+.notice{background:#fff8df;border:1px solid #efd36a;color:#7a6300}
+.ok{background:#eaf8f2;border:1px solid #9dd9c4;color:#0a6b4a}
+.error{background:#fde8ec;border:1px solid #f0b8c4;color:#a04050}
+.stat-box{background:#f8faff;padding:8px;border-radius:8px;text-align:center;border:1px solid #e2ecf5}
+.stat-box .num{font-size:20px;font-weight:900;color:#0d2b4f}
+.stat-box .label{font-size:9px;color:#6a8aaa}
+.grid-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(90px,1fr));gap:6px}
+.login-box{background:#f8faff;border-radius:8px;padding:10px;border:1px solid #e2ecf5}
+.login-flex{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.login-flex input{flex:1;min-width:160px}
+.session-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:6px;margin-top:6px}
+.session-item{background:#f9fbfd;border:1px solid #d9e4ef;border-radius:8px;padding:8px 10px;cursor:pointer}
+.session-item:hover{border-color:#123a6f}
+.session-item .s-code{font-size:15px;font-weight:900;color:#123a6f}
+.session-item .s-class{font-size:12px;font-weight:600}
+.session-item .s-meta{font-size:9px;color:#6b7d90}
+.session-item .s-status{display:inline-block;padding:1px 8px;border-radius:10px;font-size:8px;font-weight:700}
+.session-item .s-status.active{background:#eaf8f2;color:#159a7c}
+.session-item .s-status.closed{background:#f0f0f0;color:#6b7d90}
+.session-item .s-actions{margin-top:4px;display:flex;gap:3px;flex-wrap:wrap}
+.session-empty{text-align:center;padding:16px;color:#6b7d90}
+.table-wrap{overflow-x:auto;margin-top:4px;border-radius:6px;border:1px solid #d9e4ef}
+.table-main{width:100%;border-collapse:collapse;font-size:10px}
+.table-main th{background:#123a6f;color:#fff;padding:4px;text-align:center;font-weight:700;font-size:8px}
+.table-main td{padding:3px 4px;border-bottom:1px solid #eef2f6;text-align:center;font-size:9px}
+.table-main tr:nth-child(even){background:#f8fafc}
+.table-main .name-col{text-align:left;font-weight:600;padding-left:6px}
+.table-main .rank-badge{display:inline-block;min-width:16px;height:16px;line-height:16px;border-radius:50%;background:#eef2f6;color:#123a6f;font-weight:700;font-size:7px;text-align:center}
+.table-main .rank-1{background:#f4b400;color:#fff}
+.table-main .rank-2{background:#b8c8d8;color:#fff}
+.table-main .rank-3{background:#d9b382;color:#fff}
+.table-main .count{display:inline-block;background:#eaf1f9;padding:0 5px;border-radius:6px;font-weight:700;font-size:9px;color:#123a6f}
+.table-main .count-low{background:#fde8ec;color:#b84a5a}
+.table-main .total-col{font-weight:900;color:#123a6f;font-size:10px}
+.result-head{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;padding:3px 8px;background:#eaf1f9;border-radius:4px;margin-bottom:3px;font-size:10px}
+.result-head .info{color:#4a6a8a}
+.result-head .info strong{color:#123a6f}
+.result-footer{margin-top:2px;font-size:6px;color:#8a9daf;text-align:center;border-top:1px solid #e4edf4;padding-top:2px}
+.share{background:#f5f9ff;border:1px solid #cddfee;border-radius:10px;padding:10px;margin-top:8px}
+.shareline{display:flex;gap:6px;flex-wrap:wrap}
+.qrbox{margin-top:8px;padding:8px;border:1px dashed #b9c9d8;border-radius:8px;background:#f8fbfe;text-align:center}
+.qrbox img{display:block;margin:4px auto;width:120px;height:120px}
+.big{font-size:20px;font-weight:900;color:#123a6f}
+.small{font-size:10px;color:#6b7d90}
+.text-center{text-align:center}
+.aspect{border-left:4px solid #f4b400}
+.coop{border-left-color:#159a7c}
+.lead{border-left-color:#7b61ff}
+.uncomfortable{border-left-color:#d96b7b}
+@media(max-width:650px){.brand{font-size:15px}.login-flex{flex-direction:column}.login-flex button{width:100%}}
 </style>
 </head>
 <body>
 
 <header>
-  <div class="wrap header-flex">
-    <div>
-      <div class="brand">🌟 Sosio Digital <span>NaFaS BK</span></div>
-      <div class="tag">Peta Pertemanan • Kolaborasi • Kepemimpinan</div>
-    </div>
-    <button class="btn-logout" id="btnLogout" onclick="keluarAplikasi()" style="display:none;">🚪 Keluar</button>
-  </div>
-  <div class="wrap" style="margin-top:4px;">
-    <nav id="mainNav" style="display:none;">
-      <button id="nt" class="active" onclick="page('teacher')">👩‍🏫 Guru BK</button>
-      <button id="ns" onclick="page('student')">📱 Mode HP</button>
-      <button id="np" onclick="page('paper')">📄 Mode Tanpa HP</button>
-      <button id="nr" onclick="page('result')">🗺️ Hasil</button>
-    </nav>
-  </div>
+<div class="wrap flex-header">
+<div><div class="brand">🌟 Sosio Digital <span>NaFaS BK</span></div>
+<div class="tag">Peta Pertemanan • Kolaborasi • Kepemimpinan</div></div>
+<button class="btn-logout" id="btnLogout" onclick="keluar()" style="display:none;">🚪 Keluar</button>
+</div>
+<div class="wrap" style="margin-top:4px;">
+<nav id="mainNav" style="display:none;">
+<button id="nt" class="active" onclick="page('teacher')">👩‍🏫 Guru BK</button>
+<button id="ns" onclick="page('student')">📱 Mode HP</button>
+<button id="np" onclick="page('paper')">📄 Mode Tanpa HP</button>
+<button id="nr" onclick="page('result')">🗺️ Hasil</button>
+</nav>
+</div>
 </header>
 
 <main>
-  <!-- DASHBOARD -->
-  <div id="dashboardPanel">
-    <div class="panel">
-      <h2>📊 Dashboard</h2>
-      <div class="grid-stats">
-        <div class="stat-box"><div class="num" id="totalSessions">0</div><div class="label">Total Sesi</div></div>
-        <div class="stat-box"><div class="num" id="totalStudents">0</div><div class="label">Total Siswa</div></div>
-        <div class="stat-box"><div class="num" id="totalUsers">0</div><div class="label">Pengguna</div></div>
-      </div>
-    </div>
-  </div>
+<!-- DASHBOARD -->
+<div id="dashboardPanel">
+<div class="panel"><h2>📊 Dashboard</h2>
+<div class="grid-stats">
+<div class="stat-box"><div class="num" id="totalSessions">0</div><div class="label">Total Sesi</div></div>
+<div class="stat-box"><div class="num" id="totalStudents">0</div><div class="label">Total Siswa</div></div>
+<div class="stat-box"><div class="num" id="totalUsers">0</div><div class="label">Pengguna</div></div>
+</div></div></div>
 
-  <!-- LOGIN -->
-  <div id="loginPanel">
-    <div class="panel">
-      <h2>🔑 Masukkan Kunci Akses</h2>
-      <div class="login-box">
-        <div class="login-flex">
-          <input id="accessKeyInput" placeholder="Masukkan Kunci Akses">
-          <button class="primary" onclick="validateAndOpenApp()">🚀 Buka Aplikasi</button>
-        </div>
-        <div id="accessMsg"></div>
-      </div>
-    </div>
-  </div>
+<!-- LOGIN -->
+<div id="loginPanel">
+<div class="panel"><h2>🔑 Masukkan Kunci Akses</h2>
+<div class="login-box">
+<div class="login-flex">
+<input id="accessKeyInput" placeholder="Masukkan Kunci Akses">
+<button class="primary" onclick="bukaAplikasi()">🚀 Buka Aplikasi</button>
+</div>
+<div id="accessMsg"></div>
+</div></div></div>
 
-  <!-- KONTEN APLIKASI -->
-  <div id="appContent" style="display:none;">
-    <section id="teacher">
-      <div class="panel"><h2>👩‍🏫 Buat Sesi Sosiometri</h2>
-        <div class="grid">
-          <div><label>Sekolah</label><input id="school"></div>
-          <div><label>Kelas</label><input id="className"></div>
-          <div><label>Tahun Ajaran</label><input id="year" value="2026/2027"></div>
-          <div><label>Guru BK</label><input id="counselor"></div>
-        </div>
-        <label>Daftar nama siswa — satu nama per baris</label>
-        <textarea id="students" placeholder="Aisyah Putri&#10;Bima Aditya&#10;Citra Kirana"></textarea>
-        <div class="actions"><button class="green" onclick="create()">💾 Buat Sesi</button></div>
-        <div id="tmsg"></div>
-      </div>
-      <div class="panel"><h2>📋 Daftar Sesi</h2><div id="sessionList">Memuat...</div></div>
-    </section>
+<!-- KONTEN APLIKASI -->
+<div id="appContent" style="display:none;">
+<section id="teacher">
+<div class="panel"><h2>👩‍🏫 Buat Sesi Sosiometri</h2>
+<div class="grid">
+<div><label>Sekolah</label><input id="school"></div>
+<div><label>Kelas</label><input id="className"></div>
+<div><label>Tahun Ajaran</label><input id="year" value="2026/2027"></div>
+<div><label>Guru BK</label><input id="counselor"></div>
+</div>
+<label>Daftar nama siswa — satu nama per baris</label>
+<textarea id="students" placeholder="Aisyah Putri&#10;Bima Aditya&#10;Citra Kirana"></textarea>
+<div class="actions"><button class="green" onclick="buatSesi()">💾 Buat Sesi</button></div>
+<div id="tmsg"></div></div>
+<div class="panel"><h2>📋 Daftar Sesi</h2><div id="sessionList">Memuat...</div></div>
+</section>
 
-    <section id="student" class="hidden">
-      <div class="panel"><h2>📱 Pengisian Siswa</h2>
-        <div class="notice">Hasil sosiometri hanya dapat dilihat Guru BK.</div>
-        <label>Kode Sesi</label><input id="scode">
-        <label>Nama Kamu</label><select id="me"></select>
-        <div id="q"></div>
-        <div class="actions"><button class="green" onclick="send()">📨 Kirim Jawaban</button></div>
-        <div id="smsg"></div>
-      </div>
-    </section>
+<section id="student" class="hidden">
+<div class="panel"><h2>📱 Pengisian Siswa</h2>
+<div class="notice">Hasil sosiometri hanya dapat dilihat Guru BK.</div>
+<label>Kode Sesi</label><input id="scode">
+<label>Nama Kamu</label><select id="me"></select>
+<div id="q"></div>
+<div class="actions"><button class="green" onclick="kirimJawaban()">📨 Kirim Jawaban</button></div>
+<div id="smsg"></div></div>
+</section>
 
-    <section id="paper" class="hidden">
-      <div class="panel"><h2>📄 Mode Tanpa HP</h2>
-        <div class="notice"><b>Mode Tanpa HP:</b> siswa mengisi lembar kertas, lalu Guru BK memasukkan hasilnya.</div>
-        <div id="paperEntry"></div>
-        <div class="actions">
-          <button class="gold" onclick="paper()">🔄 Muat Entri</button>
-          <button class="dark" onclick="submitPaper()">💾 Simpan Semua</button>
-        </div>
-        <div id="pmsg"></div>
-      </div>
-      <div class="panel"><h3>🖨️ Lembar untuk Dicetak</h3>
-        <div id="paperRows"></div>
-        <button class="gold" onclick="printSociometry()">🖨️ Cetak Lembar</button>
-      </div>
-    </section>
+<section id="paper" class="hidden">
+<div class="panel"><h2>📄 Mode Tanpa HP</h2>
+<div class="notice"><b>Mode Tanpa HP:</b> siswa mengisi lembar kertas, Guru BK memasukkan hasilnya.</div>
+<div id="paperEntry"></div>
+<div class="actions">
+<button class="gold" onclick="muatPaper()">🔄 Muat Entri</button>
+<button class="dark" onclick="simpanPaper()">💾 Simpan Semua</button>
+</div>
+<div id="pmsg"></div></div>
+<div class="panel"><h3>🖨️ Lembar untuk Dicetak</h3>
+<div id="paperRows"></div>
+<button class="gold" onclick="cetakLembar()">🖨️ Cetak Lembar</button></div>
+</section>
 
-    <section id="result" class="hidden">
-      <div class="panel"><h2>🗺️ Hasil Guru BK</h2>
-        <div class="grid">
-          <div><label>Kode Sesi</label><input id="rcode"></div>
-          <div><label>PIN Guru BK</label><input id="rpin"></div>
-        </div>
-        <div class="actions">
-          <button class="dark" onclick="results()">🔐 Buka Hasil</button>
-          <button class="gold" onclick="printResult()">🖨️ Cetak / PDF</button>
-        </div>
-        <div id="res"></div>
-      </div>
-    </section>
-  </div>
+<section id="result" class="hidden">
+<div class="panel"><h2>🗺️ Hasil Guru BK</h2>
+<div class="grid">
+<div><label>Kode Sesi</label><input id="rcode"></div>
+<div><label>PIN Guru BK</label><input id="rpin"></div>
+</div>
+<div class="actions">
+<button class="dark" onclick="lihatHasil()">🔐 Buka Hasil</button>
+<button class="gold" onclick="cetakHasil()">🖨️ Cetak / PDF</button>
+</div>
+<div id="res"></div></div>
+</section>
+</div>
 </main>
 
 <script>
 // ============================================================
 // KONFIGURASI
 // ============================================================
-const MASTER_KEY = 'NAFAS-2026';
-const GROUP_CODE = 'GRP-001';
-const STORAGE_KEY = 'NAFAS_SOSIO_SESSIONS';
+const KUNCI = 'NAFAS-2026';
+const GRUP = 'GRP-001';
+const KEY_SESI = 'NAFAS_SOSIO_SESSIONS';
 
 // ============================================================
-// VARIABLE GLOBAL
+// VARIABLE
 // ============================================================
-let session = null;
-let currentResults = null;
+let sesiAktif = null;
 
 try {
   const saved = localStorage.getItem('NAFAS_SOSIO_CURRENT_SESSION');
-  if (saved) session = JSON.parse(saved);
-} catch(e) { session = null; }
+  if (saved) sesiAktif = JSON.parse(saved);
+} catch(e) { sesiAktif = null; }
 
 const esc = s => String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 
 // ============================================================
 // FUNGSI KELUAR
 // ============================================================
-function keluarAplikasi() {
-  if (confirm('Yakin ingin keluar dari aplikasi?')) {
+function keluar() {
+  if (confirm('Yakin ingin keluar?')) {
     localStorage.removeItem('NAFAS_CURRENT_SESSION');
     location.reload();
   }
@@ -281,7 +222,7 @@ function updateDashboard() {
   } catch(e) { document.getElementById('totalUsers').textContent = '0'; }
   
   try {
-    const sessions = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+    const sessions = JSON.parse(localStorage.getItem(KEY_SESI)) || [];
     document.getElementById('totalSessions').textContent = sessions.length;
     let total = 0;
     sessions.forEach(s => { if (s.students) total += s.students.length; });
@@ -292,7 +233,7 @@ function updateDashboard() {
   }
 }
 
-function note(id, msg, type='notice') {
+function pesan(id, msg, type='notice') {
   const cls = { notice:'notice', ok:'ok', error:'error' }[type] || 'notice';
   document.getElementById(id).innerHTML = `<div class="${cls}">${msg}</div>`;
   setTimeout(() => { document.getElementById(id).innerHTML = ''; }, 4000);
@@ -301,15 +242,15 @@ function note(id, msg, type='notice') {
 // ============================================================
 // VALIDASI & BUKA APLIKASI
 // ============================================================
-function validateAndOpenApp() {
+function bukaAplikasi() {
   const input = document.getElementById('accessKeyInput').value.trim();
   if (!input) {
-    note('accessMsg', '⚠️ Masukkan kunci akses.', 'error');
+    pesan('accessMsg', '⚠️ Masukkan kunci akses.', 'error');
     return;
   }
   
-  if (input === MASTER_KEY || input === GROUP_CODE) {
-    note('accessMsg', '✅ Akses diterima!', 'ok');
+  if (input === KUNCI || input === GRUP) {
+    pesan('accessMsg', '✅ Akses diterima!', 'ok');
     
     try {
       const users = JSON.parse(localStorage.getItem('NAFAS_ACCESS_USERS')) || [];
@@ -321,58 +262,51 @@ function validateAndOpenApp() {
       updateDashboard();
     } catch(e) {}
     
-    openApp();
+    // Buka aplikasi
+    document.getElementById('loginPanel').style.display = 'none';
+    document.getElementById('dashboardPanel').style.display = 'none';
+    document.getElementById('appContent').style.display = 'block';
+    document.getElementById('mainNav').style.display = 'flex';
+    document.getElementById('btnLogout').style.display = 'block';
+    
+    renderSessionList();
+    showTeacherSession();
   } else {
-    note('accessMsg', '❌ Kunci tidak valid.', 'error');
-  }
-}
-
-function openApp() {
-  document.getElementById('loginPanel').style.display = 'none';
-  document.getElementById('dashboardPanel').style.display = 'none';
-  document.getElementById('appContent').style.display = 'block';
-  document.getElementById('mainNav').style.display = 'flex';
-  document.getElementById('btnLogout').style.display = 'block';
-  
-  renderSessionList();
-  showTeacherSession();
-  if (location.hash.startsWith('#sesi=')) {
-    page('student');
-    setTimeout(loadStudent, 300);
+    pesan('accessMsg', '❌ Kunci tidak valid.', 'error');
   }
 }
 
 // ============================================================
 // MANAJEMEN SESSIONS
 // ============================================================
-function getStoredSessions() {
-  try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || []; } 
+function getSessions() {
+  try { return JSON.parse(localStorage.getItem(KEY_SESI)) || []; } 
   catch(e) { return []; }
 }
 
-function saveStoredSessions(sessions) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(sessions));
+function saveSessions(sessions) {
+  localStorage.setItem(KEY_SESI, JSON.stringify(sessions));
 }
 
-function addSession(sessionData) {
-  const sessions = getStoredSessions();
-  const exists = sessions.some(s => s.code === sessionData.code);
+function addSession(data) {
+  const sessions = getSessions();
+  const exists = sessions.some(s => s.code === data.code);
   if (!exists) {
-    sessions.push(sessionData);
-    saveStoredSessions(sessions);
+    sessions.push(data);
+    saveSessions(sessions);
   }
   return sessions;
 }
 
 function getSessionByCode(code) {
-  const sessions = getStoredSessions();
+  const sessions = getSessions();
   return sessions.find(s => s.code === code) || null;
 }
 
-function deleteSessionByCode(code) {
-  let sessions = getStoredSessions();
+function deleteSession(code) {
+  let sessions = getSessions();
   sessions = sessions.filter(s => s.code !== code);
-  saveStoredSessions(sessions);
+  saveSessions(sessions);
   return sessions;
 }
 
@@ -411,12 +345,12 @@ function page(id) {
   if (el) el.classList.add('active');
   
   if (id === 'student') loadStudent();
-  if (id === 'paper') paper();
+  if (id === 'paper') muatPaper();
   if (id === 'teacher') { showTeacherSession(); renderSessionList(); }
   if (id === 'result') {
-    if (session) {
-      document.getElementById('rcode').value = session.code || '';
-      document.getElementById('rpin').value = session.pin || '';
+    if (sesiAktif) {
+      document.getElementById('rcode').value = sesiAktif.code || '';
+      document.getElementById('rpin').value = sesiAktif.pin || '';
     }
   }
 }
@@ -426,7 +360,7 @@ function page(id) {
 // ============================================================
 function renderSessionList() {
   const container = document.getElementById('sessionList');
-  const sessions = getStoredSessions();
+  const sessions = getSessions();
   
   if (sessions.length === 0) {
     container.innerHTML = '<div class="session-empty">📭 Belum ada sesi.</div>';
@@ -451,7 +385,7 @@ function renderSessionList() {
           <button class="soft" onclick="loadSession('${s.code}')">📂 Buka</button>
           <button class="soft" onclick="viewResult('${s.code}')">📊 Hasil</button>
           <button class="gold" onclick="copyText('${s.code}')">📋 Kode</button>
-          <button class="soft" onclick="deleteSession('${s.code}')" style="color:#d96b7b;">🗑️</button>
+          <button class="soft" onclick="hapusSesi('${s.code}')" style="color:#d96b7b;">🗑️</button>
         </div>
       </div>
     `;
@@ -463,26 +397,26 @@ function renderSessionList() {
 function loadSession(code) {
   const found = getSessionByCode(code);
   if (found) {
-    session = found;
-    localStorage.setItem('NAFAS_SOSIO_CURRENT_SESSION', JSON.stringify(session));
+    sesiAktif = found;
+    localStorage.setItem('NAFAS_SOSIO_CURRENT_SESSION', JSON.stringify(sesiAktif));
     showTeacherSession();
-    note('tmsg', '✅ Sesi ' + code + ' dimuat.', 'ok');
+    pesan('tmsg', '✅ Sesi ' + code + ' dimuat.', 'ok');
     renderSessionList();
   } else {
-    note('tmsg', '❌ Sesi tidak ditemukan.', 'error');
+    pesan('tmsg', '❌ Sesi tidak ditemukan.', 'error');
   }
 }
 
-function deleteSession(code) {
+function hapusSesi(code) {
   if (!confirm('⚠️ Hapus sesi ' + code + '?')) return;
-  deleteSessionByCode(code);
-  if (session && session.code === code) {
-    session = null;
+  deleteSession(code);
+  if (sesiAktif && sesiAktif.code === code) {
+    sesiAktif = null;
     localStorage.removeItem('NAFAS_SOSIO_CURRENT_SESSION');
   }
   renderSessionList();
   showTeacherSession();
-  note('tmsg', '🗑️ Sesi ' + code + ' dihapus.');
+  pesan('tmsg', '🗑️ Sesi ' + code + ' dihapus.');
 }
 
 function viewResult(code) {
@@ -492,7 +426,7 @@ function viewResult(code) {
   if (found && found.pin) {
     document.getElementById('rpin').value = found.pin;
   }
-  setTimeout(results, 300);
+  setTimeout(lihatHasil, 300);
 }
 
 // ============================================================
@@ -501,19 +435,19 @@ function viewResult(code) {
 function showTeacherSession() {
   const el = document.getElementById('session');
   if (!el) return;
-  if (!session) {
+  if (!sesiAktif) {
     el.innerHTML = '<div class="notice">ℹ️ Belum ada sesi aktif.</div>';
     return;
   }
-  const u = location.href.split('#')[0] + '#sesi=' + encodeURIComponent(session.code);
+  const u = location.href.split('#')[0] + '#sesi=' + encodeURIComponent(sesiAktif.code);
   const qr = 'https://api.qrserver.com/v1/create-qr-code/?size=200x200&margin=8&data=' + encodeURIComponent(u);
   el.innerHTML = `
     <div class="grid">
-      <div><b>🔑 KODE SESI</b><div class="big">${esc(session.code)}</div>
-        <button class="soft" onclick="copyText('${session.code}')">📋 Salin Kode</button>
+      <div><b>🔑 KODE SESI</b><div class="big">${esc(sesiAktif.code)}</div>
+        <button class="soft" onclick="copyText('${sesiAktif.code}')">📋 Salin Kode</button>
       </div>
-      <div><b>🔐 PIN GURU BK</b><div class="big">${esc(session.pin)}</div>
-        <button class="soft" onclick="copyText('${session.pin}')">📋 Salin PIN</button>
+      <div><b>🔐 PIN GURU BK</b><div class="big">${esc(sesiAktif.pin)}</div>
+        <button class="soft" onclick="copyText('${sesiAktif.pin}')">📋 Salin PIN</button>
       </div>
     </div>
     <div class="share">
@@ -529,19 +463,19 @@ function showTeacherSession() {
         <br><button class="soft" onclick="printShareCard()">🖨️ Cetak Kartu QR</button>
       </div>
     </div>
-    <div class="small">✅ Data tersimpan di lokal.</div>
+    <div class="small">✅ Data tersimpan di browser ini.</div>
   `;
 }
 
-function create() {
+function buatSesi() {
   const names = document.getElementById('students').value.split('\n').map(x=>x.trim()).filter(Boolean);
-  if (names.length < 2) { note('tmsg','⚠️ Minimal 2 nama.', 'error'); return; }
+  if (names.length < 2) { pesan('tmsg','⚠️ Minimal 2 nama.', 'error'); return; }
   
   const code = generateCode();
   const pin = generatePin();
   const students = names.map((name,i) => ({ id:'S'+(i+1), name }));
   
-  session = {
+  sesiAktif = {
     code: code,
     pin: pin,
     students: students,
@@ -554,35 +488,35 @@ function create() {
     responses: []
   };
   
-  addSession(session);
-  localStorage.setItem('NAFAS_SOSIO_CURRENT_SESSION', JSON.stringify(session));
+  addSession(sesiAktif);
+  localStorage.setItem('NAFAS_SOSIO_CURRENT_SESSION', JSON.stringify(sesiAktif));
   showTeacherSession();
   renderSessionList();
   updateDashboard();
   
-  note('tmsg', '✅ Sesi ' + code + ' berhasil dibuat!', 'ok');
+  pesan('tmsg', '✅ Sesi ' + code + ' berhasil dibuat!', 'ok');
 }
 
 function printShareCard() {
-  if(!session) return;
-  const u = location.href.split('#')[0] + '#sesi=' + encodeURIComponent(session.code);
+  if(!sesiAktif) return;
+  const u = location.href.split('#')[0] + '#sesi=' + encodeURIComponent(sesiAktif.code);
   const qr = 'https://api.qrserver.com/v1/create-qr-code/?size=250x250&margin=8&data=' + encodeURIComponent(u);
   const w = window.open('','_blank','width=600,height=700');
   if(!w){ alert('⚠️ Izinkan pop-up.'); return; }
   w.document.write(`<!doctype html><html><head><title>Kartu Sosiometri</title>
-    <style>body{font-family:Arial;text-align:center;padding:30px;color:#0d2b4f;background:#fff;}
-    h1{font-size:20px;margin:0 0 4px;color:#0d2b4f;}
-    h2{font-size:14px;margin:0 0 12px;font-weight:400;color:#4a6a8a;}
-    img{width:180px;height:180px;border:1px solid #d0ddee;padding:6px;border-radius:10px;background:#fff;}
-    .code{font-size:24px;font-weight:bold;margin:8px 0;color:#0d2b4f;}
-    .small{color:#6a8aaa;font-size:11px;word-break:break-all;max-width:350px;margin:auto;}
-    @page{size:A5;margin:8mm;}
+    <style>body{font-family:Arial;text-align:center;padding:30px;color:#0d2b4f;background:#fff}
+    h1{font-size:20px;margin:0 0 4px;color:#0d2b4f}
+    h2{font-size:14px;margin:0 0 12px;font-weight:400;color:#4a6a8a}
+    img{width:180px;height:180px;border:1px solid #d0ddee;padding:6px;border-radius:10px;background:#fff}
+    .code{font-size:24px;font-weight:bold;margin:8px 0;color:#0d2b4f}
+    .small{color:#6a8aaa;font-size:11px;word-break:break-all;max-width:350px;margin:auto}
+    @page{size:A5;margin:8mm}
     </style>
     </head><body>
     <h1>🌟 SOSIO DIGITAL NaFaS BK</h1>
     <h2>SCAN UNTUK MENGISI</h2>
     <img src="${qr}">
-    <div class="code">${esc(session.code)}</div>
+    <div class="code">${esc(sesiAktif.code)}</div>
     <div class="small">${esc(u)}</div>
     <p style="font-size:10px;color:#4a6a8a;">Scan QR dengan kamera HP.</p>
     <script>setTimeout(function(){window.print()},600)<\/script>
@@ -603,9 +537,9 @@ function block(cls, title, txt, n) {
 }
 
 function opts() {
-  if (!session || !session.students) return '<option value="">— Pilih nama —</option>';
+  if (!sesiAktif || !sesiAktif.students) return '<option value="">— Pilih nama —</option>';
   return '<option value="">— Pilih nama —</option>' + 
-    session.students.map(s => '<option value="'+esc(s.id)+'">'+esc(s.name)+'</option>').join('');
+    sesiAktif.students.map(s => '<option value="'+esc(s.id)+'">'+esc(s.name)+'</option>').join('');
 }
 
 function loadStudent() {
@@ -621,7 +555,7 @@ function loadStudent() {
     return;
   }
   
-  session = sessionData;
+  sesiAktif = sessionData;
   document.getElementById('scode').value = code;
   document.getElementById('me').innerHTML = opts();
   
@@ -641,36 +575,36 @@ function reas(c) {
   return [...document.querySelectorAll('textarea.rs.'+c)].map(x => x.value.trim()); 
 }
 
-function send() {
+function kirimJawaban() {
   const me = document.getElementById('me').value;
   const h = vals('heart'), c = vals('coop'), l = vals('lead'), u = vals('uncomfortable');
   const all = [...h, ...c, ...l, ...u];
   const reasons = [...reas('heart'), ...reas('coop'), ...reas('lead'), ...reas('uncomfortable')];
   
-  if(!me){ note('smsg','⚠️ Pilih nama.', 'error'); return; }
+  if(!me){ pesan('smsg','⚠️ Pilih nama.', 'error'); return; }
   if(h.length < 2 || c.length < 2 || l.length < 1) { 
-    note('smsg','⚠️ Lengkapi semua pilihan.', 'error'); 
+    pesan('smsg','⚠️ Lengkapi semua pilihan.', 'error'); 
     return; 
   }
   if(reasons.some(r => !r.trim())) { 
-    note('smsg','⚠️ Isi semua alasan.', 'error'); 
+    pesan('smsg','⚠️ Isi semua alasan.', 'error'); 
     return; 
   }
-  if(all.includes(me)){ note('smsg','⚠️ Tidak boleh pilih sendiri.', 'error'); return; }
+  if(all.includes(me)){ pesan('smsg','⚠️ Tidak boleh pilih sendiri.', 'error'); return; }
   if(new Set(h).size < 2 || new Set(c).size < 2){ 
-    note('smsg','⚠️ Pilihan harus berbeda.', 'error'); 
+    pesan('smsg','⚠️ Pilihan harus berbeda.', 'error'); 
     return; 
   }
   
   const sessionData = getSessionByCode(document.getElementById('scode').value);
   if (!sessionData) {
-    note('smsg','❌ Sesi tidak ditemukan.', 'error');
+    pesan('smsg','❌ Sesi tidak ditemukan.', 'error');
     return;
   }
   
   if (!sessionData.responses) sessionData.responses = [];
   if (sessionData.responses.find(r => r.respondent === me)) {
-    note('smsg','⚠️ Kamu sudah mengisi sebelumnya.', 'notice');
+    pesan('smsg','⚠️ Kamu sudah mengisi sebelumnya.', 'notice');
     return;
   }
   
@@ -683,11 +617,11 @@ function send() {
     submittedAt: new Date().toISOString()
   });
   
-  let sessions = getStoredSessions();
+  let sessions = getSessions();
   sessions = sessions.map(s => s.code === sessionData.code ? sessionData : s);
-  saveStoredSessions(sessions);
+  saveSessions(sessions);
   
-  note('smsg', '✅ Jawaban berhasil disimpan! 🙏', 'ok');
+  pesan('smsg', '✅ Jawaban berhasil disimpan! 🙏', 'ok');
   document.querySelectorAll('.ch').forEach(x => x.value = '');
   document.querySelectorAll('.rs').forEach(x => x.value = '');
 }
@@ -695,12 +629,12 @@ function send() {
 // ============================================================
 // PAPER MODE
 // ============================================================
-function paper() {
-  if(!session) {
-    const sessions = getStoredSessions();
+function muatPaper() {
+  if(!sesiAktif) {
+    const sessions = getSessions();
     if (sessions.length > 0) {
-      session = sessions[0];
-      localStorage.setItem('NAFAS_SOSIO_CURRENT_SESSION', JSON.stringify(session));
+      sesiAktif = sessions[0];
+      localStorage.setItem('NAFAS_SOSIO_CURRENT_SESSION', JSON.stringify(sesiAktif));
     } else {
       document.getElementById('paperEntry').innerHTML = '<div class="error">⚠️ Belum ada sesi.</div>';
       return;
@@ -708,9 +642,9 @@ function paper() {
   }
   
   const optsHtml = '<option value="">— Pilih —</option>' + 
-    session.students.map(s => '<option value="'+esc(s.id)+'">'+esc(s.name)+'</option>').join('');
+    sesiAktif.students.map(s => '<option value="'+esc(s.id)+'">'+esc(s.name)+'</option>').join('');
   
-  document.getElementById('paperEntry').innerHTML = session.students.map((s,i) => `
+  document.getElementById('paperEntry').innerHTML = sesiAktif.students.map((s,i) => `
     <div class="panel" style="padding:10px;">
       <h3 style="margin:0 0 6px;">👤 ${i+1}. ${esc(s.name)}</h3>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;">
@@ -731,49 +665,66 @@ function paper() {
   `).join('');
   
   document.getElementById('paperRows').innerHTML = `
-    <div class="print-sheet">
-      <div class="print-head"><h1>SOSIO DIGITAL NaFaS BK</h1><h2>LEMBAR SOSIOMETRI</h2>
-        <div class="print-meta"><span>Nama: _________________</span><span>Kelas: ${esc(session.className||'______________')}</span></div>
-        <div class="print-meta"><span>Sesi: ${esc(session.code||'______________')}</span><span>Tanggal: _________________</span></div>
+    <div style="background:#fff;border:1px solid #d8e2ec;border-radius:8px;padding:8px;margin-top:8px;">
+      <div style="text-align:center;border-bottom:2px solid #123a6f;padding-bottom:6px;margin-bottom:8px;">
+        <h1 style="font-size:14px;margin:0;color:#123a6f;">SOSIO DIGITAL NaFaS BK</h1>
+        <h2 style="font-size:11px;margin:2px 0;font-weight:400;">LEMBAR SOSIOMETRI</h2>
+        <div style="display:flex;justify-content:center;gap:10px;font-size:9px;color:#6b7d90;">
+          <span>Nama: _________________</span>
+          <span>Kelas: ${esc(sesiAktif.className||'______________')}</span>
+          <span>Sesi: ${esc(sesiAktif.code||'______________')}</span>
+        </div>
       </div>
-      <div class="print-instruction"><b>Petunjuk:</b> Jawab dengan jujur.</div>
-      <div class="print-q"><h3>❤️ PERTEMANAN</h3><p>Pilih 2 teman yang paling nyaman diajak berteman.</p>
-        <div class="line">1) _________________ Alasan: _________________</div>
-        <div class="line">2) _________________ Alasan: _________________</div>
+      <div style="font-size:8px;background:#f6f9fc;border:1px solid #d9e4ef;border-radius:5px;padding:5px;margin-bottom:5px;">
+        <b>Petunjuk:</b> Jawab dengan jujur.
       </div>
-      <div class="print-q"><h3>🤝 KERJA SAMA</h3><p>Pilih 2 teman yang paling dipilih untuk bekerja sama.</p>
-        <div class="line">1) _________________ Alasan: _________________</div>
-        <div class="line">2) _________________ Alasan: _________________</div>
+      <div style="border:1px solid #cfdbe7;border-radius:5px;padding:4px;margin:3px 0;">
+        <h3 style="font-size:10px;margin:0 0 2px;color:#123a6f;">❤️ PERTEMANAN</h3>
+        <p style="font-size:8px;margin:2px 0;">Pilih 2 teman yang paling nyaman diajak berteman.</p>
+        <div style="font-size:7px;margin:2px 0;">1) _________________ Alasan: _________________</div>
+        <div style="font-size:7px;margin:2px 0;">2) _________________ Alasan: _________________</div>
       </div>
-      <div class="print-q"><h3>⭐ KEPEMIMPINAN</h3><p>Pilih 1 teman yang mampu memimpin.</p>
-        <div class="line">Nama: _________________ Alasan: _________________</div>
+      <div style="border:1px solid #cfdbe7;border-radius:5px;padding:4px;margin:3px 0;">
+        <h3 style="font-size:10px;margin:0 0 2px;color:#123a6f;">🤝 KERJA SAMA</h3>
+        <p style="font-size:8px;margin:2px 0;">Pilih 2 teman yang paling dipilih untuk bekerja sama.</p>
+        <div style="font-size:7px;margin:2px 0;">1) _________________ Alasan: _________________</div>
+        <div style="font-size:7px;margin:2px 0;">2) _________________ Alasan: _________________</div>
       </div>
-      <div class="print-q"><h3>🔎 RELASI KURANG NYAMAN</h3><p>Pilih 1 teman yang paling sulit diajak interaksi.</p>
-        <div class="line">Nama: _________________ Alasan: _________________</div>
+      <div style="border:1px solid #cfdbe7;border-radius:5px;padding:4px;margin:3px 0;">
+        <h3 style="font-size:10px;margin:0 0 2px;color:#123a6f;">⭐ KEPEMIMPINAN</h3>
+        <p style="font-size:8px;margin:2px 0;">Pilih 1 teman yang mampu memimpin.</p>
+        <div style="font-size:7px;margin:2px 0;">Nama: _________________ Alasan: _________________</div>
       </div>
-      <div class="print-footer">SOSIO DIGITAL NaFaS BK • Data untuk BK</div>
+      <div style="border:1px solid #cfdbe7;border-radius:5px;padding:4px;margin:3px 0;">
+        <h3 style="font-size:10px;margin:0 0 2px;color:#123a6f;">🔎 RELASI KURANG NYAMAN</h3>
+        <p style="font-size:8px;margin:2px 0;">Pilih 1 teman yang paling sulit diajak interaksi.</p>
+        <div style="font-size:7px;margin:2px 0;">Nama: _________________ Alasan: _________________</div>
+      </div>
+      <div style="text-align:center;font-size:6px;color:#647687;margin-top:3px;border-top:1px solid #d9e4ef;padding-top:2px;">
+        SOSIO DIGITAL NaFaS BK • Data untuk BK
+      </div>
     </div>
   `;
 }
 
-function printSociometry() {
-  if(!session){ alert('⚠️ Pilih sesi.'); return; }
+function cetakLembar() {
+  if(!sesiAktif){ alert('⚠️ Pilih sesi.'); return; }
   window.print();
 }
 
-function submitPaper() {
-  if(!session){ note('pmsg','⚠️ Pilih sesi.', 'error'); return; }
+function simpanPaper() {
+  if(!sesiAktif){ pesan('pmsg','⚠️ Pilih sesi.', 'error'); return; }
   const cards = [...document.querySelectorAll('#paperEntry .panel')];
   
-  const sessionData = getSessionByCode(session.code);
+  const sessionData = getSessionByCode(sesiAktif.code);
   if (!sessionData) {
-    note('pmsg','❌ Sesi tidak ditemukan.', 'error');
+    pesan('pmsg','❌ Sesi tidak ditemukan.', 'error');
     return;
   }
   if (!sessionData.responses) sessionData.responses = [];
   
   for(let i=0; i<cards.length; i++) {
-    const s = session.students[i];
+    const s = sesiAktif.students[i];
     const sels = [...cards[i].querySelectorAll('select')];
     const ins = [...cards[i].querySelectorAll('input')];
     const h = sels.slice(0,2).map(x=>x.value).filter(Boolean);
@@ -786,7 +737,7 @@ function submitPaper() {
     const ur = ins[5]?.value.trim() ? [ins[5].value.trim()] : [];
     
     if(h.length!==2 || c.length!==2 || !l.length || hr.some(x=>!x) || cr.some(x=>!x) || !lr.length) {
-      note('pmsg','⚠️ Entri '+(i+1)+' belum lengkap.', 'error');
+      pesan('pmsg','⚠️ Entri '+(i+1)+' belum lengkap.', 'error');
       return;
     }
     
@@ -802,17 +753,17 @@ function submitPaper() {
     });
   }
   
-  let sessions = getStoredSessions();
+  let sessions = getSessions();
   sessions = sessions.map(s => s.code === sessionData.code ? sessionData : s);
-  saveStoredSessions(sessions);
+  saveSessions(sessions);
   
-  note('pmsg','✅ Semua entri berhasil disimpan!', 'ok');
+  pesan('pmsg','✅ Semua entri berhasil disimpan!', 'ok');
 }
 
 // ============================================================
 // HASIL
 // ============================================================
-function renderResult(data) {
+function renderHasil(data) {
   const rs = data.responses || [];
   const st = data.session.students || [];
   const className = data.session.className || '';
@@ -891,7 +842,7 @@ function renderResult(data) {
   return html;
 }
 
-function results() {
+function lihatHasil() {
   const code = document.getElementById('rcode').value.trim();
   const pin = document.getElementById('rpin').value.trim();
   if(!code || !pin){ 
@@ -910,14 +861,13 @@ function results() {
     return;
   }
   
-  document.getElementById('res').innerHTML = renderResult(sessionData);
-  currentResults = sessionData;
+  document.getElementById('res').innerHTML = renderHasil(sessionData);
 }
 
 // ============================================================
 // CETAK HASIL
 // ============================================================
-function printResult() {
+function cetakHasil() {
   const source = document.getElementById('res');
   if (!source || !source.innerHTML.trim()) { 
     alert('⚠️ Klik "Buka Hasil" dulu.'); 
@@ -970,12 +920,7 @@ function printResult() {
 // ============================================================
 // INISIALISASI
 // ============================================================
-function init() {
-  updateDashboard();
-}
-
-init();
-function openPrintPage(){let code=document.getElementById('rcode')?.value.trim()||'';let pin=document.getElementById('rpin')?.value.trim()||'';if(!code||!pin){alert('Masukkan Kode Sesi dan PIN Guru BK terlebih dahulu.');return}let u='cetak-hasil.html?code='+encodeURIComponent(code)+'&pin='+encodeURIComponent(pin);let w=window.open(u,'_blank');if(!w)alert('Izinkan pop-up agar laporan dapat dibuka.')}
+updateDashboard();
 </script>
 </body>
 </html>

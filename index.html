@@ -1,762 +1,239 @@
-<!doctype html><html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Sosio Digital NaFaS BK</title>
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Sosio Digital NaFaS BK - Sosiometri</title>
 <style>
-body{margin:0;font-family:Arial,sans-serif;background:#f4f8fc;color:#18324a}header{background:linear-gradient(135deg,#123a6f,#1c5c9e);color:#fff;padding:26px 16px}.wrap,main{max-width:1000px;margin:auto}.brand{font-size:27px;font-weight:900}.tag{margin-top:6px}nav{display:flex;gap:8px;flex-wrap:wrap;margin-top:18px}button{border:0;border-radius:11px;padding:11px 15px;font-weight:800;cursor:pointer}nav button{background:#fff;color:#123a6f}nav button.active,nav button:hover{background:#f4b400}main{padding:20px 14px}.panel{background:#fff;border:1px solid #d9e4ef;border-radius:17px;padding:20px;margin-bottom:16px;box-shadow:0 4px 16px #123a6f10}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px}label{display:block;font-weight:800;font-size:14px;margin:10px 0 5px}input,select,textarea{width:100%;padding:11px;border:1px solid #c9d8e6;border-radius:9px;box-sizing:border-box;font:inherit}textarea{min-height:85px}.hidden{display:none!important}.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}.green{background:#159a7c;color:#fff}.gold{background:#f4b400;color:#17324d}.dark{background:#123a6f;color:#fff}.soft{background:#eaf4ff;color:#123a6f}.notice,.ok,.private{padding:12px;border-radius:11px;margin-top:12px}.notice{background:#fff8df;border:1px solid #efd36a}.ok{background:#eaf8f2;border:1px solid #9dd9c4}.private{background:#fff0f4;border:1px solid #efb3c2}.aspect{border-left:7px solid #f4b400}.coop{border-left-color:#159a7c}.lead{border-left-color:#7b61ff}.uncomfortable{border-left-color:#d96b7b}.big{font-size:28px;font-weight:900;color:#123a6f;margin-top:7px}.share{background:linear-gradient(135deg,#eef7ff,#fff9e8);border:1px solid #cddfee;border-radius:15px;padding:15px;margin-top:14px}.shareline{display:flex;gap:7px}.reason{background:#fbfdff;border:1px solid #d9e4ef;border-radius:12px;padding:12px;margin-top:9px}.reason b{color:#123a6f}.small{font-size:12px;color:#6b7d90}.rank{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid #e4edf4}.bar{height:8px;background:#dce7f2;border-radius:8px;margin-top:5px}.fill{height:8px;background:#123a6f;border-radius:8px}.hiddenprint{display:block}@media(max-width:650px){.shareline{flex-direction:column}}@media print{header,nav,#teacher,#student,#paper,.actions{display:none!important}.panel{box-shadow:none;border:0}}
+* { box-sizing: border-box; }
+body { margin:0; font-family:'Segoe UI',Arial,sans-serif; background:#f0f5fb; color:#18324a; }
 
-/* ============================================
-   DAFTAR SESI
-   ============================================ */
-.session-list {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 10px;
-  margin-top: 10px;
-}
-.session-item {
-  background: #fff;
-  border: 1px solid #d9e4ef;
-  border-radius: 12px;
-  padding: 12px 14px;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-.session-item:hover {
-  border-color: #123a6f;
-  box-shadow: 0 2px 12px rgba(18,58,111,0.1);
-}
-.session-item .s-code {
-  font-size: 18px;
-  font-weight: 900;
-  color: #123a6f;
-}
-.session-item .s-class {
-  font-size: 14px;
-  font-weight: 600;
-  color: #18324a;
-}
-.session-item .s-meta {
-  font-size: 11px;
-  color: #6b7d90;
-  margin-top: 4px;
-}
-.session-item .s-status {
-  display: inline-block;
-  padding: 2px 10px;
-  border-radius: 12px;
-  font-size: 10px;
-  font-weight: 700;
-  margin-top: 4px;
-}
-.session-item .s-status.active { background: #eaf8f2; color: #159a7c; }
-.session-item .s-status.closed { background: #f0f0f0; color: #6b7d90; }
-.session-item .s-actions {
-  margin-top: 8px;
-  display: flex;
-  gap: 6px;
-  flex-wrap: wrap;
-}
-.session-item .s-actions button {
-  padding: 4px 10px;
-  font-size: 10px;
-  border-radius: 6px;
-}
-.session-empty {
-  text-align: center;
-  padding: 30px;
-  color: #6b7d90;
-}
+header { background:linear-gradient(135deg,#0d2b4f,#1a5a9e); color:#fff; padding:12px 16px; }
+.wrap, main { max-width:1100px; margin:auto; }
+.brand { font-size:20px; font-weight:900; display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+.brand span { color:#f4b400; }
+.tag { font-size:11px; opacity:0.8; }
 
-/* ============================================
-   HASIL - HANYA TABEL RINGKAS
-   ============================================ */
-.result-head {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-  padding: 3px 8px;
-  background: #eaf1f9;
-  border-radius: 4px;
-  margin-bottom: 4px;
-  font-size: 10px;
-}
-.result-head .info { color: #4a5d70; }
-.result-head .info strong { color: #123a6f; }
+main { padding:12px; }
+.panel { background:#fff; border-radius:12px; padding:16px; margin-bottom:12px; box-shadow:0 2px 12px rgba(13,43,79,0.08); border:1px solid #e2ecf5; }
+h2 { font-size:18px; margin:0 0 10px; color:#0d2b4f; display:flex; align-items:center; gap:8px; }
 
-.table-wrap {
-  overflow-x: auto;
-  margin-bottom: 4px;
-}
-.table-main {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 10px;
-}
-.table-main th {
-  background: #123a6f;
-  color: #fff;
-  padding: 3px 4px;
-  text-align: center;
-  font-weight: 700;
-  font-size: 8px;
-  border: 1px solid #123a6f;
-}
-.table-main td {
-  padding: 2px 4px;
-  border: 1px solid #d9e4ef;
-  text-align: center;
-  font-size: 9px;
-}
-.table-main tr:nth-child(even) { background: #f8fafc; }
-.table-main .name-col { text-align: left; font-weight: 600; color: #18324a; font-size: 9px; padding-left: 6px; }
-.table-main .rank-badge {
-  display: inline-block;
-  min-width: 16px;
-  padding: 0 3px;
-  height: 16px;
-  line-height: 16px;
-  border-radius: 50%;
-  background: #e4edf4;
-  color: #123a6f;
-  font-weight: 700;
-  font-size: 8px;
-  text-align: center;
-}
-.table-main .rank-1 { background: #f4b400; color: #fff; }
-.table-main .rank-2 { background: #b8c6d4; color: #fff; }
-.table-main .rank-3 { background: #d9b382; color: #fff; }
-.table-main .count {
-  display: inline-block;
-  background: #f0f5fb;
-  padding: 0 6px;
-  border-radius: 8px;
-  font-weight: 700;
-  font-size: 9px;
-  color: #123a6f;
-}
-.table-main .count-low { background: #d96b7b15; color: #b84a5a; }
-.table-main .total-col { font-weight: 900; color: #123a6f; font-size: 10px; }
+input { width:100%; padding:10px 12px; border:1px solid #d0ddee; border-radius:8px; font:inherit; background:#fafcfe; font-size:14px; }
+input:focus { border-color:#1a5a9e; outline:none; box-shadow:0 0 0 3px rgba(26,90,158,0.12); }
 
-.result-footer {
-  margin-top: 3px;
-  font-size: 7px;
-  color: #8a9daf;
-  text-align: center;
-  border-top: 1px solid #e4edf4;
-  padding-top: 3px;
-}
+button { border:0; border-radius:8px; padding:10px 20px; font-weight:700; font-size:14px; cursor:pointer; transition:all 0.2s; }
+button:hover { transform:translateY(-1px); box-shadow:0 4px 12px rgba(0,0,0,0.12); }
 
-@media(max-width:600px){
-  .table-main { font-size: 8px; }
-  .table-main th, .table-main td { padding: 1px 2px; }
-  .table-main .name-col { font-size: 8px; }
-}
+.primary { background:#1a5a9e; color:#fff; }
+.primary:hover { background:#0d4a8a; }
+.gold { background:#f4b400; color:#0d2b4f; }
+.gold:hover { background:#e0a300; }
 
-@media print {
-  body { background: #fff !important; }
-  .table-wrap { page-break-after: avoid; }
-  .table-main td { padding: 1px 3px; font-size: 7px; }
-  .table-main th { padding: 1px 3px; font-size: 7px; }
-  .table-main .name-col { font-size: 7px; }
-  .table-main .count { font-size: 7px; padding: 0 4px; }
-  .table-main .total-col { font-size: 8px; }
-  .table-main .rank-badge { min-width: 14px; height: 14px; line-height: 14px; font-size: 7px; }
-  .result-head { background: #e8edf3 !important; padding: 2px 6px; font-size: 8px; margin-bottom: 3px; }
-  .result-footer { font-size: 6px; margin-top: 2px; padding-top: 2px; }
-  .panel { padding: 5px !important; margin-bottom: 5px !important; }
-  .table-main tr:nth-child(even) { background: #f5f7fa !important; }
-  .table-main th { background: #123a6f !important; color: #fff !important; }
-  .table-main td { border-color: #d0dae6 !important; }
-  header, nav, .actions, #teacher, #student, #paper { display: none !important; }
-  .session-list { display: none !important; }
-  .private, .ok, .notice { font-size: 7px !important; padding: 2px 6px !important; margin-top: 3px !important; }
-}
+.flex { display:flex; gap:8px; flex-wrap:wrap; align-items:center; }
+.text-muted { color:#6a8aaa; font-size:12px; }
+.text-center { text-align:center; }
+.hidden { display:none !important; }
+.mt-8 { margin-top:6px; }
 
-.print-sheet{background:#fff;color:#172b3a;border:1px solid #d8e2ec;border-radius:12px;padding:12px;margin-top:15px;line-height:1.18}.print-sheet{page-break-after:avoid;break-after:avoid}.print-head{text-align:center;border-bottom:2px solid #123a6f;padding-bottom:12px;margin-bottom:14px}.print-head h1{font-size:18px;margin:0;color:#123a6f}.print-head h2{font-size:14px;margin:3px 0 7px}.print-meta{display:flex;justify-content:space-between;gap:12px;text-align:left;font-size:11px;margin-top:3px}.print-instruction{font-size:10px;background:#f6f9fc;border:1px solid #d9e4ef;border-radius:7px;padding:7px;margin-bottom:8px}.print-q{border:1px solid #cfdbe7;border-radius:7px;padding:6px;margin:4px 0;page-break-inside:avoid}.print-q h3{font-size:12px;margin:0 0 4px;color:#123a6f}.print-q p{font-size:10px;margin:3px 0 5px}.print-q .line{font-size:9px;margin:4px 0;min-height:12px}.print-footer{text-align:center;font-size:7px;color:#647687;margin-top:5px;border-top:1px solid #d9e4ef;padding-top:3px}
-.qrbox{margin-top:14px;padding:14px;border:1px dashed #b9c9d8;border-radius:12px;background:#f8fbfe;text-align:center}.qrbox img{display:block;margin:8px auto}
-</style></head><body>
-<header><div class="wrap"><div class="brand">🌟 SOSIO DIGITAL NaFaS BK</div><div class="tag">Peta Pertemanan • Kolaborasi • Kepemimpinan</div><nav><button id="nt" class="active" onclick="page('teacher')">👩‍🏫 Guru BK</button><button id="ns" onclick="page('student')">📱 Mode HP</button><button id="np" onclick="page('paper')">📄 Mode Tanpa HP</button><button id="nr" onclick="page('result')">🗺️ Hasil Guru BK</button></nav></div></header>
-<main><section id="teacher"><div class="panel"><h2>👩‍🏫 Buat Sesi Sosiometri</h2><div class="grid"><div><label>Sekolah</label><input id="school"></div><div><label>Kelas / Rombel</label><input id="className"></div><div><label>Tahun Ajaran</label><input id="year" value="2026/2027"></div><div><label>Guru BK</label><input id="counselor"></div></div><label>Daftar nama siswa — satu nama per baris</label><textarea id="students" placeholder="Aisyah Putri&#10;Bima Aditya&#10;Citra Kirana"></textarea><div class="actions"><button class="green" onclick="create()">💾 Buat Sesi & Bagikan</button></div><div id="tmsg"></div></div>
-<div class="panel"><h2>📋 Daftar Sesi</h2><div id="sessionList">Memuat...</div></div></section>
-<section id="student" class="hidden"><div class="panel"><h2>📱 Pengisian Siswa</h2><div class="notice">Hasil sosiometri hanya dapat dilihat Guru BK.</div><label>Kode Sesi</label><input id="scode"><label>Nama Kamu</label><select id="me"></select><div id="q"></div><div class="actions"><button class="green" onclick="send()">📨 Kirim Jawaban</button></div><div id="smsg"></div></div></section>
-<section id="paper" class="hidden"><div class="panel"><h2>📄 Mode Tanpa HP</h2><div class="notice"><b>Mode Tanpa HP:</b> siswa mengisi lembar kertas, lalu Guru BK memasukkan hasilnya di sini. <b>Entri tersimpan sementara otomatis di perangkat ini.</b></div><div id="paperEntry"></div><div class="actions"><button class="gold" onclick="paper()">🔄 Muat Entri</button><button class="dark" onclick="submitPaper()">💾 Simpan Hasil Entri</button></div><div id="pmsg"></div></div><div class="panel"><h3>🖨️ Lembar Sosiometri untuk Dicetak</h3><div id="paperRows"></div><button class="gold" onclick="printSociometry()">🖨️ Cetak Lembar Siswa</button></div></section>
-<section id="result" class="hidden"><div class="panel"><h2>🗺️ Hasil Guru BK</h2><div class="grid"><div><label>Kode Sesi</label><input id="rcode"></div><div><label>PIN Guru BK</label><input id="rpin"></div></div><div class="actions"><button class="dark" onclick="results()">🔐 Buka Hasil</button><button class="gold" onclick="openPrintPage()">🖨️ Cetak / PDF</button></div><div id="res"></div></div></section></main>
+.notice, .ok, .error { padding:10px 14px; border-radius:8px; margin-top:8px; font-size:13px; }
+.notice { background:#fff8e0; border:1px solid #f0d56a; color:#7a6300; }
+.ok { background:#e6f7f0; border:1px solid #90d5b6; color:#0a6b4a; }
+.error { background:#fde8ec; border:1px solid #f0b8c4; color:#a04050; }
+
+.stat-box { background:#f8faff; padding:10px; border-radius:10px; text-align:center; border:1px solid #e2ecf5; }
+.stat-box .num { font-size:20px; font-weight:900; color:#0d2b4f; }
+.stat-box .label { font-size:9px; color:#6a8aaa; }
+
+@media(max-width:650px) {
+  .brand { font-size:16px; }
+  .flex { flex-direction:column; }
+  .flex button { width:100%; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <div class="brand">
+      🌟 Sosio Digital <span>NaFaS BK</span>
+      <span style="font-size:10px;font-weight:400;opacity:0.7;">♾️ Unlimited</span>
+    </div>
+    <div class="tag">Aplikasi Sosiometri Digital • Peta Pertemanan • Kolaborasi • Kepemimpinan</div>
+  </div>
+</header>
+
+<main>
+  <!-- ===== DASHBOARD ===== -->
+  <div class="panel">
+    <h2>📊 Dashboard</h2>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:8px;">
+      <div class="stat-box"><div class="num" id="totalSessions">0</div><div class="label">Total Sesi</div></div>
+      <div class="stat-box"><div class="num" id="totalStudents">0</div><div class="label">Total Siswa</div></div>
+      <div class="stat-box"><div class="num" id="totalUsers">0</div><div class="label">Pengguna</div></div>
+    </div>
+  </div>
+
+  <!-- ===== LOGIN / AKSES ===== -->
+  <div class="panel">
+    <h2>🔑 Masukkan Kunci Akses</h2>
+    <div style="background:#f8faff;border-radius:10px;padding:12px;border:1px solid #e2ecf5;">
+      <div class="flex">
+        <input id="accessKeyInput" placeholder="Masukkan Kunci Akses" style="flex:1;min-width:180px;">
+        <button class="primary" onclick="validateAndOpenApp()">🚀 Buka Aplikasi</button>
+      </div>
+      <div id="accessMsg"></div>
+    </div>
+  </div>
+
+  <!-- ===== APLIKASI ===== -->
+  <div id="appContainer">
+    <div class="panel text-center" style="padding:40px 16px;background:#f8faff;">
+      <div style="font-size:48px;margin-bottom:8px;">🔒</div>
+      <div style="font-size:16px;font-weight:600;color:#0d2b4f;">Masukkan kunci akses untuk membuka aplikasi</div>
+      <div style="font-size:12px;color:#6a8aaa;">♾️ Unlimited Siswa • Unlimited Sesi</div>
+    </div>
+  </div>
+</main>
+
 <script>
-const SERVER_URL='https://script.google.com/macros/s/AKfycbwawXgXFSwSO7Kj9J35xF7ewGJchGO4TeqL6OuJreGPX2p_Q1klsvvGHx_DQnD0sMfT/exec';
+// ============================================================
+// KONFIGURASI - GANTI DENGAN KUNCI ANDA
+// ============================================================
+const MASTER_KEY = 'NAFAS-2026';
+const GROUP_CODE = 'GRP-001';
 
-// ============================================
-// MANAJEMEN SESSIONS DI LOCAL STORAGE
-// ============================================
-const STORAGE_KEY = 'NAFAS_SOSIO_SESSIONS';
+const STORAGE_KEY_USERS = 'NAFAS_ACCESS_USERS';
+const STORAGE_KEY_ACTIVITY = 'NAFAS_ACTIVITY_LOG';
 
-function getStoredSessions() {
+// ============================================================
+// MANAJEMEN PENGGUNA
+// ============================================================
+function getUsers() {
+  try { return JSON.parse(localStorage.getItem(STORAGE_KEY_USERS)) || []; } 
+  catch(e) { return []; }
+}
+
+function saveUsers(users) {
+  localStorage.setItem(STORAGE_KEY_USERS, JSON.stringify(users));
+  updateDashboard();
+}
+
+function addUser(name) {
+  const users = getUsers();
+  if (users.find(u => u.name === name)) return false;
+  users.push({
+    id: 'U' + String(users.length + 1).padStart(3, '0'),
+    name,
+    status: 'active',
+    joinedAt: new Date().toISOString(),
+    lastAccess: new Date().toISOString()
+  });
+  saveUsers(users);
+  return true;
+}
+
+function updateUserAccess(name) {
+  const users = getUsers();
+  const user = users.find(u => u.name === name);
+  if (user) {
+    user.lastAccess = new Date().toISOString();
+    user.status = 'active';
+    saveUsers(users);
+  }
+}
+
+// ============================================================
+// DASHBOARD
+// ============================================================
+function getTotalStudents() {
   try {
-    return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+    const sessions = JSON.parse(localStorage.getItem('NAFAS_SOSIO_SESSIONS')) || [];
+    let total = 0;
+    sessions.forEach(s => {
+      if (s.students) total += s.students.length;
+    });
+    return total;
+  } catch(e) { return 0; }
+}
+
+function updateDashboard() {
+  const users = getUsers();
+  document.getElementById('totalUsers').textContent = users.length;
+  
+  try {
+    const sessions = JSON.parse(localStorage.getItem('NAFAS_SOSIO_SESSIONS')) || [];
+    document.getElementById('totalSessions').textContent = sessions.length;
   } catch(e) {
-    return [];
+    document.getElementById('totalSessions').textContent = '0';
   }
-}
-
-function saveStoredSessions(sessions) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(sessions));
-}
-
-function addSession(sessionData) {
-  const sessions = getStoredSessions();
-  // Cek jika sudah ada
-  const exists = sessions.some(s => s.code === sessionData.code);
-  if (!exists) {
-    sessions.push(sessionData);
-    saveStoredSessions(sessions);
-  }
-  return sessions;
-}
-
-function getSessionByCode(code) {
-  const sessions = getStoredSessions();
-  return sessions.find(s => s.code === code) || null;
-}
-
-// ============================================
-// VARIABLE GLOBAL
-// ============================================
-let session = null;
-let currentViewSession = null;
-
-try {
-  const saved = localStorage.getItem('NAFAS_SOSIO_CURRENT_SESSION');
-  if (saved) session = JSON.parse(saved);
-} catch(e) { session = null; }
-
-const esc = s => String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-
-async function api(action, data) {
-  let r = await fetch(SERVER_URL, {
-    method: 'POST',
-    headers: {'Content-Type':'text/plain;charset=utf-8'},
-    body: JSON.stringify(Object.assign({action}, data||{}))
-  });
-  return await r.json();
-}
-
-function saveCurrentSession() {
-  if (session) localStorage.setItem('NAFAS_SOSIO_CURRENT_SESSION', JSON.stringify(session));
-}
-
-// ============================================
-// NAVIGASI
-// ============================================
-function page(id) {
-  ['teacher','student','paper','result'].forEach(x => document.getElementById(x).classList.toggle('hidden', x!==id));
-  ['t','s','p','r'].forEach(x => document.getElementById('n'+x)?.classList.remove('active'));
-  const m = {teacher:'nt', student:'ns', paper:'np', result:'nr'};
-  document.getElementById(m[id]).classList.add('active');
   
-  if(id === 'student') loadStudent();
-  if(id === 'paper') paper();
-  if(id === 'teacher') { showTeacherSession(); renderSessionList(); }
-  if(id === 'result') {
-    if(session) {
-      document.getElementById('rcode').value = session.code || '';
-      document.getElementById('rpin').value = session.pin || '';
-    }
-  }
+  document.getElementById('totalStudents').textContent = getTotalStudents();
 }
 
-function note(id, s, ok=false) {
-  document.getElementById(id).innerHTML = '<div class="'+(ok?'ok':'notice')+'">'+s+'</div>';
+// ============================================================
+// VALIDASI & BUKA APLIKASI
+// ============================================================
+function note(id, msg, type='notice') {
+  const cls = { notice:'notice', ok:'ok', error:'error' }[type] || 'notice';
+  document.getElementById(id).innerHTML = `<div class="${cls}">${msg}</div>`;
+  setTimeout(() => { document.getElementById(id).innerHTML = ''; }, 4000);
 }
 
-// ============================================
-// SESSION LIST
-// ============================================
-function renderSessionList() {
-  const container = document.getElementById('sessionList');
-  const sessions = getStoredSessions();
-  
-  if (sessions.length === 0) {
-    container.innerHTML = '<div class="session-empty">📭 Belum ada sesi yang dibuat. Buat sesi baru di atas.</div>';
+function validateAndOpenApp() {
+  const input = document.getElementById('accessKeyInput').value.trim();
+  if (!input) {
+    note('accessMsg', '⚠️ Masukkan kunci akses.', 'error');
     return;
   }
   
-  let html = '<div class="session-list">';
-  sessions.reverse().forEach(s => {
-    const statusClass = s.isActive !== false ? 'active' : 'closed';
-    const statusLabel = s.isActive !== false ? '🟢 Aktif' : '🔒 Selesai';
-    const createdDate = s.createdAt ? new Date(s.createdAt).toLocaleDateString('id-ID') : '-';
-    const studentCount = s.students ? s.students.length : 0;
+  if (input === MASTER_KEY || input === GROUP_CODE) {
+    note('accessMsg', '✅ Akses diterima!', 'ok');
     
-    html += `
-      <div class="session-item">
-        <div class="s-code">${esc(s.code)}</div>
-        <div class="s-class">${esc(s.className || 'Kelas tidak terisi')}</div>
-        <div class="s-meta">
-          ${esc(s.school || '')} • ${esc(s.year || '')} • ${studentCount} siswa
-        </div>
-        <div class="s-meta">Dibuat: ${createdDate}</div>
-        <span class="s-status ${statusClass}">${statusLabel}</span>
-        <div class="s-actions">
-          <button class="soft" onclick="loadSession('${s.code}')">📂 Buka</button>
-          <button class="soft" onclick="viewResult('${s.code}')">📊 Hasil</button>
-          <button class="gold" onclick="copyText('${s.code}')">📋 Kode</button>
-          <button class="soft" onclick="deleteSession('${s.code}')" style="color:#d96b7b;">🗑️</button>
-        </div>
-      </div>
-    `;
-  });
-  html += '</div>';
-  container.innerHTML = html;
-}
-
-function loadSession(code) {
-  const sessions = getStoredSessions();
-  const found = sessions.find(s => s.code === code);
-  if (found) {
-    session = found;
-    saveCurrentSession();
-    showTeacherSession();
-    note('tmsg', '✅ Sesi ' + code + ' berhasil dimuat.', 'ok');
-    renderSessionList();
+    // Catat pengguna
+    const userName = 'User-' + input.slice(-4);
+    addUser(userName);
+    updateUserAccess(userName);
+    
+    openApp();
   } else {
-    note('tmsg', '❌ Sesi tidak ditemukan.');
+    note('accessMsg', '❌ Kunci tidak valid. Periksa kembali.', 'error');
   }
 }
 
-function deleteSession(code) {
-  if (!confirm('Yakin ingin menghapus sesi ' + code + '? Data tidak bisa dikembalikan.')) return;
-  let sessions = getStoredSessions();
-  sessions = sessions.filter(s => s.code !== code);
-  saveStoredSessions(sessions);
-  if (session && session.code === code) {
-    session = null;
-    localStorage.removeItem('NAFAS_SOSIO_CURRENT_SESSION');
-  }
-  renderSessionList();
-  showTeacherSession();
-  note('tmsg', '🗑️ Sesi ' + code + ' telah dihapus.');
-}
-
-function viewResult(code) {
-  // Pindah ke tab hasil dan isi kode
-  page('result');
-  document.getElementById('rcode').value = code;
-  // Cari PIN dari sesi tersimpan
-  const sessions = getStoredSessions();
-  const found = sessions.find(s => s.code === code);
-  if (found && found.pin) {
-    document.getElementById('rpin').value = found.pin;
-  }
-  // Otomatis buka hasil
-  results();
-}
-
-// ============================================
-// CREATE SESSION
-// ============================================
-function showTeacherSession() {
-  if (!session) {
-    document.getElementById('session').innerHTML = 'Belum ada sesi aktif. Buat sesi baru atau pilih dari daftar.';
-    return;
-  }
-  const u = location.href.split('#')[0] + '#sesi=' + encodeURIComponent(session.code);
-  const qr = 'https://api.qrserver.com/v1/create-qr-code/?size=260x260&margin=8&data=' + encodeURIComponent(u);
-  document.getElementById('session').innerHTML = `
-    <div class="grid">
-      <div><b>KODE SESI</b><div class="big">${esc(session.code)}</div>
-        <button class="soft" onclick="copyText('${session.code}')">📋 Salin Kode</button>
+function openApp() {
+  const container = document.getElementById('appContainer');
+  container.innerHTML = `
+    <div style="background:#fff;border-radius:12px;border:1px solid #e2ecf5;overflow:hidden;">
+      <div style="background:#0d2b4f;color:#fff;padding:8px 14px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:4px;">
+        <span style="font-weight:700;font-size:14px;">🌟 SOSIO DIGITAL NaFaS BK</span>
+        <div style="display:flex;gap:6px;align-items:center;">
+          <span style="font-size:9px;background:#17a67a;padding:2px 8px;border-radius:10px;">♾️ Unlimited</span>
+          <span style="font-size:10px;opacity:0.7;">✅ Aktif</span>
+        </div>
       </div>
-      <div><b>PIN GURU BK</b><div class="big">${esc(session.pin)}</div>
-        <button class="soft" onclick="copyText('${session.pin}')">📋 Salin PIN</button>
+      <iframe src="aplikasi-utama.html" style="width:100%;height:650px;border:0;"></iframe>
+      <div style="padding:4px 14px;background:#f8faff;font-size:9px;color:#6a8aaa;text-align:center;border-top:1px solid #e2ecf5;">
+        🔒 Akses aman • ♾️ Unlimited Siswa & Sesi • Khusus Guru BK
       </div>
-    </div>
-    <div class="share">
-      <h3>📱 Bagikan ke Siswa</h3>
-      <div class="shareline">
-        <input id="link" readonly value="${esc(u)}">
-        <button class="soft" onclick="copyLink()">📋 Salin Link</button>
-      </div>
-      <div class="qrbox">
-        <b>▣ QR Code Siswa</b>
-        <p class="small">Siswa dapat memindai QR untuk membuka sesi.</p>
-        <img src="${qr}" style="width:180px;height:180px;border:1px solid #ddd;border-radius:10px;background:#fff;padding:6px">
-        <br><button class="soft" onclick="printShareCard()">🖨️ Cetak Kartu Link & QR</button>
-      </div>
-    </div>
-    <div class="small">Sesi tersimpan di daftar sesi. Kode dan PIN tetap tersimpan.</div>
-  `;
-}
-
-async function create() {
-  const names = document.getElementById('students').value.split('\n').map(x=>x.trim()).filter(Boolean);
-  if (names.length < 2) { note('tmsg','Masukkan minimal 2 nama siswa.'); return; }
-  
-  note('tmsg','⏳ Membuat sesi online...');
-  const students = names.map((name,i) => ({ id:'S'+(i+1), name }));
-  
-  const r = await api('createSession', {
-    school: document.getElementById('school').value,
-    className: document.getElementById('className').value,
-    year: document.getElementById('year').value,
-    counselor: document.getElementById('counselor').value,
-    students
-  });
-  
-  if (r.status !== 'OK') { note('tmsg','❌ '+esc(r.message)); return; }
-  
-  session = {
-    code: r.code,
-    pin: r.pin,
-    students,
-    school: document.getElementById('school').value,
-    className: document.getElementById('className').value,
-    year: document.getElementById('year').value,
-    counselor: document.getElementById('counselor').value,
-    isActive: true,
-    createdAt: new Date().toISOString()
-  };
-  
-  // Simpan ke daftar sesi
-  addSession(session);
-  saveCurrentSession();
-  showTeacherSession();
-  renderSessionList();
-  
-  const link = location.href.split('#')[0] + '#sesi=' + encodeURIComponent(r.code);
-  note('tmsg','✅ Sesi berhasil dibuat dan tersimpan di daftar sesi.','ok');
-}
-
-function copyLink() { copyText(document.getElementById('link').value); }
-function copyText(v) {
-  navigator.clipboard?.writeText(v).then(()=>alert('Berhasil disalin.')).catch(()=>{
-    const a = document.createElement('textarea');
-    a.value = v; document.body.appendChild(a); a.select(); document.execCommand('copy'); a.remove();
-    alert('Berhasil disalin.');
-  });
-}
-
-function printShareCard() {
-  if(!session) return;
-  const u = location.href.split('#')[0] + '#sesi=' + encodeURIComponent(session.code);
-  const qr = 'https://api.qrserver.com/v1/create-qr-code/?size=300x300&margin=8&data=' + encodeURIComponent(u);
-  const w = window.open('','_blank','width=700,height=800');
-  if(!w){ alert('Izinkan pop-up untuk mencetak kartu.'); return; }
-  w.document.write(`<!doctype html><html><head><title>Kartu Sosio Digital NaFaS BK</title>
-    <style>body{font-family:Arial;text-align:center;padding:35px;color:#123a6f}h1{font-size:24px;margin:0 0 8px}h2{font-size:18px;margin:4px 0 20px}img{width:300px;height:300px;border:1px solid #ddd;padding:8px;border-radius:12px}.code{font-size:24px;font-weight:bold;margin:12px}.small{color:#555;font-size:12px;max-width:520px;margin:10px auto;word-break:break-all}@page{size:A5;margin:12mm}</style>
-    </head><body><h1>SOSIO DIGITAL NaFaS BK</h1><h2>SCAN UNTUK MENGISI SOSIOMETRI</h2>
-    <img src="${qr}"><div class="code">${esc(session.code)}</div>
-    <div class="small">${esc(u)}</div><p>Silakan scan QR Code dengan kamera HP.</p>
-    <script>window.onload=function(){setTimeout(function(){window.print()},700)}<\/script>
-    </body></html>`);
-  w.document.close();
-}
-
-// ============================================
-// STUDENT MODE
-// ============================================
-function block(cls, title, txt, n) {
-  let h = '<div class="panel aspect '+cls+'"><h3>'+title+'</h3><p>'+txt+'</p>';
-  for(let i=0; i<n; i++) {
-    h += `<label>Pilihan ${i+1}</label><select class="ch ${cls}"></select>
-          <label>Alasan</label><textarea class="rs ${cls}" placeholder="Tuliskan alasan singkat..."></textarea>`;
-  }
-  return h+'</div>';
-}
-function opts() {
-  return '<option value="">— Pilih nama —</option>' + session.students.map(s => '<option value="'+esc(s.id)+'">'+esc(s.name)+'</option>').join('');
-}
-
-async function loadStudent() {
-  const code = location.hash.startsWith('#sesi=') ? decodeURIComponent(location.hash.slice(6)) : document.getElementById('scode').value.trim();
-  if(!code) { document.getElementById('q').innerHTML='<div class="notice">Masukkan kode sesi.</div>'; return; }
-  const r = await api('getSession', {code});
-  if(r.status !== 'OK') { document.getElementById('q').innerHTML='<div class="notice">'+esc(r.message)+'</div>'; return; }
-  session = r.session;
-  document.getElementById('scode').value = code;
-  document.getElementById('me').innerHTML = opts();
-  document.getElementById('q').innerHTML = 
-    block('heart','❤️ Pertemanan','Pilih 2 teman yang paling nyaman kamu ajak berteman.',2) +
-    block('coop','🤝 Kerja Sama','Pilih 2 teman yang paling kamu pilih untuk bekerja sama.',2) +
-    block('lead','⭐ Kepemimpinan','Pilih 1 teman yang menurutmu mampu memimpin.',1) +
-    block('uncomfortable','🔎 Relasi Kurang Nyaman','Pilih maksimal 1 teman yang menurutmu paling sulit diajak berinteraksi atau bekerja sama.',1);
-  document.querySelectorAll('.ch').forEach(x=>x.innerHTML=opts());
-}
-
-function vals(c) { return [...document.querySelectorAll('select.ch.'+c)].map(x=>x.value); }
-function reas(c) { return [...document.querySelectorAll('textarea.rs.'+c)].map(x=>x.value.trim()); }
-
-async function send() {
-  const me = document.getElementById('me').value,
-        h = vals('heart'), c = vals('coop'), l = vals('lead'), u = vals('uncomfortable'),
-        all = [...h,...c,...l,...u.filter(Boolean)],
-        re = [...reas('heart'), ...reas('coop'), ...reas('lead'), ...(u[0]?[reas('uncomfortable')[0]]:[])];
-  if(!me){ note('smsg','Pilih nama kamu.'); return; }
-  if(h.some(x=>!x) || c.some(x=>!x) || !l[0] || re.some(x=>!x)){ note('smsg','Lengkapi semua pilihan dan alasan.'); return; }
-  if(all.includes(me)){ note('smsg','Tidak boleh memilih diri sendiri.'); return; }
-  if(new Set(h).size<2 || new Set(c).size<2){ note('smsg','Dua pilihan harus berbeda.'); return; }
-  note('smsg','⏳ Mengirim...');
-  const r = await api('submitResponse', {
-    code: document.getElementById('scode').value,
-    respondent: me,
-    heart: h, heartReason: reas('heart'),
-    coop: c, coopReason: reas('coop'),
-    lead: l, leadReason: reas('lead'),
-    uncomfortable: u.filter(Boolean),
-    uncomfortableReason: u[0] ? [reas('uncomfortable')[0]] : []
-  });
-  note('smsg', r.status==='OK' ? '✅ Jawaban berhasil dikirim.' : '❌ '+esc(r.message), r.status==='OK');
-}
-
-// ============================================
-// PAPER MODE
-// ============================================
-function paper() {
-  if(!session) {
-    // Coba ambil dari daftar sesi terakhir
-    const sessions = getStoredSessions();
-    if (sessions.length > 0) {
-      session = sessions[0];
-      saveCurrentSession();
-    } else {
-      document.getElementById('paperEntry').innerHTML = '<div class="notice">Belum ada sesi. Buat sesi terlebih dahulu atau pilih dari daftar sesi.</div>';
-      return;
-    }
-  }
-  const optsHtml = '<option value="">— Pilih —</option>' + session.students.map(s => '<option value="'+esc(s.id)+'">'+esc(s.name)+'</option>').join('');
-  document.getElementById('paperEntry').innerHTML = session.students.map((s,i) => `
-    <div class="panel"><h3>👤 ${i+1}. ${esc(s.name)}</h3>
-    <div class="grid">
-      <div><label>❤️ Pertemanan 1</label><select class="pe heart">${optsHtml}</select><label>Alasan</label><input class="pr heart"></div>
-      <div><label>❤️ Pertemanan 2</label><select class="pe heart">${optsHtml}</select><label>Alasan</label><input class="pr heart"></div>
-      <div><label>🤝 Kerja Sama 1</label><select class="pe coop">${optsHtml}</select><label>Alasan</label><input class="pr coop"></div>
-      <div><label>🤝 Kerja Sama 2</label><select class="pe coop">${optsHtml}</select><label>Alasan</label><input class="pr coop"></div>
-      <div><label>⭐ Kepemimpinan</label><select class="pe lead">${optsHtml}</select><label>Alasan</label><input class="pr lead"></div>
-      <div><label>🔎 Relasi Kurang Nyaman</label><select class="pe uncomfortable">${optsHtml}</select><label>Alasan</label><input class="pr uncomfortable"></div>
-    </div></div>
-  `).join('');
-  
-  // Lembar cetak
-  document.getElementById('paperRows').innerHTML = `
-    <div class="print-sheet">
-      <div class="print-head"><h1>SOSIO DIGITAL NaFaS BK</h1><h2>LEMBAR SOSIOMETRI</h2>
-        <div class="print-meta"><span>Nama: ____________________________________</span><span>Kelas: ${esc(session.className||'________________')}</span></div>
-        <div class="print-meta"><span>Sesi: ${esc(session.code||'________________')}</span><span>Tanggal: __________________</span></div>
-      </div>
-      <div class="print-instruction"><b>Petunjuk:</b> Jawablah dengan jujur. Tuliskan nama teman dan alasan singkat.</div>
-      <div class="print-q"><h3>❤️ A. PERTEMANAN</h3><p>Pilih 2 teman yang paling nyaman diajak berteman.</p>
-        <div class="line">1) ____________________________________ &nbsp; Alasan: ______________________________________________</div>
-        <div class="line">2) ____________________________________ &nbsp; Alasan: ______________________________________________</div>
-      </div>
-      <div class="print-q"><h3>🤝 B. KERJA SAMA</h3><p>Pilih 2 teman yang paling dipilih untuk bekerja sama.</p>
-        <div class="line">1) ____________________________________ &nbsp; Alasan: ______________________________________________</div>
-        <div class="line">2) ____________________________________ &nbsp; Alasan: ______________________________________________</div>
-      </div>
-      <div class="print-q"><h3>⭐ C. KEPEMIMPINAN</h3><p>Pilih 1 teman yang mampu memimpin.</p>
-        <div class="line">Nama: __________________________________ &nbsp; Alasan: ______________________________________________</div>
-      </div>
-      <div class="print-q"><h3>🔎 D. RELASI KURANG NYAMAN</h3><p>Pilih 1 teman yang paling sulit diajak interaksi (opsional).</p>
-        <div class="line">Nama: __________________________________ &nbsp; Alasan: ______________________________________________</div>
-      </div>
-      <div class="print-footer">SOSIO DIGITAL NaFaS BK • Data untuk layanan Bimbingan dan Konseling.</div>
     </div>
   `;
-}
-
-function printSociometry() {
-  if(!session){ alert('Pilih sesi terlebih dahulu.'); return; }
-  const old = document.title;
-  document.title = 'Lembar Sosiometri - '+(session.className||'NaFaS BK');
-  window.print();
-  document.title = old;
-}
-
-async function submitPaper() {
-  if(!session){ note('pmsg','Pilih sesi terlebih dahulu.'); return; }
-  const cards = [...document.querySelectorAll('#paperEntry .panel')];
-  note('pmsg','⏳ Menyimpan entri...');
-  for(let i=0; i<cards.length; i++) {
-    const s = session.students[i],
-          sels = [...cards[i].querySelectorAll('select')],
-          ins = [...cards[i].querySelectorAll('input')],
-          h = sels.slice(0,2).map(x=>x.value).filter(Boolean),
-          c = sels.slice(2,4).map(x=>x.value).filter(Boolean),
-          l = sels[4]?.value ? [sels[4].value] : [],
-          u = sels[5]?.value ? [sels[5].value] : [],
-          hr = ins.slice(0,2).map(x=>x.value.trim()),
-          cr = ins.slice(2,4).map(x=>x.value.trim()),
-          lr = ins[4]?.value.trim() ? [ins[4].value.trim()] : [],
-          ur = ins[5]?.value.trim() ? [ins[5].value.trim()] : [];
-    if(h.length!==2 || c.length!==2 || !l.length || hr.some(x=>!x) || cr.some(x=>!x) || !lr.length) {
-      note('pmsg','⚠️ Entri '+(i+1)+' belum lengkap.');
-      return;
-    }
-    const r = await api('submitResponse', {
-      code: session.code,
-      respondent: s.id,
-      heart: h, heartReason: hr,
-      coop: c, coopReason: cr,
-      lead: l, leadReason: lr,
-      uncomfortable: u, uncomfortableReason: ur
-    });
-    if(r.status!=='OK' && !(r.message && r.message.includes('sudah diterima'))) {
-      note('pmsg','❌ Entri '+(i+1)+' gagal tersimpan.');
-      return;
-    }
-  }
-  note('pmsg','✅ Semua entri berhasil disimpan.','ok');
-}
-
-// ============================================
-// HASIL - TABEL RINGKAS
-// ============================================
-function renderTableOnly(r) {
-  const rs = r.responses || [];
-  const st = r.session.students;
-  const className = r.session.className || '';
-  const code = r.session.code || '';
-
-  const counts = { heart: {}, coop: {}, lead: {}, uncomfortable: {} };
-  st.forEach(s => ['heart','coop','lead','uncomfortable'].forEach(k => counts[k][s.id] = 0));
-  rs.forEach(x => {
-    ['heart','coop','lead','uncomfortable'].forEach(k => {
-      (x[k] || []).forEach(id => { if (counts[k][id] !== undefined) counts[k][id]++; });
-    });
+  
+  // Sembunyikan dashboard dan login
+  document.querySelectorAll('.panel').forEach(el => {
+    if (el.id !== 'appContainer') el.style.display = 'none';
   });
-
-  const name = id => (st.find(s => String(s.id) === String(id)) || { name: id }).name;
-
-  let html = '';
-  html += `<div class="result-head">
-    <div class="info"><strong>${esc(className)}</strong> • ${rs.length}/${st.length} siswa</div>
-    <div class="info">Kode: <strong>${esc(code)}</strong></div>
-  </div>`;
-
-  html += `<div class="table-wrap">
-    <table class="table-main">
-      <thead><tr>
-        <th style="width:20px;">#</th>
-        <th style="text-align:left;min-width:80px;">Nama</th>
-        <th style="width:30px;">❤️</th>
-        <th style="width:30px;">🤝</th>
-        <th style="width:30px;">⭐</th>
-        <th style="width:30px;">🔎</th>
-        <th style="width:32px;">Total</th>
-      </tr></thead><tbody>`;
-  
-  const sorted = [...st].map(s => ({
-    ...s,
-    total: counts.heart[s.id] + counts.coop[s.id] + counts.lead[s.id] + counts.uncomfortable[s.id]
-  })).sort((a,b) => b.total - a.total || a.name.localeCompare(b.name,'id'));
-
-  sorted.forEach((s, idx) => {
-    const h = counts.heart[s.id] || 0;
-    const c = counts.coop[s.id] || 0;
-    const l = counts.lead[s.id] || 0;
-    const u = counts.uncomfortable[s.id] || 0;
-    const total = h + c + l + u;
-    
-    let rankClass = '';
-    if (idx === 0 && total > 0) rankClass = 'rank-1';
-    else if (idx === 1 && total > 0) rankClass = 'rank-2';
-    else if (idx === 2 && total > 0) rankClass = 'rank-3';
-    
-    html += `<tr>
-      <td>${total > 0 ? `<span class="rank-badge ${rankClass}">${idx + 1}</span>` : '-'}</td>
-      <td class="name-col">${esc(s.name)}</td>
-      <td>${h > 0 ? `<span class="count">${h}</span>` : '-'}</td>
-      <td>${c > 0 ? `<span class="count">${c}</span>` : '-'}</td>
-      <td>${l > 0 ? `<span class="count">${l}</span>` : '-'}</td>
-      <td>${u > 0 ? `<span class="count count-low">${u}</span>` : '-'}</td>
-      <td class="total-col">${total}</td>
-    </tr>`;
-  });
-  
-  html += `</tbody></table></div>`;
-  html += `<div class="result-footer">🔐 Khusus Guru BK • Dicetak: ${new Date().toLocaleDateString('id-ID')}</div>`;
-  
-  return html;
 }
 
-async function results() {
-  const code = document.getElementById('rcode').value.trim();
-  const pin = document.getElementById('rpin').value.trim();
-  if(!code || !pin){ 
-    document.getElementById('res').innerHTML = '<div class="notice">⚠️ Masukkan Kode Sesi dan PIN Guru BK.</div>'; 
-    return; 
-  }
-  
-  const r = await api('getResults', { code, pin });
-  if(r.status !== 'OK'){ 
-    document.getElementById('res').innerHTML = '<div class="notice">❌ '+esc(r.message)+'</div>'; 
-    return; 
-  }
-  
-  if(!r.session) {
-    // Coba ambil dari penyimpanan lokal
-    const stored = getSessionByCode(code);
-    if (stored) r.session = stored;
-  }
-  
-  document.getElementById('res').innerHTML = renderTableOnly(r);
-}
-
-function printResults() {
-  const source = document.getElementById('res');
-  if(!source || !source.innerHTML.trim()){ 
-    alert('⚠️ Silakan klik "Buka Hasil" terlebih dahulu.'); 
-    return; 
-  }
-  
-  const code = document.getElementById('rcode')?.value.trim() || '';
-  const pin = document.getElementById('rpin')?.value.trim() || '';
-  const sessions = getStoredSessions();
-  const found = sessions.find(s => s.code === code);
-  const className = found?.className || '';
-  
-  const w = window.open('', '_blank', 'width=800,height=700');
-  if(!w){ alert('⚠️ Jendela cetak diblokir. Izinkan pop-up.'); return; }
-  
-  const styles = document.querySelector('style').innerHTML;
-  
-  w.document.write(`<!doctype html><html lang="id"><head>
-    <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Hasil Sosiometri ${code}</title>
-    <style>${styles}
-      body { padding: 3mm; background: #fff; margin: 0; font-family: Arial, sans-serif; }
-      .toolbar-print { position: sticky; top: 0; background: #fff; padding: 4px; text-align: center; border-bottom: 1px solid #d0dae6; z-index: 10; margin-bottom: 6px; }
-      .toolbar-print button { border: 0; border-radius: 4px; padding: 4px 12px; background: #f4b400; color: #17324d; font-weight: 700; cursor: pointer; font-size: 10px; }
-      .toolbar-print button.close-btn { background: #e4edf4; margin-left: 6px; }
-      .print-header { text-align: center; border-bottom: 1px solid #123a6f; padding-bottom: 3px; margin-bottom: 5px; }
-      .print-header h1 { font-size: 12px; margin: 0; color: #123a6f; }
-      .print-header h2 { font-size: 10px; margin: 1px 0; color: #4a5d70; font-weight: 400; }
-      .print-meta { display: flex; justify-content: center; gap: 12px; font-size: 7px; color: #6b7d90; margin-top: 1px; }
-      @media print { .toolbar-print { display: none; } body { padding: 2mm; } .panel { padding: 3px !important; margin-bottom: 3px !important; } }
-      @page { size: A4 landscape; margin: 3mm; }
-    </style>
-  </head><body>
-    <div class="toolbar-print">
-      <button onclick="window.print()">🖨️ CETAK / PDF</button>
-      <button class="close-btn" onclick="window.close()">✖ Tutup</button>
-    </div>
-    <div class="print-header">
-      <h1>📊 HASIL SOSIOMETRI</h1>
-      <h2>${esc(className)}</h2>
-      <div class="print-meta"><span>Kode: <strong>${esc(code)}</strong></span><span>PIN: <strong>${esc(pin)}</strong></span><span>${new Date().toLocaleDateString('id-ID')}</span></div>
-    </div>
-    <main>${source.innerHTML}</main>
-  </body></html>`);
-  w.document.close();
-  w.focus();
-}
-
-// ============================================
+// ============================================================
 // INISIALISASI
-// ============================================
-function init() {
-  renderSessionList();
-  showTeacherSession();
-  if(location.hash.startsWith('#sesi=')) { page('student'); loadStudent(); }
-}
+// ============================================================
+updateDashboard();
 
-// Jalankan saat halaman dimuat
-init();
-function openPrintPage(){let code=document.getElementById('rcode')?.value.trim()||'';let pin=document.getElementById('rpin')?.value.trim()||'';if(!code||!pin){alert('Masukkan Kode Sesi dan PIN Guru BK terlebih dahulu.');return}let u='cetak-hasil.html?code='+encodeURIComponent(code)+'&pin='+encodeURIComponent(pin);let w=window.open(u,'_blank');if(!w)alert('Izinkan pop-up agar laporan dapat dibuka.')}
-</script></body></html>
+// Cek apakah sudah pernah akses (bisa via URL parameter)
+if (window.location.hash === '#akses') {
+  document.getElementById('accessKeyInput').focus();
+}
+</script>
+</body>
+</html>

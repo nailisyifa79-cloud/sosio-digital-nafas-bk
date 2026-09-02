@@ -176,50 +176,6 @@ button:hover{transform:translateY(-1px)}
 .license-container .success{background:#eaf8f2;color:#0a6b4a;padding:10px;border-radius:6px;font-size:13px;margin-bottom:12px;display:none}
 .license-container .info{background:#fff8df;color:#7a6300;padding:10px;border-radius:6px;font-size:13px;margin-bottom:12px;display:none}
 
-/* ===== STYLE IKON MATA - TIDAK MENGHALANGI ===== */
-.password-wrapper {
-    position: relative;
-    width: 100%;
-}
-.password-wrapper input {
-    width: 100%;
-    padding: 10px 40px 10px 14px;
-    border: 1px solid #d0ddee;
-    border-radius: 8px;
-    font-size: 14px;
-    background: #fafcfe;
-    box-sizing: border-box;
-    margin-bottom: 14px;
-    padding-right: 45px; /* Memberi ruang untuk ikon di kanan */
-}
-.password-wrapper input:focus {
-    border-color: #1a5a9e;
-    outline: none;
-    box-shadow: 0 0 0 3px rgba(26, 90, 158, 0.12);
-}
-.password-wrapper .toggle-password {
-    position: absolute;
-    right: 12px;
-    top: 11px;
-    background: none;
-    border: none;
-    cursor: pointer;
-    font-size: 18px;
-    color: #94a3b8;
-    padding: 2px 6px;
-    transition: 0.3s;
-    border-radius: 6px;
-    line-height: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 2;
-}
-.password-wrapper .toggle-password:hover {
-    background: rgba(26, 90, 158, 0.08);
-    color: #1a5a9e;
-}
-
 /* ===== TOMBOL LUPA PASSWORD ===== */
 .forgot-password-btn {
     background: none !important;
@@ -388,10 +344,7 @@ button:hover{transform:translateY(-1px)}
         <input type="email" id="loginEmail" placeholder="Masukkan email">
         
         <label>🔒 Password</label>
-        <div class="password-wrapper">
-            <input type="password" id="loginPassword" placeholder="Masukkan password">
-            <button type="button" class="toggle-password" onclick="togglePassword('loginPassword', this)" aria-label="Tampilkan password">👁️</button>
-        </div>
+        <input type="password" id="loginPassword" placeholder="Masukkan password">
         
         <div class="forgot-password-container">
             <a class="forgot-password-btn" onclick="bukaModalLupaPassword()">🔑 Lupa password?</a>
@@ -406,10 +359,7 @@ button:hover{transform:translateY(-1px)}
         <input type="email" id="registerEmail" placeholder="Masukkan email">
         
         <label>🔒 Password</label>
-        <div class="password-wrapper">
-            <input type="password" id="registerPassword" placeholder="Buat password (min 6 karakter)">
-            <button type="button" class="toggle-password" onclick="togglePassword('registerPassword', this)" aria-label="Tampilkan password">👁️</button>
-        </div>
+        <input type="password" id="registerPassword" placeholder="Buat password (min 6 karakter)">
         
         <label>📝 Nama Guru BK</label>
         <input type="text" id="registerName" placeholder="Masukkan nama lengkap">
@@ -549,24 +499,6 @@ button:hover{transform:translateY(-1px)}
 
 <script>
 // ============================================================
-// FUNGSI TOGGLE PASSWORD (IKON MATA) - TIDAK MENGHALANGI
-// ============================================================
-function togglePassword(inputId, btn) {
-    var input = document.getElementById(inputId);
-    if (input.type === 'password') {
-        input.type = 'text';
-        btn.textContent = '🙈';
-        btn.setAttribute('aria-label', 'Sembunyikan password');
-    } else {
-        input.type = 'password';
-        btn.textContent = '👁️';
-        btn.setAttribute('aria-label', 'Tampilkan password');
-    }
-    // Fokus kembali ke input setelah toggle
-    input.focus();
-}
-
-// ============================================================
 // MODAL LUPA PASSWORD
 // ============================================================
 function bukaModalLupaPassword() {
@@ -609,7 +541,7 @@ function resetPassword() {
         return;
     }
     
-    // Generate password baru (6 karakter acak)
+    // Generate password baru (8 karakter acak)
     var chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
     var newPassword = '';
     for (var i = 0; i < 8; i++) {

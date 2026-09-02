@@ -5,8 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Sosio Digital NaFaS BK</title>
 <!-- Firebase SDK -->
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js">function openPrintPage(){let code=document.getElementById('rcode')?.value.trim()||'';let pin=document.getElementById('rpin')?.value.trim()||'';if(!code||!pin){alert('Masukkan Kode Sesi dan PIN Guru BK terlebih dahulu.');return}let u='cetak-hasil.html?code='+encodeURIComponent(code)+'&pin='+encodeURIComponent(pin);let w=window.open(u,'_blank');if(!w)alert('Izinkan pop-up agar laporan dapat dibuka.')}
-</script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
@@ -174,6 +173,49 @@ button:hover{transform:translateY(-1px)}
 .license-container .error{background:#fde8ec;color:#a04050;padding:10px;border-radius:6px;font-size:13px;margin-bottom:12px;display:none}
 .license-container .success{background:#eaf8f2;color:#0a6b4a;padding:10px;border-radius:6px;font-size:13px;margin-bottom:12px;display:none}
 .license-container .info{background:#fff8df;color:#7a6300;padding:10px;border-radius:6px;font-size:13px;margin-bottom:12px;display:none}
+
+/* ===== STYLE IKON MATA (SEPERTI JURNAL GURU) ===== */
+.password-wrapper {
+    position: relative;
+    width: 100%;
+    margin-bottom: 14px;
+}
+.password-wrapper input {
+    width: 100%;
+    padding: 10px 45px 10px 14px;
+    border: 1px solid #d0ddee;
+    border-radius: 8px;
+    font-size: 14px;
+    background: #fafcfe;
+    box-sizing: border-box;
+}
+.password-wrapper input:focus {
+    border-color: #1a5a9e;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(26, 90, 158, 0.12);
+}
+.password-wrapper .toggle-password {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 20px;
+    color: #94a3b8;
+    padding: 4px 8px;
+    transition: 0.3s;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+}
+.password-wrapper .toggle-password:hover {
+    background: rgba(26, 90, 158, 0.08);
+    color: #1a5a9e;
+}
 </style>
 </head>
 <body>
@@ -205,10 +247,13 @@ button:hover{transform:translateY(-1px)}
     
     <div id="formLogin">
         <label>📧 Email</label>
-        <input type="email" id="loginEmail" placeholder="Masukkan email" autocomplete="email">
+        <input type="email" id="loginEmail" placeholder="Masukkan email">
         
         <label>🔒 Password</label>
-        <input type="password" id="loginPassword" placeholder="Masukkan password" autocomplete="current-password">
+        <div class="password-wrapper">
+            <input type="password" id="loginPassword" placeholder="Masukkan password">
+            <button type="button" class="toggle-password" onclick="togglePassword('loginPassword', this)" aria-label="Tampilkan password">👁️</button>
+        </div>
         
         <button onclick="login()">🚀 Masuk</button>
         <div class="toggle-link">Belum punya akun? <a onclick="showRegister()">Daftar di sini</a></div>
@@ -216,10 +261,13 @@ button:hover{transform:translateY(-1px)}
     
     <div id="formRegister" style="display:none;">
         <label>📧 Email</label>
-        <input type="email" id="registerEmail" placeholder="Masukkan email" autocomplete="email">
+        <input type="email" id="registerEmail" placeholder="Masukkan email">
         
         <label>🔒 Password</label>
-        <input type="password" id="registerPassword" placeholder="Buat password (min. 6 karakter)" autocomplete="new-password">
+        <div class="password-wrapper">
+            <input type="password" id="registerPassword" placeholder="Buat password">
+            <button type="button" class="toggle-password" onclick="togglePassword('registerPassword', this)" aria-label="Tampilkan password">👁️</button>
+        </div>
         
         <label>📝 Nama Guru BK</label>
         <input type="text" id="registerName" placeholder="Masukkan nama lengkap">
@@ -341,6 +389,22 @@ button:hover{transform:translateY(-1px)}
 </div>
 
 <script>
+// ============================================================
+// FUNGSI TOGGLE PASSWORD (IKON MATA) - SEPERTI JURNAL GURU
+// ============================================================
+function togglePassword(inputId, btn) {
+    var input = document.getElementById(inputId);
+    if (input.type === 'password') {
+        input.type = 'text';
+        btn.textContent = '🙈';
+        btn.setAttribute('aria-label', 'Sembunyikan password');
+    } else {
+        input.type = 'password';
+        btn.textContent = '👁️';
+        btn.setAttribute('aria-label', 'Tampilkan password');
+    }
+}
+
 // ============================================================
 // KONFIGURASI FIREBASE
 // ============================================================

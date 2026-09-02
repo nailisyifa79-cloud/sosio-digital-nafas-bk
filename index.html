@@ -125,7 +125,10 @@ button:hover{transform:translateY(-1px)}
 .student-mode-only .brand { font-size: 16px; }
 .student-mode-only .tag { font-size: 9px; }
 
-@media print{.reason-cell{max-width:300px;min-width:180px;font-size:6.5px}.reason-item{font-size:6.5px;padding:0.5px 0}.reason-item .cat{font-size:5px}.reason-item .reason-text{font-size:6.5px}.table-main td{padding:2px 3px;font-size:7px}.table-main th{font-size:6px;padding:2px 3px}.legend-footer{font-size:6.5px;padding:2px 6px;gap:3px 10px}.legend-footer .icon{font-size:9px}}
+/* ===== DEBUG BOX ===== */
+.debug-box{background:#f8f0e0;border:2px solid #d96b7b;border-radius:6px;padding:8px 10px;margin-bottom:8px;font-size:11px;color:#5a3a2a;font-family:monospace;white-space:pre-wrap;word-break:break-all;max-height:200px;overflow-y:auto}
+
+@media print{.reason-cell{max-width:300px;min-width:180px;font-size:6.5px}.reason-item{font-size:6.5px;padding:0.5px 0}.reason-item .cat{font-size:5px}.reason-item .reason-text{font-size:6.5px}.table-main td{padding:2px 3px;font-size:7px}.table-main th{font-size:6px;padding:2px 3px}.legend-footer{font-size:6.5px;padding:2px 6px;gap:3px 10px}.legend-footer .icon{font-size:9px}.debug-box{display:none!important}}
 </style>
 </head>
 <body>
@@ -222,6 +225,7 @@ button:hover{transform:translateY(-1px)}
             <section id="student" class="hidden">
                 <div class="panel"><h2>📱 Pengisian Siswa</h2>
                     <div class="notice">✅ Hasil sosiometri hanya dapat dilihat oleh Guru BK. Jawaban Anda rahasia.</div>
+                    <div id="debugInfo" class="debug-box" style="display:none;"></div>
                     <label>Kode Sesi</label>
                     <input id="scode" readonly style="background:#f0f4f8;font-weight:bold;color:#123a6f;">
                     <label>Pilih Nama Kamu</label>
@@ -273,13 +277,24 @@ button:hover{transform:translateY(-1px)}
 
 <script>
 // ============================================================
-// DETEKSI LINK SISWA - PALING AWAL
+// DETEKSI LINK SISWA - PALING AWAL DENGAN DEBUG
 // ============================================================
 (function() {
     var hash = window.location.hash;
+    var debugEl = document.getElementById('debugInfo');
+    
+    function logDebug(msg) {
+        console.log(msg);
+        if (debugEl) {
+            debugEl.style.display = 'block';
+            debugEl.innerHTML += msg + '\n';
+            debugEl.scrollTop = debugEl.scrollHeight;
+        }
+    }
+    
     if (hash && hash.indexOf('#sesi=') === 0) {
         var kodeSesi = decodeURIComponent(hash.substring(6));
-        console.log('🔍 Link siswa terdeteksi! Kode:', kodeSesi);
+        logDebug('🔍 Link siswa terdeteksi! Kode: ' + kodeSesi);
         
         document.getElementById('loginPage').style.display = 'none';
         document.getElementById('appPage').style.display = 'block';
@@ -288,17 +303,23 @@ button:hover{transform:translateY(-1px)}
         var sessions = [];
         try {
             var raw = localStorage.getItem('NAFAS_SOSIO_SESSIONS');
-            console.log('📦 Data mentah dari localStorage:', raw);
+            logDebug('📦 Data mentah dari localStorage: ' + (raw ? raw.substring(0, 100) + '...' : 'null'));
             sessions = JSON.parse(raw) || [];
         } catch(e) { 
-            console.log('❌ Gagal baca localStorage:', e);
+            logDebug('❌ Gagal baca localStorage: ' + e.message);
             sessions = []; 
         }
-        console.log('📋 Total sesi tersimpan:', sessions.length);
+        logDebug('📋 Total sesi tersimpan: ' + sessions.length);
+        
+        // Tampilkan semua kode sesi yang tersimpan
+        var allCodes = [];
+        for (var i = 0; i < sessions.length; i++) {
+            allCodes.push(sessions[i].code);
+        }
+        logDebug('🔑 Semua kode sesi: ' + allCodes.join(', '));
         
         var sessionData = null;
         for (var i = 0; i < sessions.length; i++) {
-            console.log('🔑 Sesi ke-' + i + ':', sessions[i].code);
             if (sessions[i].code === kodeSesi) {
                 sessionData = sessions[i];
                 break;
@@ -306,7 +327,7 @@ button:hover{transform:translateY(-1px)}
         }
         
         if (sessionData) {
-            console.log('✅ Sesi ditemukan!', sessionData);
+            logDebug('✅ Sesi ditemukan! Nama: ' + sessionData.className + ', Siswa: ' + sessionData.students.length);
             window.sesiAktif = sessionData;
             window.isStudentMode = true;
             document.getElementById('appPage').classList.add('student-mode-only');
@@ -346,11 +367,12 @@ button:hover{transform:translateY(-1px)}
                 if (guruElements[l]) guruElements[l].style.display = 'none';
             }
             document.getElementById('student').classList.remove('hidden');
+            logDebug('✅ Mode siswa berhasil diaktifkan!');
             
         } else {
-            console.log('❌ Sesi dengan kode', kodeSesi, 'tidak ditemukan');
+            logDebug('❌ Sesi dengan kode ' + kodeSesi + ' tidak ditemukan');
             document.getElementById('student').classList.remove('hidden');
-            document.getElementById('q').innerHTML = '<div class="error">❌ Sesi dengan kode <b>' + kodeSesi + '</b> tidak ditemukan.<br><br>📌 <b>Petunjuk:</b> Pastikan link yang Anda klik sudah benar. Jika masih error, hubungi Guru BK untuk mendapatkan kode sesi yang valid.<br><br>🔍 <b>Info untuk Guru BK:</b> Klik tombol "🔍 Cek Sesi" di halaman Guru BK untuk melihat daftar sesi yang tersimpan.</div>';
+            document.getElementById('q').innerHTML = '<div class="error">❌ Sesi dengan kode <b>' + kodeSesi + '</b> tidak ditemukan.<br><br>📌 <b>Petunjuk:</b> Pastikan link yang Anda klik sudah benar. Jika masih error, hubungi Guru BK untuk mendapatkan kode sesi yang valid.<br><br>🔍 <b>Info Debug:</b> Kode yang dicari: <b>' + kodeSesi + '</b><br>Kode yang tersimpan: <b>' + allCodes.join(', ') + '</b></div>';
             document.getElementById('me').innerHTML = '<option value="">— Pilih nama —</option>';
             document.getElementById('scode').value = kodeSesi;
             document.getElementById('appPage').classList.add('student-mode-only');
@@ -1436,7 +1458,6 @@ if (window.location.hash.indexOf('#sesi=') !== 0) {
         showLogin();
     }
 }
-function openPrintPage(){let code=document.getElementById('rcode')?.value.trim()||'';let pin=document.getElementById('rpin')?.value.trim()||'';if(!code||!pin){alert('Masukkan Kode Sesi dan PIN Guru BK terlebih dahulu.');return}let u='cetak-hasil.html?code='+encodeURIComponent(code)+'&pin='+encodeURIComponent(pin);let w=window.open(u,'_blank');if(!w)alert('Izinkan pop-up agar laporan dapat dibuka.')}
 </script>
 </body>
 </html>

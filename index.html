@@ -5,8 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Sosio Digital NaFaS BK</title>
 <!-- Firebase SDK -->
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js">function openPrintPage(){let code=document.getElementById('rcode')?.value.trim()||'';let pin=document.getElementById('rpin')?.value.trim()||'';if(!code||!pin){alert('Masukkan Kode Sesi dan PIN Guru BK terlebih dahulu.');return}let u='cetak-hasil.html?code='+encodeURIComponent(code)+'&pin='+encodeURIComponent(pin);let w=window.open(u,'_blank');if(!w)alert('Izinkan pop-up agar laporan dapat dibuka.')}
-</script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
@@ -25,6 +24,7 @@ body{font-family:Arial,sans-serif;background:#eef4fa;color:#18324a;min-height:10
 .login-container .toggle-link a:hover{text-decoration:underline}
 .login-container .error{background:#fde8ec;color:#a04050;padding:10px;border-radius:6px;font-size:13px;margin-bottom:12px;display:none}
 .login-container .success{background:#eaf8f2;color:#0a6b4a;padding:10px;border-radius:6px;font-size:13px;margin-bottom:12px;display:none}
+.login-container .info{background:#fff8df;color:#7a6300;padding:10px;border-radius:6px;font-size:13px;margin-bottom:12px;display:none}
 .hidden{display:none!important}
 .app-wrapper{width:100%;max-width:1100px;margin:auto}
 header{background:linear-gradient(135deg,#0d2b4f,#1a5a9e);color:#fff;padding:8px 16px;border-radius:10px 10px 0 0}
@@ -75,8 +75,9 @@ button:hover{transform:translateY(-1px)}
 .session-empty{text-align:center;padding:16px;color:#6b7d90}
 .table-wrap{overflow-x:auto;margin-top:4px;border-radius:6px;border:1px solid #d9e4ef}
 .table-main{width:100%;border-collapse:collapse;font-size:9px}
-.table-main th{background:#123a6f;color:#fff;padding:3px 5px;text-align:center;font-weight:700;font-size:7px}
-.table-main td{padding:3px 5px;border-bottom:1px solid #eef2f6;text-align:center;vertical-align:middle;font-size:8px}
+.table-main th{background:#123a6f;color:#fff;padding:3px 5px;text-align:center;font-weight:700;font-size:7px;border-right:1px solid #2a5a8a}
+.table-main td{padding:3px 5px;border-bottom:1px solid #eef2f6;border-right:1px solid #d9e4ef;text-align:center;vertical-align:middle;font-size:8px}
+.table-main td:last-child,.table-main th:last-child{border-right:none}
 .table-main tr:nth-child(even){background:#f8fafc}
 .table-main .name-col{text-align:left;font-weight:600;padding-left:6px}
 .table-main .rank-badge{display:inline-block;min-width:16px;height:16px;line-height:16px;border-radius:50%;background:#eef2f6;color:#123a6f;font-weight:700;font-size:7px;text-align:center}
@@ -115,7 +116,7 @@ button:hover{transform:translateY(-1px)}
 .loading{text-align:center;padding:20px;color:#4a6a8a;font-size:14px}
 .loading .spinner{display:inline-block;width:20px;height:20px;border:3px solid #d9e4ef;border-top-color:#1a5a9e;border-radius:50%;animation:spin 0.8s linear infinite;margin-right:8px}
 @keyframes spin{to{transform:rotate(360deg)}}
-@media print{.reason-cell{max-width:300px;min-width:180px;font-size:6.5px}.reason-item{font-size:6.5px;padding:0.5px 0}.reason-item .cat{font-size:5px}.reason-item .reason-text{font-size:6.5px}.table-main td{padding:2px 3px;font-size:7px}.table-main th{font-size:6px;padding:2px 3px}.legend-footer{font-size:6.5px;padding:2px 6px;gap:3px 10px}.legend-footer .icon{font-size:9px}}
+@media print{.reason-cell{max-width:300px;min-width:180px;font-size:6.5px}.reason-item{font-size:6.5px;padding:0.5px 0}.reason-item .cat{font-size:5px}.reason-item .reason-text{font-size:6.5px}.table-main td{padding:2px 3px;font-size:7px;border-right:1px solid #ccc}.table-main th{font-size:6px;padding:2px 3px;border-right:1px solid #2a5a8a}.legend-footer{font-size:6.5px;padding:2px 6px;gap:3px 10px}.legend-footer .icon{font-size:9px}}
 
 /* ===== MODE SISWA - AMAN ===== */
 .student-mode-only nav, 
@@ -158,17 +159,48 @@ button:hover{transform:translateY(-1px)}
 .student-mode-only .panel:first-child {
     margin-top: 0 !important;
 }
+
+/* ===== SISTEM LISENSI ===== */
+.license-container{background:#fff;border-radius:16px;padding:40px 30px;max-width:420px;width:100%;box-shadow:0 10px 40px rgba(13,43,79,0.15);border:1px solid #d9e4ef}
+.license-container h1{font-size:24px;color:#0d2b4f;text-align:center;margin:0 0 6px}
+.license-container .subtitle{text-align:center;color:#6a8aaa;font-size:14px;margin-bottom:24px}
+.license-container .brand{text-align:center;font-size:28px;margin-bottom:8px}
+.license-container label{display:block;font-weight:700;font-size:13px;color:#2a4a6a;margin-bottom:4px}
+.license-container input{width:100%;padding:10px 14px;border:1px solid #d0ddee;border-radius:8px;font-size:14px;background:#fafcfe;margin-bottom:14px}
+.license-container input:focus{border-color:#1a5a9e;outline:none;box-shadow:0 0 0 3px rgba(26,90,158,0.12)}
+.license-container button{width:100%;padding:12px;background:#1a5a9e;color:#fff;border:0;border-radius:8px;font-size:16px;font-weight:700;cursor:pointer;transition:all 0.2s}
+.license-container button:hover{background:#0d4a8a;transform:translateY(-1px)}
+.license-container .error{background:#fde8ec;color:#a04050;padding:10px;border-radius:6px;font-size:13px;margin-bottom:12px;display:none}
+.license-container .success{background:#eaf8f2;color:#0a6b4a;padding:10px;border-radius:6px;font-size:13px;margin-bottom:12px;display:none}
+.license-container .info{background:#fff8df;color:#7a6300;padding:10px;border-radius:6px;font-size:13px;margin-bottom:12px;display:none}
 </style>
 </head>
 <body>
 
+<!-- ===== LISENSI / AKTIVASI ===== -->
+<div id="licensePage" class="license-container">
+    <div class="brand">🔑</div>
+    <h1>Sosio Digital <span style="color:#f4b400;">NaFaS BK</span></h1>
+    <div class="subtitle">Aktivasi Lisensi</div>
+    <div id="licenseError" class="error"></div>
+    <div id="licenseSuccess" class="success"></div>
+    <div id="licenseInfo" class="info"></div>
+    <label>🔑 Kode Lisensi</label>
+    <input type="text" id="licenseKey" placeholder="Masukkan kode lisensi (contoh: NAFAS-2024-A7X9)">
+    <button onclick="aktivasiLisensi()">🔓 Aktifkan Aplikasi</button>
+    <div class="toggle-link" style="text-align:center;margin-top:14px;font-size:12px;color:#6a8aaa;">
+        💡 Kode lisensi didapatkan setelah pembelian. Hubungi admin jika belum punya.
+    </div>
+</div>
+
 <!-- ===== LOGIN ===== -->
-<div id="loginPage" class="login-container">
+<div id="loginPage" class="login-container" style="display:none;">
     <div class="brand">🌟</div>
     <h1>Sosio Digital <span style="color:#f4b400;">NaFaS BK</span></h1>
     <div class="subtitle">Aplikasi Sosiometri Digital</div>
     <div id="loginError" class="error"></div>
     <div id="loginSuccess" class="success"></div>
+    <div id="loginInfo" class="info"></div>
     <div id="formLogin">
         <label>📧 Email</label>
         <input type="email" id="loginEmail" placeholder="Masukkan email">
@@ -305,7 +337,7 @@ button:hover{transform:translateY(-1px)}
 
 <script>
 // ============================================================
-// KONFIGURASI FIREBASE - SUDAH DIISI DENGAN DATA ANDA
+// KONFIGURASI FIREBASE
 // ============================================================
 var firebaseConfig = {
   apiKey: "AIzaSyA2AQNbuiqycFQ4S-vsthw9NFMNyb-acFA",
@@ -317,9 +349,73 @@ var firebaseConfig = {
   measurementId: "G-2JG4K6K7BF"
 };
 
-// Inisialisasi Firebase
 firebase.initializeApp(firebaseConfig);
 var db = firebase.firestore();
+
+// ============================================================
+// SISTEM LISENSI
+// ============================================================
+var LISENSI_KEY = 'NAFAS_LICENSE';
+
+function getLicense() {
+    try { return localStorage.getItem(LISENSI_KEY); } catch(e) { return null; }
+}
+function saveLicense(key) {
+    localStorage.setItem(LISENSI_KEY, key);
+}
+
+// DAFTAR KODE LISENSI YANG VALID (Anda bisa tambahkan sendiri)
+var VALID_LICENSES = [
+    'NAFAS-2024-A7X9',
+    'NAFAS-2024-B8Y1',
+    'NAFAS-2024-C9Z2',
+    'NAFAS-2025-D1A3',
+    'NAFAS-2025-E2B4'
+];
+
+function aktivasiLisensi() {
+    var key = document.getElementById('licenseKey').value.trim().toUpperCase();
+    var errorEl = document.getElementById('licenseError');
+    var successEl = document.getElementById('licenseSuccess');
+    var infoEl = document.getElementById('licenseInfo');
+    
+    errorEl.style.display = 'none';
+    successEl.style.display = 'none';
+    infoEl.style.display = 'none';
+    
+    if (!key) {
+        errorEl.textContent = '⚠️ Masukkan kode lisensi.';
+        errorEl.style.display = 'block';
+        return;
+    }
+    
+    // Cek apakah kode valid
+    var valid = false;
+    for (var i = 0; i < VALID_LICENSES.length; i++) {
+        if (VALID_LICENSES[i] === key) {
+            valid = true;
+            break;
+        }
+    }
+    
+    if (!valid) {
+        errorEl.textContent = '❌ Kode lisensi tidak valid. Periksa kembali atau hubungi admin.';
+        errorEl.style.display = 'block';
+        return;
+    }
+    
+    // Simpan lisensi
+    saveLicense(key);
+    successEl.textContent = '✅ Aktivasi berhasil! Silakan login.';
+    successEl.style.display = 'block';
+    
+    setTimeout(function() {
+        document.getElementById('licensePage').style.display = 'none';
+        document.getElementById('loginPage').style.display = 'block';
+        document.getElementById('loginInfo').textContent = '🔑 Lisensi terverifikasi! Silakan login atau daftar.';
+        document.getElementById('loginInfo').style.display = 'block';
+    }, 1500);
+}
 
 // ============================================================
 // SISTEM LOGIN
@@ -349,13 +445,13 @@ function showRegister() {
     document.getElementById('loginError').style.display = 'none';
     document.getElementById('loginSuccess').style.display = 'none';
 }
-function showError(msg) {
+function showLoginError(msg) {
     var el = document.getElementById('loginError');
     el.textContent = msg;
     el.style.display = 'block';
     document.getElementById('loginSuccess').style.display = 'none';
 }
-function showSuccess(msg) {
+function showLoginSuccess(msg) {
     var el = document.getElementById('loginSuccess');
     el.textContent = msg;
     el.style.display = 'block';
@@ -366,14 +462,14 @@ function register() {
     var email = document.getElementById('registerEmail').value.trim();
     var password = document.getElementById('registerPassword').value.trim();
     var name = document.getElementById('registerName').value.trim();
-    if (!email) { showError('⚠️ Masukkan email.'); return; }
-    if (!password || password.length < 6) { showError('⚠️ Password minimal 6 karakter.'); return; }
-    if (!name) { showError('⚠️ Masukkan nama lengkap.'); return; }
+    if (!email) { showLoginError('⚠️ Masukkan email.'); return; }
+    if (!password || password.length < 6) { showLoginError('⚠️ Password minimal 6 karakter.'); return; }
+    if (!name) { showLoginError('⚠️ Masukkan nama lengkap.'); return; }
     var users = getUsers();
-    if (users[email]) { showError('⚠️ Email sudah terdaftar.'); return; }
+    if (users[email]) { showLoginError('⚠️ Email sudah terdaftar.'); return; }
     users[email] = { password: password, name: name, registeredAt: new Date().toISOString() };
     saveUsers(users);
-    showSuccess('✅ Pendaftaran berhasil! Silakan login.');
+    showLoginSuccess('✅ Pendaftaran berhasil! Silakan login.');
     setTimeout(showLogin, 2000);
     document.getElementById('registerEmail').value = '';
     document.getElementById('registerPassword').value = '';
@@ -383,12 +479,12 @@ function register() {
 function login() {
     var email = document.getElementById('loginEmail').value.trim();
     var password = document.getElementById('loginPassword').value.trim();
-    if (!email) { showError('⚠️ Masukkan email.'); return; }
-    if (!password) { showError('⚠️ Masukkan password.'); return; }
+    if (!email) { showLoginError('⚠️ Masukkan email.'); return; }
+    if (!password) { showLoginError('⚠️ Masukkan password.'); return; }
     var users = getUsers();
     var user = users[email];
-    if (!user) { showError('⚠️ Email tidak terdaftar.'); return; }
-    if (user.password !== password) { showError('⚠️ Password salah.'); return; }
+    if (!user) { showLoginError('⚠️ Email tidak terdaftar.'); return; }
+    if (user.password !== password) { showLoginError('⚠️ Password salah.'); return; }
     saveSession(email);
     document.getElementById('loginPage').style.display = 'none';
     document.getElementById('appPage').style.display = 'block';
@@ -717,7 +813,7 @@ function kirimJawaban() {
 }
 
 // ============================================================
-// FUNGSI GURU - BUAT SESI DI FIRESTORE
+// FUNGSI GURU
 // ============================================================
 function buatSesi() {
     var names = document.getElementById('students').value.split('\n').map(function(x) { return x.trim(); }).filter(function(x) { return x !== ''; });
@@ -921,7 +1017,7 @@ function printShareCard() {
 }
 
 // ============================================================
-// HASIL - DENGAN JUMLAH SUARA PER KATEGORI
+// HASIL
 // ============================================================
 function tampilkanHasilOtomatis() {
     var code = document.getElementById('rcode').value.trim();
@@ -961,9 +1057,6 @@ function lihatHasil() {
     tampilkanHasilOtomatis();
 }
 
-// ============================================================
-// RENDER HASIL - DENGAN JUMLAH PER KATEGORI
-// ============================================================
 function renderHasil(data) {
     var sessionData = data;
     if (data.session) {
@@ -1056,7 +1149,6 @@ function renderHasil(data) {
     var totalResponded = rs.length;
     var totalStudents = st.length;
 
-    // ---- HEADER ----
     var html = '<div class="result-head">';
     html += '<div class="info"><strong>' + esc(school) + '</strong> • ' + esc(className) + '</div>';
     html += '<div class="info">📊 ' + totalResponded + '/' + totalStudents + ' siswa mengisi</div>';
@@ -1066,7 +1158,6 @@ function renderHasil(data) {
     html += '📝 Alasan dari setiap pemilih langsung terlihat di kolom ❤️ 🤝 ⭐ 🔎';
     html += '</div>';
     
-    // ---- TABEL ----
     html += '<div class="table-wrap"><table class="table-main"><thead><tr>';
     html += '<th style="width:20px;">#</th>';
     html += '<th style="text-align:left;min-width:60px;">Nama</th>';
@@ -1087,12 +1178,10 @@ function renderHasil(data) {
             else if (o === 2) rankClass = 'rank-3';
         }
         
-        // ---- Fungsi untuk menampilkan alasan + jumlah ----
         function buildReasonCell(reasonList, catLabel, count) {
             if (!reasonList || reasonList.length === 0) {
                 return '<span class="reason-empty">-</span>';
             }
-            // Tampilkan jumlah di awal
             var html2 = '<div style="font-weight:700;color:#123a6f;font-size:8px;margin-bottom:2px;">📊 ' + count + ' suara</div>';
             for (var p = 0; p < reasonList.length; p++) {
                 html2 += '<div class="reason-item">';
@@ -1122,7 +1211,6 @@ function renderHasil(data) {
     }
     html += '</tbody></table></div>';
     
-    // ---- LEGENDA ----
     html += '<div class="legend-footer">';
     html += '<span style="font-weight:700;">📌 Keterangan Simbol:</span>';
     html += '<span class="item"><span class="icon">❤️</span> Pertemanan</span>';
@@ -1428,6 +1516,7 @@ function resetAllData() {
     if (!confirm('⚠️⚠️ Ini tidak bisa dibatalkan! Lanjutkan?')) return;
     localStorage.removeItem(USER_KEY);
     localStorage.removeItem(SESSION_KEY);
+    localStorage.removeItem(LISENSI_KEY);
     alert('✅ Semua data lokal telah direset. Halaman akan dimuat ulang.');
     location.reload();
 }
@@ -1439,6 +1528,15 @@ function resetAllData() {
     var hash = window.location.hash;
     if (hash && hash.indexOf('#sesi=') === 0) {
         var kodeSesi = decodeURIComponent(hash.substring(6));
+        // Cek apakah sudah ada lisensi
+        var license = getLicense();
+        if (!license) {
+            // Tampilkan halaman lisensi dulu
+            document.getElementById('licensePage').style.display = 'block';
+            document.getElementById('loginPage').style.display = 'none';
+            document.getElementById('appPage').style.display = 'none';
+            return;
+        }
         document.getElementById('loginPage').style.display = 'none';
         document.getElementById('appPage').style.display = 'block';
         document.getElementById('appPage').classList.add('student-mode-only');
@@ -1466,11 +1564,30 @@ function resetAllData() {
 })();
 
 // ============================================================
-// INISIALISASI
+// INISIALISASI - CEK LISENSI
 // ============================================================
-if (window.location.hash.indexOf('#sesi=') !== 0) {
-    if (!checkSession()) {
-        showLogin();
+var license = getLicense();
+if (license) {
+    // Sudah ada lisensi, langsung ke login
+    document.getElementById('licensePage').style.display = 'none';
+    if (window.location.hash.indexOf('#sesi=') !== 0) {
+        if (!checkSession()) {
+            document.getElementById('loginPage').style.display = 'block';
+            document.getElementById('loginInfo').textContent = '✅ Lisensi terverifikasi! Silakan login.';
+            document.getElementById('loginInfo').style.display = 'block';
+        }
+    }
+} else {
+    // Belum ada lisensi, tampilkan halaman aktivasi
+    if (window.location.hash.indexOf('#sesi=') !== 0) {
+        document.getElementById('licensePage').style.display = 'block';
+        document.getElementById('loginPage').style.display = 'none';
+        document.getElementById('appPage').style.display = 'none';
+    } else {
+        // Jika ada hash sesi tapi belum lisensi, tetap tampilkan lisensi dulu
+        document.getElementById('licensePage').style.display = 'block';
+        document.getElementById('loginPage').style.display = 'none';
+        document.getElementById('appPage').style.display = 'none';
     }
 }
 

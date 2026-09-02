@@ -199,7 +199,10 @@ button:hover{transform:translateY(-1px)}
                     </div>
                     <label>Daftar nama siswa — satu nama per baris</label>
                     <textarea id="students" placeholder="Aisyah Putri&#10;Bima Aditya&#10;Citra Kirana"></textarea>
-                    <div class="actions"><button class="green" onclick="buatSesi()">💾 Buat Sesi</button></div>
+                    <div class="actions">
+                        <button class="green" onclick="buatSesi()">💾 Buat Sesi</button>
+                        <button class="soft" onclick="cekSesi()" style="margin-left:6px;">🔍 Cek Sesi Tersimpan</button>
+                    </div>
                     <div id="tmsg"></div>
                 </div>
                 <div class="panel"><h2>📋 Daftar Sesi</h2><div id="sessionList">Memuat...</div></div>
@@ -395,7 +398,23 @@ function initApp() {
     showTeacherSession();
 }
 
-// ===== FUNGSI UTAMA UNTUK MODE SISWA =====
+// ===== CEK SESI TERSIMPAN (TOMBOL CEK) =====
+function cekSesi() {
+    var sessions = getSessions();
+    if (sessions.length === 0) {
+        pesan('tmsg', '📭 Belum ada sesi tersimpan.', 'notice');
+        return;
+    }
+    var msg = '📋 <b>Total sesi tersimpan:</b> ' + sessions.length + '<br><br>';
+    for (var i = 0; i < sessions.length; i++) {
+        var s = sessions[i];
+        var siswaCount = s.students ? s.students.length : 0;
+        msg += '🔑 <b>' + s.code + '</b> — ' + esc(s.className || 'Kelas tidak terisi') + ' (' + siswaCount + ' siswa)<br>';
+    }
+    pesan('tmsg', msg, 'ok');
+}
+
+// ===== FUNGSI UTAMA UNTUK MODE SISWA (PASTI BERFUNGSI) =====
 function enableStudentMode(code) {
     console.log('🔍 enableStudentMode dipanggil dengan kode:', code);
     
@@ -424,15 +443,19 @@ function enableStudentMode(code) {
             selects[i].innerHTML = opts();
         }
         
-        // Pindah ke tab siswa
-        page('student');
+        // Pindah ke tab siswa dan sembunyikan elemen guru
+        document.getElementById('student').classList.remove('hidden');
+        var navs = document.querySelectorAll('nav, #dashboardPanel, #teacher, #paper, #result, .btn-logout, #userDisplay');
+        for (var i = 0; i < navs.length; i++) {
+            if (navs[i]) navs[i].style.display = 'none';
+        }
         console.log('✅ Mode siswa berhasil diaktifkan untuk sesi:', code);
     } else {
         // Jika sesi tidak ditemukan, tampilkan pesan error
         console.log('❌ Sesi dengan kode', code, 'tidak ditemukan');
         document.getElementById('appPage').style.display = 'block';
         document.getElementById('student').classList.remove('hidden');
-        document.getElementById('q').innerHTML = '<div class="error">❌ Sesi dengan kode <b>' + code + '</b> tidak ditemukan. Periksa link atau hubungi Guru BK.</div>';
+        document.getElementById('q').innerHTML = '<div class="error">❌ Sesi dengan kode <b>' + code + '</b> tidak ditemukan.<br><br>📌 <b>Petunjuk:</b> Pastikan link yang Anda klik sudah benar. Jika masih error, hubungi Guru BK untuk mendapatkan kode sesi yang valid.</div>';
         document.getElementById('me').innerHTML = '<option value="">— Pilih nama —</option>';
         document.getElementById('scode').value = code;
         document.getElementById('appPage').classList.add('student-mode-only');
@@ -465,7 +488,7 @@ function pesan(id, msg, type) {
     type = type || 'notice';
     var cls = { notice: 'notice', ok: 'ok', error: 'error' };
     document.getElementById(id).innerHTML = '<div class="' + (cls[type] || 'notice') + '">' + msg + '</div>';
-    setTimeout(function() { document.getElementById(id).innerHTML = ''; }, 4000);
+    setTimeout(function() { document.getElementById(id).innerHTML = ''; }, 5000);
 }
 
 function getSessions() {
@@ -1418,12 +1441,9 @@ window.addEventListener('hashchange', function() {
     if (hash && hash.indexOf('#sesi=') === 0) {
         var code = decodeURIComponent(hash.substring(6));
         console.log('📌 Hash berubah ke:', code);
-        // Jika belum login, langsung ke mode siswa
-        if (!getSession() || !getSession().email) {
-            document.getElementById('loginPage').style.display = 'none';
-            document.getElementById('appPage').style.display = 'block';
-            enableStudentMode(code);
-        }
+        document.getElementById('loginPage').style.display = 'none';
+        document.getElementById('appPage').style.display = 'block';
+        enableStudentMode(code);
     }
 });
 
@@ -1432,12 +1452,10 @@ window.addEventListener('DOMContentLoaded', function() {
     if (hash && hash.indexOf('#sesi=') === 0) {
         var code = decodeURIComponent(hash.substring(6));
         console.log('📌 Halaman dimuat dengan hash:', code);
-        // Langsung ke mode siswa tanpa login
         document.getElementById('loginPage').style.display = 'none';
         document.getElementById('appPage').style.display = 'block';
         enableStudentMode(code);
     } else {
-        // Jika tidak ada hash, cek session
         if (!checkSession()) {
             showLogin();
         }
@@ -1448,7 +1466,6 @@ window.addEventListener('DOMContentLoaded', function() {
 if (!checkSession() && window.location.hash.indexOf('#sesi=') !== 0) {
     showLogin();
 }
-function openPrintPage(){let code=document.getElementById('rcode')?.value.trim()||'';let pin=document.getElementById('rpin')?.value.trim()||'';if(!code||!pin){alert('Masukkan Kode Sesi dan PIN Guru BK terlebih dahulu.');return}let u='cetak-hasil.html?code='+encodeURIComponent(code)+'&pin='+encodeURIComponent(pin);let w=window.open(u,'_blank');if(!w)alert('Izinkan pop-up agar laporan dapat dibuka.')}
 </script>
 </body>
 </html>

@@ -273,28 +273,32 @@ button:hover{transform:translateY(-1px)}
 
 <script>
 // ============================================================
-// DETEKSI LINK SISWA - PALING AWAL (SEBELUM APAPUN)
+// DETEKSI LINK SISWA - PALING AWAL
 // ============================================================
 (function() {
-    // Cek apakah ada hash #sesi= di URL
     var hash = window.location.hash;
     if (hash && hash.indexOf('#sesi=') === 0) {
         var kodeSesi = decodeURIComponent(hash.substring(6));
         console.log('🔍 Link siswa terdeteksi! Kode:', kodeSesi);
         
-        // Sembunyikan halaman login
         document.getElementById('loginPage').style.display = 'none';
         document.getElementById('appPage').style.display = 'block';
         
-        // Cari data sesi di localStorage
+        // BACA LANGSUNG DARI localStorage
         var sessions = [];
         try {
-            sessions = JSON.parse(localStorage.getItem('NAFAS_SOSIO_SESSIONS')) || [];
-        } catch(e) { sessions = []; }
+            var raw = localStorage.getItem('NAFAS_SOSIO_SESSIONS');
+            console.log('📦 Data mentah dari localStorage:', raw);
+            sessions = JSON.parse(raw) || [];
+        } catch(e) { 
+            console.log('❌ Gagal baca localStorage:', e);
+            sessions = []; 
+        }
         console.log('📋 Total sesi tersimpan:', sessions.length);
         
         var sessionData = null;
         for (var i = 0; i < sessions.length; i++) {
+            console.log('🔑 Sesi ke-' + i + ':', sessions[i].code);
             if (sessions[i].code === kodeSesi) {
                 sessionData = sessions[i];
                 break;
@@ -303,20 +307,17 @@ button:hover{transform:translateY(-1px)}
         
         if (sessionData) {
             console.log('✅ Sesi ditemukan!', sessionData);
-            // Aktifkan mode siswa
             window.sesiAktif = sessionData;
             window.isStudentMode = true;
             document.getElementById('appPage').classList.add('student-mode-only');
             document.getElementById('scode').value = kodeSesi;
             
-            // Isi daftar nama
             var optsHtml = '<option value="">— Pilih nama —</option>';
             for (var j = 0; j < sessionData.students.length; j++) {
                 optsHtml += '<option value="' + sessionData.students[j].id + '">' + sessionData.students[j].name + '</option>';
             }
             document.getElementById('me').innerHTML = optsHtml;
             
-            // Tampilkan pertanyaan
             document.getElementById('q').innerHTML =
                 '<div class="panel aspect heart"><h3>❤️ Pertemanan</h3><p style="font-size:12px;color:#4a6a8a;margin:0 0 6px;">Pilih 2 teman yang paling nyaman diajak berteman.</p>' +
                 '<label>Pilihan 1</label><select class="ch heart"></select>' +
@@ -335,29 +336,24 @@ button:hover{transform:translateY(-1px)}
                 '<label>Pilihan 1</label><select class="ch uncomfortable"></select>' +
                 '<label>Alasan</label><textarea class="rs uncomfortable" placeholder="Tulis alasan..." style="min-height:35px;"></textarea></div>';
             
-            // Isi semua dropdown dengan daftar nama
             var selects = document.querySelectorAll('.ch');
             for (var k = 0; k < selects.length; k++) {
                 selects[k].innerHTML = optsHtml;
             }
             
-            // Sembunyikan semua elemen guru
             var guruElements = document.querySelectorAll('nav, #dashboardPanel, #teacher, #paper, #result, .btn-logout, #userDisplay');
             for (var l = 0; l < guruElements.length; l++) {
                 if (guruElements[l]) guruElements[l].style.display = 'none';
             }
-            // Tampilkan halaman siswa
             document.getElementById('student').classList.remove('hidden');
             
         } else {
             console.log('❌ Sesi dengan kode', kodeSesi, 'tidak ditemukan');
-            // Tampilkan pesan error
             document.getElementById('student').classList.remove('hidden');
-            document.getElementById('q').innerHTML = '<div class="error">❌ Sesi dengan kode <b>' + kodeSesi + '</b> tidak ditemukan.<br><br>📌 <b>Petunjuk:</b> Pastikan link yang Anda klik sudah benar. Jika masih error, hubungi Guru BK untuk mendapatkan kode sesi yang valid.</div>';
+            document.getElementById('q').innerHTML = '<div class="error">❌ Sesi dengan kode <b>' + kodeSesi + '</b> tidak ditemukan.<br><br>📌 <b>Petunjuk:</b> Pastikan link yang Anda klik sudah benar. Jika masih error, hubungi Guru BK untuk mendapatkan kode sesi yang valid.<br><br>🔍 <b>Info untuk Guru BK:</b> Klik tombol "🔍 Cek Sesi" di halaman Guru BK untuk melihat daftar sesi yang tersimpan.</div>';
             document.getElementById('me').innerHTML = '<option value="">— Pilih nama —</option>';
             document.getElementById('scode').value = kodeSesi;
             document.getElementById('appPage').classList.add('student-mode-only');
-            // Sembunyikan elemen guru
             var guruElements = document.querySelectorAll('nav, #dashboardPanel, #teacher, #paper, #result, .btn-logout, #userDisplay');
             for (var l = 0; l < guruElements.length; l++) {
                 if (guruElements[l]) guruElements[l].style.display = 'none';
@@ -451,7 +447,6 @@ function logout() {
 }
 
 function checkSession() {
-    // Jika sudah dalam mode siswa, jangan tampilkan login
     if (window.isStudentMode) {
         return true;
     }
@@ -477,7 +472,6 @@ var KEY_SESI = 'NAFAS_SOSIO_SESSIONS';
 var sesiAktif = null;
 var isStudentMode = window.isStudentMode || false;
 
-// Coba ambil data sesi dari localStorage
 try {
     var saved = localStorage.getItem('NAFAS_SOSIO_CURRENT_SESSION');
     if (saved) sesiAktif = JSON.parse(saved);
@@ -576,7 +570,6 @@ function generateCode() {
 }
 function generatePin() { return String(Math.floor(1000 + Math.random() * 9000)); }
 
-// ===== NAVIGASI =====
 function page(id) {
     if (isStudentMode && id !== 'student') {
         return;
@@ -621,7 +614,6 @@ function page(id) {
     }
 }
 
-// ===== TAMPILKAN HASIL OTOMATIS =====
 function tampilkanHasilOtomatis() {
     var code = document.getElementById('rcode').value.trim();
     var pin = document.getElementById('rpin').value.trim();
@@ -647,7 +639,6 @@ function tampilkanHasilOtomatis() {
     document.getElementById('res').innerHTML = hasilHTML;
 }
 
-// ===== RENDER SESSION LIST =====
 function renderSessionList() {
     var container = document.getElementById('sessionList');
     var sessions = getSessions();
@@ -828,7 +819,7 @@ function printShareCard() {
 }
 
 // ============================================================
-// STUDENT MODE (FUNGSI UNTUK KIRIM JAWABAN)
+// STUDENT MODE - FUNGSI UNTUK KIRIM JAWABAN
 // ============================================================
 function opts() {
     if (!window.sesiAktif || !window.sesiAktif.students) return '<option value="">— Pilih nama —</option>';
@@ -1445,7 +1436,6 @@ if (window.location.hash.indexOf('#sesi=') !== 0) {
         showLogin();
     }
 }
-function openPrintPage(){let code=document.getElementById('rcode')?.value.trim()||'';let pin=document.getElementById('rpin')?.value.trim()||'';if(!code||!pin){alert('Masukkan Kode Sesi dan PIN Guru BK terlebih dahulu.');return}let u='cetak-hasil.html?code='+encodeURIComponent(code)+'&pin='+encodeURIComponent(pin);let w=window.open(u,'_blank');if(!w)alert('Izinkan pop-up agar laporan dapat dibuka.')}
 </script>
 </body>
 </html>

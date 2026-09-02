@@ -5,8 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Sosio Digital NaFaS BK</title>
 <!-- Firebase SDK -->
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js">function openPrintPage(){let code=document.getElementById('rcode')?.value.trim()||'';let pin=document.getElementById('rpin')?.value.trim()||'';if(!code||!pin){alert('Masukkan Kode Sesi dan PIN Guru BK terlebih dahulu.');return}let u='cetak-hasil.html?code='+encodeURIComponent(code)+'&pin='+encodeURIComponent(pin);let w=window.open(u,'_blank');if(!w)alert('Izinkan pop-up agar laporan dapat dibuka.')}
-</script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
@@ -112,19 +111,52 @@ button:hover{transform:translateY(-1px)}
 .legend-footer{display:flex;flex-wrap:wrap;gap:4px 16px;padding:4px 8px;background:#f6f9fc;border-radius:4px;border:1px solid #d9e4ef;margin-top:4px;font-size:8px;color:#2a4a6a;justify-content:center}
 .legend-footer .item{display:flex;align-items:center;gap:3px}
 .legend-footer .icon{font-size:11px}
-.student-mode-only nav, .student-mode-only #dashboardPanel, 
-.student-mode-only #teacher, .student-mode-only #paper, .student-mode-only #result,
-.student-mode-only .btn-logout, .student-mode-only #userDisplay,
-.student-mode-only .flex-header > div:last-child { display: none !important; }
-.student-mode-only #student { display: block !important; }
-.student-mode-only #student .hidden { display: block !important; }
-.student-mode-only header { border-radius: 10px 10px 0 0; }
-.student-mode-only .brand { font-size: 16px; }
-.student-mode-only .tag { font-size: 9px; }
 .loading{text-align:center;padding:20px;color:#4a6a8a;font-size:14px}
 .loading .spinner{display:inline-block;width:20px;height:20px;border:3px solid #d9e4ef;border-top-color:#1a5a9e;border-radius:50%;animation:spin 0.8s linear infinite;margin-right:8px}
 @keyframes spin{to{transform:rotate(360deg)}}
 @media print{.reason-cell{max-width:300px;min-width:180px;font-size:6.5px}.reason-item{font-size:6.5px;padding:0.5px 0}.reason-item .cat{font-size:5px}.reason-item .reason-text{font-size:6.5px}.table-main td{padding:2px 3px;font-size:7px}.table-main th{font-size:6px;padding:2px 3px}.legend-footer{font-size:6.5px;padding:2px 6px;gap:3px 10px}.legend-footer .icon{font-size:9px}}
+
+/* ===== MODE SISWA - AMAN ===== */
+.student-mode-only nav, 
+.student-mode-only #dashboardPanel, 
+.student-mode-only #teacher, 
+.student-mode-only #paper, 
+.student-mode-only #result,
+.student-mode-only .btn-logout, 
+.student-mode-only #userDisplay,
+.student-mode-only .flex-header > div:last-child { 
+    display: none !important; 
+}
+.student-mode-only #student { 
+    display: block !important; 
+}
+.student-mode-only #student .hidden { 
+    display: block !important; 
+}
+.student-mode-only header { 
+    border-radius: 10px 10px 0 0; 
+}
+.student-mode-only .brand { 
+    font-size: 16px; 
+}
+.student-mode-only .tag { 
+    font-size: 9px; 
+}
+.student-mode-only .flex-header {
+    justify-content: center !important;
+}
+.student-mode-only .share-siswa {
+    display: none !important;
+}
+.student-mode-only #session {
+    display: none !important;
+}
+.student-mode-only #sessionList {
+    display: none !important;
+}
+.student-mode-only .panel:first-child {
+    margin-top: 0 !important;
+}
 </style>
 </head>
 <body>
@@ -392,6 +424,7 @@ function checkSession() {
 // APLIKASI UTAMA
 // ============================================================
 var sesiAktif = null;
+var isStudentMode = false;
 
 function esc(s) {
     return String(s || '').replace(/[&<>"']/g, function(c) {
@@ -1409,16 +1442,45 @@ function resetAllData() {
 }
 
 // ============================================================
-// DETEKSI LINK SISWA
+// DETEKSI LINK SISWA - AMAN (HANYA MODE SISWA)
 // ============================================================
 (function() {
     var hash = window.location.hash;
     if (hash && hash.indexOf('#sesi=') === 0) {
         var kodeSesi = decodeURIComponent(hash.substring(6));
+        
+        // Sembunyikan login, tampilkan app
         document.getElementById('loginPage').style.display = 'none';
         document.getElementById('appPage').style.display = 'block';
-        // Langsung buka tab siswa dan isi kode
-        page('student');
+        
+        // AKTIFKAN MODE SISWA - SEMUA MENU GURU DISEMBUNYIKAN
+        document.getElementById('appPage').classList.add('student-mode-only');
+        isStudentMode = true;
+        
+        // Sembunyikan juga tombol logout dan user display
+        document.querySelector('.btn-logout')?.style.setProperty('display', 'none', 'important');
+        document.getElementById('userDisplay')?.style.setProperty('display', 'none', 'important');
+        
+        // Paksa hanya tab student yang terlihat
+        var sections = ['teacher', 'student', 'paper', 'result'];
+        for (var i = 0; i < sections.length; i++) {
+            var el = document.getElementById(sections[i]);
+            if (sections[i] === 'student') {
+                el.classList.remove('hidden');
+            } else {
+                el.classList.add('hidden');
+            }
+        }
+        
+        // Reset nav active ke student
+        var navs = ['t', 's', 'p', 'r'];
+        for (var j = 0; j < navs.length; j++) {
+            var navEl = document.getElementById('n' + navs[j]);
+            if (navEl) navEl.classList.remove('active');
+        }
+        document.getElementById('ns').classList.add('active');
+        
+        // Isi kode dan cari sesi otomatis
         document.getElementById('scode').value = kodeSesi;
         setTimeout(cariSesiSiswa, 500);
     }

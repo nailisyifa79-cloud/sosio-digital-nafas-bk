@@ -4,6 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Sosio Digital NaFaS BK</title>
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:Arial,sans-serif;background:#eef4fa;color:#18324a;min-height:100vh;display:flex;justify-content:center;align-items:center}
@@ -98,9 +101,6 @@ button:hover{transform:translateY(-1px)}
 .coop{border-left-color:#159a7c}
 .lead{border-left-color:#7b61ff}
 .uncomfortable{border-left-color:#d96b7b}
-@media(max-width:650px){.brand{font-size:15px}.flex-header{flex-direction:column;align-items:stretch;gap:4px}}
-
-/* ===== STYLE ALASAN LANGSUNG TERLIHAT ===== */
 .reason-cell{text-align:left;font-size:7.5px;padding:2px 4px;max-width:220px;min-width:150px}
 .reason-item{font-size:7.5px;padding:1px 0;border-bottom:1px dotted #e8edf2;line-height:1.3}
 .reason-item:last-child{border-bottom:none}
@@ -108,13 +108,9 @@ button:hover{transform:translateY(-1px)}
 .reason-item .cat{font-size:6px;color:#6a8aaa;background:#eef4fa;padding:0 3px;border-radius:3px;display:inline-block}
 .reason-item .reason-text{color:#4a6a8a;font-style:italic}
 .reason-empty{color:#aaa;font-size:7px;font-style:italic}
-
-/* ===== LEGENDA DI BAWAH ===== */
 .legend-footer{display:flex;flex-wrap:wrap;gap:4px 16px;padding:4px 8px;background:#f6f9fc;border-radius:4px;border:1px solid #d9e4ef;margin-top:4px;font-size:8px;color:#2a4a6a;justify-content:center}
 .legend-footer .item{display:flex;align-items:center;gap:3px}
 .legend-footer .icon{font-size:11px}
-
-/* ===== MODE SISWA - TANPA LOGIN & TANPA AKSES GURU ===== */
 .student-mode-only nav, .student-mode-only #dashboardPanel, 
 .student-mode-only #teacher, .student-mode-only #paper, .student-mode-only #result,
 .student-mode-only .btn-logout, .student-mode-only #userDisplay,
@@ -124,16 +120,15 @@ button:hover{transform:translateY(-1px)}
 .student-mode-only header { border-radius: 10px 10px 0 0; }
 .student-mode-only .brand { font-size: 16px; }
 .student-mode-only .tag { font-size: 9px; }
-
-/* ===== DEBUG BOX ===== */
-.debug-box{background:#f8f0e0;border:2px solid #d96b7b;border-radius:6px;padding:8px 10px;margin-bottom:8px;font-size:11px;color:#5a3a2a;font-family:monospace;white-space:pre-wrap;word-break:break-all;max-height:200px;overflow-y:auto}
-
-@media print{.reason-cell{max-width:300px;min-width:180px;font-size:6.5px}.reason-item{font-size:6.5px;padding:0.5px 0}.reason-item .cat{font-size:5px}.reason-item .reason-text{font-size:6.5px}.table-main td{padding:2px 3px;font-size:7px}.table-main th{font-size:6px;padding:2px 3px}.legend-footer{font-size:6.5px;padding:2px 6px;gap:3px 10px}.legend-footer .icon{font-size:9px}.debug-box{display:none!important}}
+.loading{text-align:center;padding:20px;color:#4a6a8a;font-size:14px}
+.loading .spinner{display:inline-block;width:20px;height:20px;border:3px solid #d9e4ef;border-top-color:#1a5a9e;border-radius:50%;animation:spin 0.8s linear infinite;margin-right:8px}
+@keyframes spin{to{transform:rotate(360deg)}}
+@media print{.reason-cell{max-width:300px;min-width:180px;font-size:6.5px}.reason-item{font-size:6.5px;padding:0.5px 0}.reason-item .cat{font-size:5px}.reason-item .reason-text{font-size:6.5px}.table-main td{padding:2px 3px;font-size:7px}.table-main th{font-size:6px;padding:2px 3px}.legend-footer{font-size:6.5px;padding:2px 6px;gap:3px 10px}.legend-footer .icon{font-size:9px}}
 </style>
 </head>
 <body>
 
-<!-- ===== LOGIN (HANYA UNTUK GURU) ===== -->
+<!-- ===== LOGIN ===== -->
 <div id="loginPage" class="login-container">
     <div class="brand">🌟</div>
     <h1>Sosio Digital <span style="color:#f4b400;">NaFaS BK</span></h1>
@@ -225,9 +220,10 @@ button:hover{transform:translateY(-1px)}
             <section id="student" class="hidden">
                 <div class="panel"><h2>📱 Pengisian Siswa</h2>
                     <div class="notice">✅ Hasil sosiometri hanya dapat dilihat oleh Guru BK. Jawaban Anda rahasia.</div>
-                    <div id="debugInfo" class="debug-box" style="display:none;"></div>
+                    <div id="studentLoading" class="loading" style="display:none;"><span class="spinner"></span> Memuat data sesi...</div>
                     <label>Kode Sesi</label>
-                    <input id="scode" readonly style="background:#f0f4f8;font-weight:bold;color:#123a6f;">
+                    <input id="scode" placeholder="Masukkan kode sesi dari guru" style="font-weight:bold;color:#123a6f;">
+                    <button class="soft" onclick="cariSesiSiswa()" style="margin-top:4px;">🔍 Cari Sesi</button>
                     <label>Pilih Nama Kamu</label>
                     <select id="me"></select>
                     <div id="q"></div>
@@ -239,13 +235,11 @@ button:hover{transform:translateY(-1px)}
             <section id="paper" class="hidden">
                 <div class="panel"><h2>📄 Mode Tanpa HP</h2>
                     <div class="notice"><b>Mode Tanpa HP:</b> siswa mengisi lembar kertas, Guru BK memasukkan hasilnya.</div>
-                    
                     <div class="panel" style="background:#fafffd;border:2px solid #123a6f;">
                         <h3 style="margin:0 0 6px;color:#123a6f;">🖨️ LEMBAR UNTUK SISWA (CETAK & BAGIKAN)</h3>
                         <div id="paperRows"></div>
                         <button class="gold" onclick="cetakLembarBaru()" style="margin-top:6px;">🖨️ Cetak Lembar Siswa</button>
                     </div>
-
                     <div class="panel" style="background:#f8faff;border:2px solid #f4b400;margin-top:10px;">
                         <h3 style="margin:0 0 6px;color:#b8860b;">📝 ENTRI HASIL SISWA (UNTUK GURU)</h3>
                         <div id="paperEntry"></div>
@@ -277,115 +271,24 @@ button:hover{transform:translateY(-1px)}
 
 <script>
 // ============================================================
-// DETEKSI LINK SISWA - PALING AWAL DENGAN DEBUG
+// KONFIGURASI FIREBASE - SUDAH DIISI DENGAN DATA ANDA
 // ============================================================
-(function() {
-    var hash = window.location.hash;
-    var debugEl = document.getElementById('debugInfo');
-    
-    function logDebug(msg) {
-        console.log(msg);
-        if (debugEl) {
-            debugEl.style.display = 'block';
-            debugEl.innerHTML += msg + '\n';
-            debugEl.scrollTop = debugEl.scrollHeight;
-        }
-    }
-    
-    if (hash && hash.indexOf('#sesi=') === 0) {
-        var kodeSesi = decodeURIComponent(hash.substring(6));
-        logDebug('🔍 Link siswa terdeteksi! Kode: ' + kodeSesi);
-        
-        document.getElementById('loginPage').style.display = 'none';
-        document.getElementById('appPage').style.display = 'block';
-        
-        // BACA LANGSUNG DARI localStorage
-        var sessions = [];
-        try {
-            var raw = localStorage.getItem('NAFAS_SOSIO_SESSIONS');
-            logDebug('📦 Data mentah dari localStorage: ' + (raw ? raw.substring(0, 100) + '...' : 'null'));
-            sessions = JSON.parse(raw) || [];
-        } catch(e) { 
-            logDebug('❌ Gagal baca localStorage: ' + e.message);
-            sessions = []; 
-        }
-        logDebug('📋 Total sesi tersimpan: ' + sessions.length);
-        
-        // Tampilkan semua kode sesi yang tersimpan
-        var allCodes = [];
-        for (var i = 0; i < sessions.length; i++) {
-            allCodes.push(sessions[i].code);
-        }
-        logDebug('🔑 Semua kode sesi: ' + allCodes.join(', '));
-        
-        var sessionData = null;
-        for (var i = 0; i < sessions.length; i++) {
-            if (sessions[i].code === kodeSesi) {
-                sessionData = sessions[i];
-                break;
-            }
-        }
-        
-        if (sessionData) {
-            logDebug('✅ Sesi ditemukan! Nama: ' + sessionData.className + ', Siswa: ' + sessionData.students.length);
-            window.sesiAktif = sessionData;
-            window.isStudentMode = true;
-            document.getElementById('appPage').classList.add('student-mode-only');
-            document.getElementById('scode').value = kodeSesi;
-            
-            var optsHtml = '<option value="">— Pilih nama —</option>';
-            for (var j = 0; j < sessionData.students.length; j++) {
-                optsHtml += '<option value="' + sessionData.students[j].id + '">' + sessionData.students[j].name + '</option>';
-            }
-            document.getElementById('me').innerHTML = optsHtml;
-            
-            document.getElementById('q').innerHTML =
-                '<div class="panel aspect heart"><h3>❤️ Pertemanan</h3><p style="font-size:12px;color:#4a6a8a;margin:0 0 6px;">Pilih 2 teman yang paling nyaman diajak berteman.</p>' +
-                '<label>Pilihan 1</label><select class="ch heart"></select>' +
-                '<label>Alasan</label><textarea class="rs heart" placeholder="Tulis alasan..." style="min-height:35px;"></textarea>' +
-                '<label>Pilihan 2</label><select class="ch heart"></select>' +
-                '<label>Alasan</label><textarea class="rs heart" placeholder="Tulis alasan..." style="min-height:35px;"></textarea></div>' +
-                '<div class="panel aspect coop"><h3>🤝 Kerja Sama</h3><p style="font-size:12px;color:#4a6a8a;margin:0 0 6px;">Pilih 2 teman yang paling dipilih untuk bekerja sama.</p>' +
-                '<label>Pilihan 1</label><select class="ch coop"></select>' +
-                '<label>Alasan</label><textarea class="rs coop" placeholder="Tulis alasan..." style="min-height:35px;"></textarea>' +
-                '<label>Pilihan 2</label><select class="ch coop"></select>' +
-                '<label>Alasan</label><textarea class="rs coop" placeholder="Tulis alasan..." style="min-height:35px;"></textarea></div>' +
-                '<div class="panel aspect lead"><h3>⭐ Kepemimpinan</h3><p style="font-size:12px;color:#4a6a8a;margin:0 0 6px;">Pilih 1 teman yang mampu memimpin.</p>' +
-                '<label>Pilihan 1</label><select class="ch lead"></select>' +
-                '<label>Alasan</label><textarea class="rs lead" placeholder="Tulis alasan..." style="min-height:35px;"></textarea></div>' +
-                '<div class="panel aspect uncomfortable"><h3>🔎 Relasi Kurang Nyaman</h3><p style="font-size:12px;color:#4a6a8a;margin:0 0 6px;">Pilih 1 teman yang paling sulit diajak interaksi (opsional).</p>' +
-                '<label>Pilihan 1</label><select class="ch uncomfortable"></select>' +
-                '<label>Alasan</label><textarea class="rs uncomfortable" placeholder="Tulis alasan..." style="min-height:35px;"></textarea></div>';
-            
-            var selects = document.querySelectorAll('.ch');
-            for (var k = 0; k < selects.length; k++) {
-                selects[k].innerHTML = optsHtml;
-            }
-            
-            var guruElements = document.querySelectorAll('nav, #dashboardPanel, #teacher, #paper, #result, .btn-logout, #userDisplay');
-            for (var l = 0; l < guruElements.length; l++) {
-                if (guruElements[l]) guruElements[l].style.display = 'none';
-            }
-            document.getElementById('student').classList.remove('hidden');
-            logDebug('✅ Mode siswa berhasil diaktifkan!');
-            
-        } else {
-            logDebug('❌ Sesi dengan kode ' + kodeSesi + ' tidak ditemukan');
-            document.getElementById('student').classList.remove('hidden');
-            document.getElementById('q').innerHTML = '<div class="error">❌ Sesi dengan kode <b>' + kodeSesi + '</b> tidak ditemukan.<br><br>📌 <b>Petunjuk:</b> Pastikan link yang Anda klik sudah benar. Jika masih error, hubungi Guru BK untuk mendapatkan kode sesi yang valid.<br><br>🔍 <b>Info Debug:</b> Kode yang dicari: <b>' + kodeSesi + '</b><br>Kode yang tersimpan: <b>' + allCodes.join(', ') + '</b></div>';
-            document.getElementById('me').innerHTML = '<option value="">— Pilih nama —</option>';
-            document.getElementById('scode').value = kodeSesi;
-            document.getElementById('appPage').classList.add('student-mode-only');
-            var guruElements = document.querySelectorAll('nav, #dashboardPanel, #teacher, #paper, #result, .btn-logout, #userDisplay');
-            for (var l = 0; l < guruElements.length; l++) {
-                if (guruElements[l]) guruElements[l].style.display = 'none';
-            }
-        }
-    }
-})();
+var firebaseConfig = {
+  apiKey: "AIzaSyA2AQNbuiqycFQ4S-vsthw9NFMNyb-acFA",
+  authDomain: "sosio-digital.firebaseapp.com",
+  projectId: "sosio-digital",
+  storageBucket: "sosio-digital.firebasestorage.app",
+  messagingSenderId: "562983012848",
+  appId: "1:562983012848:web:aced97fe045efed03cf535",
+  measurementId: "G-2JG4K6K7BF"
+};
+
+// Inisialisasi Firebase
+firebase.initializeApp(firebaseConfig);
+var db = firebase.firestore();
 
 // ============================================================
-// SISTEM LOGIN
+// SISTEM LOGIN (TETAP PAKAI LOCAL STORAGE UNTUK AKUN GURU)
 // ============================================================
 var USER_KEY = 'NAFAS_USERS';
 var SESSION_KEY = 'NAFAS_SESSION';
@@ -469,9 +372,6 @@ function logout() {
 }
 
 function checkSession() {
-    if (window.isStudentMode) {
-        return true;
-    }
     var session = getSession();
     if (session && session.email) {
         var users = getUsers();
@@ -490,14 +390,7 @@ function checkSession() {
 // ============================================================
 // APLIKASI UTAMA
 // ============================================================
-var KEY_SESI = 'NAFAS_SOSIO_SESSIONS';
 var sesiAktif = null;
-var isStudentMode = window.isStudentMode || false;
-
-try {
-    var saved = localStorage.getItem('NAFAS_SOSIO_CURRENT_SESSION');
-    if (saved) sesiAktif = JSON.parse(saved);
-} catch (e) { sesiAktif = null; }
 
 function esc(s) {
     return String(s || '').replace(/[&<>"']/g, function(c) {
@@ -513,64 +406,69 @@ function initApp() {
 }
 
 function cekSesi() {
-    var sessions = getSessions();
-    if (sessions.length === 0) {
-        pesan('tmsg', '📭 Belum ada sesi tersimpan.', 'notice');
-        return;
-    }
-    var msg = '📋 <b>Total sesi tersimpan:</b> ' + sessions.length + '<br><br>';
-    for (var i = 0; i < sessions.length; i++) {
-        var s = sessions[i];
-        var siswaCount = s.students ? s.students.length : 0;
-        msg += '🔑 <b>' + s.code + '</b> — ' + esc(s.className || 'Kelas tidak terisi') + ' (' + siswaCount + ' siswa)<br>';
-    }
-    pesan('tmsg', msg, 'ok');
+    showLoading('tmsg', '🔍 Memuat data sesi...');
+    db.collection('sessions').get().then(function(snapshot) {
+        var sessions = [];
+        snapshot.forEach(function(doc) {
+            var data = doc.data();
+            data.id = doc.id;
+            sessions.push(data);
+        });
+        if (sessions.length === 0) {
+            pesan('tmsg', '📭 Belum ada sesi tersimpan di cloud.', 'notice');
+            return;
+        }
+        var msg = '📋 <b>Total sesi di cloud:</b> ' + sessions.length + '<br><br>';
+        for (var i = 0; i < sessions.length; i++) {
+            var s = sessions[i];
+            var siswaCount = s.students ? s.students.length : 0;
+            msg += '🔑 <b>' + s.code + '</b> — ' + esc(s.className || 'Kelas tidak terisi') + ' (' + siswaCount + ' siswa)<br>';
+        }
+        pesan('tmsg', msg, 'ok');
+    }).catch(function(err) {
+        pesan('tmsg', '❌ Gagal memuat sesi: ' + err.message, 'error');
+    });
+}
+
+function showLoading(id, msg) {
+    document.getElementById(id).innerHTML = '<div class="notice">⏳ ' + msg + '</div>';
 }
 
 function updateDashboard() {
+    // Hitung total sesi dari cloud
+    db.collection('sessions').get().then(function(snapshot) {
+        document.getElementById('totalSessions').textContent = snapshot.size;
+        var totalStudents = 0;
+        snapshot.forEach(function(doc) {
+            var data = doc.data();
+            if (data.students) totalStudents += data.students.length;
+        });
+        document.getElementById('totalStudents').textContent = totalStudents;
+    }).catch(function() {
+        document.getElementById('totalSessions').textContent = '0';
+        document.getElementById('totalStudents').textContent = '0';
+    });
+    // Total pengguna dari localStorage
     try {
         var users = JSON.parse(localStorage.getItem(USER_KEY)) || {};
         document.getElementById('totalUsers').textContent = Object.keys(users).length;
     } catch (e) { document.getElementById('totalUsers').textContent = '0'; }
-    try {
-        var sessions = JSON.parse(localStorage.getItem(KEY_SESI)) || [];
-        document.getElementById('totalSessions').textContent = sessions.length;
-        var total = 0;
-        sessions.forEach(function(s) { if (s.students) total += s.students.length; });
-        document.getElementById('totalStudents').textContent = total;
-    } catch (e) {
-        document.getElementById('totalSessions').textContent = '0';
-        document.getElementById('totalStudents').textContent = '0';
-    }
 }
 
 function pesan(id, msg, type) {
     type = type || 'notice';
     var cls = { notice: 'notice', ok: 'ok', error: 'error' };
     document.getElementById(id).innerHTML = '<div class="' + (cls[type] || 'notice') + '">' + msg + '</div>';
-    setTimeout(function() { document.getElementById(id).innerHTML = ''; }, 5000);
+    setTimeout(function() { document.getElementById(id).innerHTML = ''; }, 8000);
 }
 
-function getSessions() {
-    try { return JSON.parse(localStorage.getItem(KEY_SESI)) || []; } catch (e) { return []; }
+function generateCode() {
+    var chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+    var code = '';
+    for (var i = 0; i < 6; i++) code += chars[Math.floor(Math.random() * chars.length)];
+    return code;
 }
-function saveSessions(sessions) { localStorage.setItem(KEY_SESI, JSON.stringify(sessions)); }
-function getSessionByCode(code) {
-    var sessions = getSessions();
-    for (var i = 0; i < sessions.length; i++) {
-        if (sessions[i].code === code) return sessions[i];
-    }
-    return null;
-}
-function deleteSession(code) {
-    var sessions = getSessions();
-    var newSessions = [];
-    for (var i = 0; i < sessions.length; i++) {
-        if (sessions[i].code !== code) newSessions.push(sessions[i]);
-    }
-    saveSessions(newSessions);
-    return newSessions;
-}
+function generatePin() { return String(Math.floor(1000 + Math.random() * 9000)); }
 function copyText(v) {
     try {
         navigator.clipboard.writeText(v).then(function() { alert('✅ Disalin!'); });
@@ -584,19 +482,8 @@ function copyText(v) {
         alert('✅ Disalin!');
     }
 }
-function generateCode() {
-    var chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
-    var code = '';
-    for (var i = 0; i < 6; i++) code += chars[Math.floor(Math.random() * chars.length)];
-    return code;
-}
-function generatePin() { return String(Math.floor(1000 + Math.random() * 9000)); }
 
 function page(id) {
-    if (isStudentMode && id !== 'student') {
-        return;
-    }
-    
     var sections = ['teacher', 'student', 'paper', 'result'];
     for (var i = 0; i < sections.length; i++) {
         var el = document.getElementById(sections[i]);
@@ -612,8 +499,18 @@ function page(id) {
     var activeNav = document.getElementById(map[id]);
     if (activeNav) activeNav.classList.add('active');
 
-    if (id === 'student' && !isStudentMode) {
-        loadStudent();
+    if (id === 'student') {
+        document.getElementById('studentLoading').style.display = 'block';
+        // Cek apakah ada kode di URL
+        var hash = window.location.hash;
+        if (hash && hash.indexOf('#sesi=') === 0) {
+            var code = decodeURIComponent(hash.substring(6));
+            document.getElementById('scode').value = code;
+            setTimeout(cariSesiSiswa, 300);
+        } else {
+            document.getElementById('studentLoading').style.display = 'none';
+            document.getElementById('q').innerHTML = '<div class="notice">📝 Masukkan kode sesi dari guru, lalu klik "Cari Sesi".</div>';
+        }
     }
     if (id === 'paper') {
         muatPaper();
@@ -636,111 +533,309 @@ function page(id) {
     }
 }
 
-function tampilkanHasilOtomatis() {
-    var code = document.getElementById('rcode').value.trim();
-    var pin = document.getElementById('rpin').value.trim();
-
-    if (!code || !pin) {
-        document.getElementById('res').innerHTML = '<div class="error">⚠️ Kode atau PIN kosong. Pastikan sesi sudah dibuat.</div>';
-        return;
-    }
-
-    var sessionData = getSessionByCode(code);
+// ============================================================
+// FUNGSI SISWA - MENCARI SESI DI CLOUD
+// ============================================================
+function cariSesiSiswa() {
+    var code = document.getElementById('scode').value.trim();
+    var loadingEl = document.getElementById('studentLoading');
+    var qEl = document.getElementById('q');
+    var meEl = document.getElementById('me');
     
-    if (!sessionData) {
-        document.getElementById('res').innerHTML = '<div class="error">❌ Sesi dengan kode <b>' + code + '</b> tidak ditemukan. Buat sesi dulu!</div>';
+    if (!code) {
+        qEl.innerHTML = '<div class="error">⚠️ Masukkan kode sesi terlebih dahulu.</div>';
         return;
     }
+    
+    loadingEl.style.display = 'block';
+    loadingEl.innerHTML = '<span class="spinner"></span> Mencari sesi ' + code + '...';
+    qEl.innerHTML = '';
+    meEl.innerHTML = '<option value="">— Pilih nama —</option>';
+    
+    // Cari di Firestore
+    db.collection('sessions').where('code', '==', code).get().then(function(snapshot) {
+        loadingEl.style.display = 'none';
+        if (snapshot.empty) {
+            qEl.innerHTML = '<div class="error">❌ Sesi dengan kode <b>' + code + '</b> tidak ditemukan.<br><br>📌 Pastikan kode yang dimasukkan benar. Hubungi Guru BK jika masih error.</div>';
+            return;
+        }
+        var sessionData = null;
+        snapshot.forEach(function(doc) {
+            sessionData = doc.data();
+            sessionData.id = doc.id;
+        });
+        if (sessionData) {
+            // Cek apakah sesi masih aktif
+            if (sessionData.isActive === false) {
+                qEl.innerHTML = '<div class="error">🔒 Sesi ini sudah selesai. Tidak dapat diisi lagi.</div>';
+                return;
+            }
+            sesiAktif = sessionData;
+            window.sesiAktif = sessionData;
+            // Tampilkan daftar nama
+            var optsHtml = '<option value="">— Pilih nama —</option>';
+            for (var j = 0; j < sessionData.students.length; j++) {
+                optsHtml += '<option value="' + sessionData.students[j].id + '">' + sessionData.students[j].name + '</option>';
+            }
+            meEl.innerHTML = optsHtml;
+            // Tampilkan pertanyaan
+            qEl.innerHTML =
+                '<div class="panel aspect heart"><h3>❤️ Pertemanan</h3><p style="font-size:12px;color:#4a6a8a;margin:0 0 6px;">Pilih 2 teman yang paling nyaman diajak berteman.</p>' +
+                '<label>Pilihan 1</label><select class="ch heart"></select>' +
+                '<label>Alasan</label><textarea class="rs heart" placeholder="Tulis alasan..." style="min-height:35px;"></textarea>' +
+                '<label>Pilihan 2</label><select class="ch heart"></select>' +
+                '<label>Alasan</label><textarea class="rs heart" placeholder="Tulis alasan..." style="min-height:35px;"></textarea></div>' +
+                '<div class="panel aspect coop"><h3>🤝 Kerja Sama</h3><p style="font-size:12px;color:#4a6a8a;margin:0 0 6px;">Pilih 2 teman yang paling dipilih untuk bekerja sama.</p>' +
+                '<label>Pilihan 1</label><select class="ch coop"></select>' +
+                '<label>Alasan</label><textarea class="rs coop" placeholder="Tulis alasan..." style="min-height:35px;"></textarea>' +
+                '<label>Pilihan 2</label><select class="ch coop"></select>' +
+                '<label>Alasan</label><textarea class="rs coop" placeholder="Tulis alasan..." style="min-height:35px;"></textarea></div>' +
+                '<div class="panel aspect lead"><h3>⭐ Kepemimpinan</h3><p style="font-size:12px;color:#4a6a8a;margin:0 0 6px;">Pilih 1 teman yang mampu memimpin.</p>' +
+                '<label>Pilihan 1</label><select class="ch lead"></select>' +
+                '<label>Alasan</label><textarea class="rs lead" placeholder="Tulis alasan..." style="min-height:35px;"></textarea></div>' +
+                '<div class="panel aspect uncomfortable"><h3>🔎 Relasi Kurang Nyaman</h3><p style="font-size:12px;color:#4a6a8a;margin:0 0 6px;">Pilih 1 teman yang paling sulit diajak interaksi (opsional).</p>' +
+                '<label>Pilihan 1</label><select class="ch uncomfortable"></select>' +
+                '<label>Alasan</label><textarea class="rs uncomfortable" placeholder="Tulis alasan..." style="min-height:35px;"></textarea></div>';
+            var selects = document.querySelectorAll('.ch');
+            for (var k = 0; k < selects.length; k++) {
+                selects[k].innerHTML = optsHtml;
+            }
+            qEl.innerHTML += '<div class="ok" style="margin-top:6px;">✅ Sesi ditemukan! Kelas: ' + esc(sessionData.className || '-') + '</div>';
+        }
+    }).catch(function(err) {
+        loadingEl.style.display = 'none';
+        qEl.innerHTML = '<div class="error">❌ Gagal mencari sesi: ' + err.message + '</div>';
+    });
+}
 
-    if (sessionData.pin !== pin) {
-        document.getElementById('res').innerHTML = '<div class="error">❌ PIN salah. PIN yang benar: <b>' + sessionData.pin + '</b></div>';
+function vals(c) {
+    var selects = document.querySelectorAll('select.ch.' + c);
+    var result = [];
+    for (var i = 0; i < selects.length; i++) {
+        if (selects[i].value) result.push(selects[i].value);
+    }
+    return result;
+}
+function reas(c) {
+    var textareas = document.querySelectorAll('textarea.rs.' + c);
+    var result = [];
+    for (var i = 0; i < textareas.length; i++) {
+        result.push(textareas[i].value.trim());
+    }
+    return result;
+}
+
+function kirimJawaban() {
+    if (!sesiAktif) {
+        pesan('smsg', '⚠️ Silakan cari sesi terlebih dahulu.', 'error');
         return;
     }
+    var me = document.getElementById('me').value;
+    var h = vals('heart'),
+        c = vals('coop'),
+        l = vals('lead'),
+        u = vals('uncomfortable');
+    var all = h.concat(c).concat(l).concat(u);
+    var reasons = reas('heart').concat(reas('coop')).concat(reas('lead')).concat(reas('uncomfortable'));
+    if (!me) { pesan('smsg', '⚠️ Pilih nama.', 'error'); return; }
+    if (h.length < 2 || c.length < 2 || l.length < 1) { pesan('smsg', '⚠️ Lengkapi semua pilihan.', 'error'); return; }
+    for (var i = 0; i < reasons.length; i++) {
+        if (!reasons[i].trim()) { pesan('smsg', '⚠️ Isi semua alasan.', 'error'); return; }
+    }
+    if (all.indexOf(me) !== -1) { pesan('smsg', '⚠️ Tidak boleh pilih sendiri.', 'error'); return; }
+    var hSet = {};
+    for (var j = 0; j < h.length; j++) hSet[h[j]] = true;
+    var cSet = {};
+    for (var k = 0; k < c.length; k++) cSet[c[k]] = true;
+    if (Object.keys(hSet).length < 2 || Object.keys(cSet).length < 2) { pesan('smsg', '⚠️ Pilihan harus berbeda.', 'error'); return; }
 
-    var hasilHTML = renderHasil(sessionData);
-    document.getElementById('res').innerHTML = hasilHTML;
+    // Cek apakah sudah mengisi
+    var responses = sesiAktif.responses || [];
+    for (var m = 0; m < responses.length; m++) {
+        if (responses[m].respondent === me) {
+            pesan('smsg', '⚠️ Kamu sudah mengisi sebelumnya.', 'notice');
+            return;
+        }
+    }
+    
+    var jawaban = {
+        respondent: me,
+        heart: h,
+        heartReason: reas('heart'),
+        coop: c,
+        coopReason: reas('coop'),
+        lead: l,
+        leadReason: reas('lead'),
+        uncomfortable: u,
+        uncomfortableReason: reas('uncomfortable'),
+        submittedAt: new Date().toISOString()
+    };
+    
+    // Simpan ke Firestore
+    pesan('smsg', '⏳ Menyimpan jawaban...', 'notice');
+    
+    var sessionRef = db.collection('sessions').doc(sesiAktif.id);
+    sessionRef.update({
+        responses: firebase.firestore.FieldValue.arrayUnion(jawaban)
+    }).then(function() {
+        pesan('smsg', '✅ Jawaban berhasil disimpan! 🙏', 'ok');
+        document.querySelectorAll('.ch').forEach(function(x) { x.value = ''; });
+        document.querySelectorAll('.rs').forEach(function(x) { x.value = ''; });
+        document.getElementById('me').value = '';
+        document.getElementById('q').innerHTML = '<div class="ok">✅ Terima kasih! Jawabanmu sudah tersimpan.</div>';
+        // Update sesiAktif
+        sesiAktif.responses = sesiAktif.responses || [];
+        sesiAktif.responses.push(jawaban);
+    }).catch(function(err) {
+        pesan('smsg', '❌ Gagal menyimpan: ' + err.message, 'error');
+    });
+}
+
+// ============================================================
+// FUNGSI GURU - BUAT SESI DI FIRESTORE
+// ============================================================
+function buatSesi() {
+    var names = document.getElementById('students').value.split('\n').map(function(x) { return x.trim(); }).filter(function(x) { return x !== ''; });
+    if (names.length < 2) { pesan('tmsg', '⚠️ Minimal 2 nama.', 'error'); return; }
+    var code = generateCode();
+    var pin = generatePin();
+    var students = [];
+    for (var i = 0; i < names.length; i++) {
+        students.push({ id: 'S' + (i + 1), name: names[i] });
+    }
+    var data = {
+        code: code,
+        pin: pin,
+        students: students,
+        school: document.getElementById('school').value.trim(),
+        className: document.getElementById('className').value.trim(),
+        year: document.getElementById('year').value.trim(),
+        counselor: document.getElementById('counselor').value.trim(),
+        isActive: true,
+        createdAt: new Date().toISOString(),
+        responses: []
+    };
+    pesan('tmsg', '⏳ Menyimpan sesi ke cloud...', 'notice');
+    db.collection('sessions').add(data).then(function(docRef) {
+        data.id = docRef.id;
+        sesiAktif = data;
+        window.sesiAktif = data;
+        showTeacherSession();
+        renderSessionList();
+        updateDashboard();
+        pesan('tmsg', '✅ Sesi ' + code + ' berhasil dibuat di cloud!', 'ok');
+    }).catch(function(err) {
+        pesan('tmsg', '❌ Gagal membuat sesi: ' + err.message, 'error');
+    });
 }
 
 function renderSessionList() {
     var container = document.getElementById('sessionList');
-    var sessions = getSessions();
-    if (sessions.length === 0) {
-        container.innerHTML = '<div class="session-empty">📭 Belum ada sesi.</div>';
-        return;
-    }
-    var html = '<div class="session-list">';
-    for (var i = sessions.length - 1; i >= 0; i--) {
-        var s = sessions[i];
-        var statusClass = s.isActive !== false ? 'active' : 'closed';
-        var statusLabel = s.isActive !== false ? '🟢 Aktif' : '🔒 Selesai';
-        var createdDate = s.createdAt ? new Date(s.createdAt).toLocaleDateString('id-ID') : '-';
-        var studentCount = s.students ? s.students.length : 0;
-        var responses = s.responses || [];
-        var doneCount = responses.length;
-        var progress = studentCount > 0 ? Math.round((doneCount / studentCount) * 100) : 0;
-        var doneList = responses.map(function(r) { return r.respondent; });
-        var statusList = '';
-        if (s.students) {
-            for (var j = 0; j < s.students.length; j++) {
-                statusList += doneList.indexOf(s.students[j].id) !== -1 ? '✅' : '⏳';
-                if (j < s.students.length - 1) statusList += ' ';
-            }
+    container.innerHTML = '<div class="notice">⏳ Memuat daftar sesi...</div>';
+    db.collection('sessions').orderBy('createdAt', 'desc').get().then(function(snapshot) {
+        if (snapshot.empty) {
+            container.innerHTML = '<div class="session-empty">📭 Belum ada sesi.</div>';
+            return;
         }
-        html += '<div class="session-item">';
-        html += '<div class="s-code">' + esc(s.code) + '</div>';
-        html += '<div class="s-class">' + esc(s.className || 'Kelas tidak terisi') + '</div>';
-        html += '<div class="s-meta">' + esc(s.school || '') + ' • ' + esc(s.year || '') + ' • ' + studentCount + ' siswa</div>';
-        html += '<div class="s-meta">📅 ' + createdDate + '</div>';
-        html += '<div class="s-meta">📊 ' + doneCount + '/' + studentCount + ' mengisi (' + progress + '%)</div>';
-        html += '<div class="s-meta" style="font-size:8px;">' + statusList + '</div>';
-        html += '<div class="progress-bar"><div class="progress-fill" style="width:' + progress + '%;"></div></div>';
-        html += '<span class="s-status ' + statusClass + '">' + statusLabel + '</span>';
-        html += '<div class="s-actions">';
-        html += '<button class="soft" onclick="loadSession(\'' + s.code + '\')">📂 Buka</button>';
-        html += '<button class="soft" onclick="viewResult(\'' + s.code + '\')">📊 Hasil</button>';
-        html += '<button class="gold" onclick="copyText(\'' + s.code + '\')">📋 Kode</button>';
-        html += '<button class="soft" onclick="hapusSesi(\'' + s.code + '\')" style="color:#d96b7b;">🗑️</button>';
-        html += '</div></div>';
-    }
-    html += '</div>';
-    container.innerHTML = html;
+        var html = '<div class="session-list">';
+        snapshot.forEach(function(doc) {
+            var s = doc.data();
+            s.id = doc.id;
+            var statusClass = s.isActive !== false ? 'active' : 'closed';
+            var statusLabel = s.isActive !== false ? '🟢 Aktif' : '🔒 Selesai';
+            var createdDate = s.createdAt ? new Date(s.createdAt).toLocaleDateString('id-ID') : '-';
+            var studentCount = s.students ? s.students.length : 0;
+            var responses = s.responses || [];
+            var doneCount = responses.length;
+            var progress = studentCount > 0 ? Math.round((doneCount / studentCount) * 100) : 0;
+            var doneList = responses.map(function(r) { return r.respondent; });
+            var statusList = '';
+            if (s.students) {
+                for (var j = 0; j < s.students.length; j++) {
+                    statusList += doneList.indexOf(s.students[j].id) !== -1 ? '✅' : '⏳';
+                    if (j < s.students.length - 1) statusList += ' ';
+                }
+            }
+            html += '<div class="session-item">';
+            html += '<div class="s-code">' + esc(s.code) + '</div>';
+            html += '<div class="s-class">' + esc(s.className || 'Kelas tidak terisi') + '</div>';
+            html += '<div class="s-meta">' + esc(s.school || '') + ' • ' + esc(s.year || '') + ' • ' + studentCount + ' siswa</div>';
+            html += '<div class="s-meta">📅 ' + createdDate + '</div>';
+            html += '<div class="s-meta">📊 ' + doneCount + '/' + studentCount + ' mengisi (' + progress + '%)</div>';
+            html += '<div class="s-meta" style="font-size:8px;">' + statusList + '</div>';
+            html += '<div class="progress-bar"><div class="progress-fill" style="width:' + progress + '%;"></div></div>';
+            html += '<span class="s-status ' + statusClass + '">' + statusLabel + '</span>';
+            html += '<div class="s-actions">';
+            html += '<button class="soft" onclick="loadSession(\'' + s.code + '\')">📂 Buka</button>';
+            html += '<button class="soft" onclick="viewResult(\'' + s.code + '\')">📊 Hasil</button>';
+            html += '<button class="gold" onclick="copyText(\'' + s.code + '\')">📋 Kode</button>';
+            html += '<button class="soft" onclick="hapusSesi(\'' + s.code + '\', \'' + s.id + '\')" style="color:#d96b7b;">🗑️</button>';
+            html += '</div></div>';
+        });
+        html += '</div>';
+        container.innerHTML = html;
+    }).catch(function(err) {
+        container.innerHTML = '<div class="error">❌ Gagal memuat sesi: ' + err.message + '</div>';
+    });
 }
 
 function loadSession(code) {
-    var found = getSessionByCode(code);
-    if (found) {
-        sesiAktif = found;
-        localStorage.setItem('NAFAS_SOSIO_CURRENT_SESSION', JSON.stringify(sesiAktif));
-        showTeacherSession();
-        pesan('tmsg', '✅ Sesi ' + code + ' dimuat.', 'ok');
-        renderSessionList();
-    } else {
-        pesan('tmsg', '❌ Sesi tidak ditemukan.', 'error');
-    }
+    db.collection('sessions').where('code', '==', code).get().then(function(snapshot) {
+        if (snapshot.empty) {
+            pesan('tmsg', '❌ Sesi tidak ditemukan.', 'error');
+            return;
+        }
+        var data = null;
+        snapshot.forEach(function(doc) {
+            data = doc.data();
+            data.id = doc.id;
+        });
+        if (data) {
+            sesiAktif = data;
+            window.sesiAktif = data;
+            showTeacherSession();
+            pesan('tmsg', '✅ Sesi ' + code + ' dimuat.', 'ok');
+            renderSessionList();
+        }
+    }).catch(function(err) {
+        pesan('tmsg', '❌ Gagal memuat: ' + err.message, 'error');
+    });
 }
 
-function hapusSesi(code) {
+function hapusSesi(code, docId) {
     if (!confirm('⚠️ Hapus sesi ' + code + '?')) return;
-    deleteSession(code);
-    if (sesiAktif && sesiAktif.code === code) {
-        sesiAktif = null;
-        localStorage.removeItem('NAFAS_SOSIO_CURRENT_SESSION');
-    }
-    renderSessionList();
-    showTeacherSession();
-    pesan('tmsg', '🗑️ Sesi ' + code + ' dihapus.');
+    db.collection('sessions').doc(docId).delete().then(function() {
+        if (sesiAktif && sesiAktif.code === code) {
+            sesiAktif = null;
+            window.sesiAktif = null;
+        }
+        renderSessionList();
+        showTeacherSession();
+        updateDashboard();
+        pesan('tmsg', '🗑️ Sesi ' + code + ' dihapus.', 'notice');
+    }).catch(function(err) {
+        pesan('tmsg', '❌ Gagal menghapus: ' + err.message, 'error');
+    });
 }
 
 function viewResult(code) {
     page('result');
     document.getElementById('rcode').value = code;
-    var found = getSessionByCode(code);
-    if (found && found.pin) {
-        document.getElementById('rpin').value = found.pin;
-    }
-    setTimeout(function() {
-        tampilkanHasilOtomatis();
-    }, 500);
+    db.collection('sessions').where('code', '==', code).get().then(function(snapshot) {
+        if (!snapshot.empty) {
+            var data = null;
+            snapshot.forEach(function(doc) {
+                data = doc.data();
+                data.id = doc.id;
+            });
+            if (data && data.pin) {
+                document.getElementById('rpin').value = data.pin;
+                sesiAktif = data;
+                window.sesiAktif = data;
+                setTimeout(tampilkanHasilOtomatis, 500);
+            }
+        }
+    });
 }
 
 function showTeacherSession() {
@@ -758,14 +853,14 @@ function showTeacherSession() {
     el.innerHTML += '<div><b>🔐 PIN GURU BK</b><div class="big">' + esc(sesiAktif.pin) + '</div>';
     el.innerHTML += '<button class="soft" onclick="copyText(\'' + sesiAktif.pin + '\')">📋 Salin PIN</button></div></div>';
     el.innerHTML += '<div class="share-siswa"><h3 style="margin:0 0 6px;color:#0d6b4a;">📱 LINK UNTUK SISWA (KLIK LANGSUNG)</h3>';
-    el.innerHTML += '<p style="font-size:11px;color:#4a6a8a;margin:0 0 8px;">Siswa cukup klik link ini — <b>tanpa perlu login</b> dan <b>tidak bisa melihat data guru</b>.</p>';
+    el.innerHTML += '<p style="font-size:11px;color:#4a6a8a;margin:0 0 8px;">Siswa klik link ini — <b>tanpa perlu login</b> dan <b>tidak bisa melihat data guru</b>.</p>';
     el.innerHTML += '<div class="shareline"><input id="studentLink" readonly value="' + esc(studentLink) + '" style="flex:1;min-width:200px;padding:8px;border:1px solid #b8d4c8;border-radius:6px;background:#fafffd;font-size:12px;">';
     el.innerHTML += '<button class="green" onclick="copyText(document.getElementById(\'studentLink\').value)" style="padding:8px 16px;">📋 Salin Link</button>';
     el.innerHTML += '<button class="gold" onclick="bagikanWA()" style="padding:8px 16px;">💬 Bagikan WA</button></div>';
     el.innerHTML += '<div class="qrbox"><b>▣ QR Code Siswa</b><p class="small">Siswa scan QR untuk langsung mengisi.</p>';
     el.innerHTML += '<img src="' + qr + '" style="width:120px;height:120px;">';
     el.innerHTML += '<br><button class="soft" onclick="printShareCard()">🖨️ Cetak Kartu QR</button></div></div>';
-    el.innerHTML += '<div class="small" style="margin-top:6px;">✅ Data tersimpan di browser ini. Jangan lupa backup!</div>';
+    el.innerHTML += '<div class="small" style="margin-top:6px;">✅ Data tersimpan di cloud (Firebase). Aman dan bisa diakses di mana saja!</div>';
 }
 
 function bagikanWA() {
@@ -773,46 +868,6 @@ function bagikanWA() {
     if (!linkInput) return;
     var pesan = encodeURIComponent('📝 *Sosiometri Digital NaFaS BK*\n\nSilakan klik link berikut untuk mengisi:\n' + linkInput.value + '\n\n🙏 Isi dengan jujur ya! Jawaban Anda rahasia.');
     window.open('https://wa.me/?text=' + pesan, '_blank');
-}
-
-function buatSesi() {
-    var names = document.getElementById('students').value.split('\n').map(function(x) { return x.trim(); }).filter(function(x) { return x !== ''; });
-    if (names.length < 2) { pesan('tmsg', '⚠️ Minimal 2 nama.', 'error'); return; }
-    var code = generateCode();
-    var pin = generatePin();
-    var students = [];
-    for (var i = 0; i < names.length; i++) {
-        students.push({ id: 'S' + (i + 1), name: names[i] });
-    }
-    sesiAktif = {
-        code: code,
-        pin: pin,
-        students: students,
-        school: document.getElementById('school').value.trim(),
-        className: document.getElementById('className').value.trim(),
-        year: document.getElementById('year').value.trim(),
-        counselor: document.getElementById('counselor').value.trim(),
-        isActive: true,
-        createdAt: new Date().toISOString(),
-        responses: []
-    };
-    addSession(sesiAktif);
-    localStorage.setItem('NAFAS_SOSIO_CURRENT_SESSION', JSON.stringify(sesiAktif));
-    showTeacherSession();
-    renderSessionList();
-    updateDashboard();
-    pesan('tmsg', '✅ Sesi ' + code + ' berhasil dibuat!', 'ok');
-}
-
-function addSession(data) {
-    var sessions = getSessions();
-    var exists = false;
-    for (var i = 0; i < sessions.length; i++) {
-        if (sessions[i].code === data.code) { exists = true; break; }
-    }
-    if (!exists) { sessions.push(data);
-        saveSessions(sessions); }
-    return sessions;
 }
 
 function printShareCard() {
@@ -841,305 +896,48 @@ function printShareCard() {
 }
 
 // ============================================================
-// STUDENT MODE - FUNGSI UNTUK KIRIM JAWABAN
+// TAMPILKAN HASIL DARI FIRESTORE
 // ============================================================
-function opts() {
-    if (!window.sesiAktif || !window.sesiAktif.students) return '<option value="">— Pilih nama —</option>';
-    var html = '<option value="">— Pilih nama —</option>';
-    for (var i = 0; i < window.sesiAktif.students.length; i++) {
-        html += '<option value="' + esc(window.sesiAktif.students[i].id) + '">' + esc(window.sesiAktif.students[i].name) + '</option>';
-    }
-    return html;
-}
+function tampilkanHasilOtomatis() {
+    var code = document.getElementById('rcode').value.trim();
+    var pin = document.getElementById('rpin').value.trim();
 
-function vals(c) {
-    var selects = document.querySelectorAll('select.ch.' + c);
-    var result = [];
-    for (var i = 0; i < selects.length; i++) {
-        if (selects[i].value) result.push(selects[i].value);
-    }
-    return result;
-}
-function reas(c) {
-    var textareas = document.querySelectorAll('textarea.rs.' + c);
-    var result = [];
-    for (var i = 0; i < textareas.length; i++) {
-        result.push(textareas[i].value.trim());
-    }
-    return result;
-}
-
-function kirimJawaban() {
-    var me = document.getElementById('me').value;
-    var h = vals('heart'),
-        c = vals('coop'),
-        l = vals('lead'),
-        u = vals('uncomfortable');
-    var all = h.concat(c).concat(l).concat(u);
-    var reasons = reas('heart').concat(reas('coop')).concat(reas('lead')).concat(reas('uncomfortable'));
-    if (!me) { pesan('smsg', '⚠️ Pilih nama.', 'error'); return; }
-    if (h.length < 2 || c.length < 2 || l.length < 1) { pesan('smsg', '⚠️ Lengkapi semua pilihan.', 'error'); return; }
-    for (var i = 0; i < reasons.length; i++) {
-        if (!reasons[i].trim()) { pesan('smsg', '⚠️ Isi semua alasan.', 'error'); return; }
-    }
-    if (all.indexOf(me) !== -1) { pesan('smsg', '⚠️ Tidak boleh pilih sendiri.', 'error'); return; }
-    var hSet = {};
-    for (var j = 0; j < h.length; j++) hSet[h[j]] = true;
-    var cSet = {};
-    for (var k = 0; k < c.length; k++) cSet[c[k]] = true;
-    if (Object.keys(hSet).length < 2 || Object.keys(cSet).length < 2) { pesan('smsg', '⚠️ Pilihan harus berbeda.', 'error'); return; }
-
-    var sessionData = getSessionByCode(document.getElementById('scode').value);
-    if (!sessionData) { pesan('smsg', '❌ Sesi tidak ditemukan.', 'error'); return; }
-    if (!sessionData.responses) sessionData.responses = [];
-    for (var m = 0; m < sessionData.responses.length; m++) {
-        if (sessionData.responses[m].respondent === me) {
-            pesan('smsg', '⚠️ Kamu sudah mengisi sebelumnya.', 'notice');
-            return;
-        }
-    }
-    sessionData.responses.push({
-        respondent: me,
-        heart: h,
-        heartReason: reas('heart'),
-        coop: c,
-        coopReason: reas('coop'),
-        lead: l,
-        leadReason: reas('lead'),
-        uncomfortable: u,
-        uncomfortableReason: reas('uncomfortable'),
-        submittedAt: new Date().toISOString()
-    });
-    var sessions = getSessions();
-    for (var n = 0; n < sessions.length; n++) {
-        if (sessions[n].code === sessionData.code) sessions[n] = sessionData;
-    }
-    saveSessions(sessions);
-    pesan('smsg', '✅ Jawaban berhasil disimpan! 🙏', 'ok');
-    document.querySelectorAll('.ch').forEach(function(x) { x.value = ''; });
-    document.querySelectorAll('.rs').forEach(function(x) { x.value = ''; });
-    document.getElementById('me').value = '';
-    document.getElementById('q').innerHTML = '<div class="ok">✅ Terima kasih! Jawabanmu sudah tersimpan.</div>';
-}
-
-// ============================================================
-// PAPER MODE
-// ============================================================
-function renderPaperRows() {
-    if (!sesiAktif) {
-        document.getElementById('paperRows').innerHTML = '<div class="notice">⚠️ Pilih sesi dulu.</div>';
-        return;
-    }
-    var html = '<div style="border:1px solid #d8e2ec;border-radius:8px;padding:10px;background:#fff;max-width:100%;">';
-    html += '<div style="text-align:center;border-bottom:2px solid #123a6f;padding-bottom:8px;margin-bottom:10px;">';
-    html += '<h1 style="font-size:18px;margin:0;color:#123a6f;">SOSIO DIGITAL NaFaS BK</h1>';
-    html += '<h2 style="font-size:13px;margin:4px 0;font-weight:400;">LEMBAR SOSIOMETRI</h2>';
-    html += '<div style="display:flex;justify-content:center;gap:15px;font-size:11px;color:#6b7d90;flex-wrap:wrap;margin-top:4px;">';
-    html += '<span><b>Nama:</b> _________________</span>';
-    html += '<span><b>Kelas:</b> ' + esc(sesiAktif.className || '______________') + '</span>';
-    html += '<span><b>Sesi:</b> ' + esc(sesiAktif.code || '______________') + '</span>';
-    html += '</div></div>';
-    html += '<div style="font-size:10px;background:#f6f9fc;border:1px solid #d9e4ef;border-radius:5px;padding:6px;margin-bottom:8px;">';
-    html += '<b>📌 Petunjuk:</b> Jawab dengan jujur dan pilih teman yang sesuai dengan pertanyaan.</div>';
-    html += '<div style="border:1px solid #cfdbe7;border-radius:5px;padding:8px;margin:6px 0;">';
-    html += '<h3 style="font-size:12px;margin:0 0 4px;color:#123a6f;">❤️ PERTEMANAN</h3>';
-    html += '<p style="font-size:10px;margin:2px 0;color:#555;">Pilih 2 teman yang paling nyaman diajak berteman.</p>';
-    html += '<div style="font-size:9px;margin:4px 0;padding:2px 0;">1) _________________ &nbsp;&nbsp; Alasan: _________________</div>';
-    html += '<div style="font-size:9px;margin:4px 0;padding:2px 0;">2) _________________ &nbsp;&nbsp; Alasan: _________________</div></div>';
-    html += '<div style="border:1px solid #cfdbe7;border-radius:5px;padding:8px;margin:6px 0;">';
-    html += '<h3 style="font-size:12px;margin:0 0 4px;color:#123a6f;">🤝 KERJA SAMA</h3>';
-    html += '<p style="font-size:10px;margin:2px 0;color:#555;">Pilih 2 teman yang paling dipilih untuk bekerja sama.</p>';
-    html += '<div style="font-size:9px;margin:4px 0;padding:2px 0;">1) _________________ &nbsp;&nbsp; Alasan: _________________</div>';
-    html += '<div style="font-size:9px;margin:4px 0;padding:2px 0;">2) _________________ &nbsp;&nbsp; Alasan: _________________</div></div>';
-    html += '<div style="border:1px solid #cfdbe7;border-radius:5px;padding:8px;margin:6px 0;">';
-    html += '<h3 style="font-size:12px;margin:0 0 4px;color:#123a6f;">⭐ KEPEMIMPINAN</h3>';
-    html += '<p style="font-size:10px;margin:2px 0;color:#555;">Pilih 1 teman yang mampu memimpin.</p>';
-    html += '<div style="font-size:9px;margin:4px 0;padding:2px 0;">Nama: _________________ &nbsp;&nbsp; Alasan: _________________</div></div>';
-    html += '<div style="border:1px solid #cfdbe7;border-radius:5px;padding:8px;margin:6px 0;">';
-    html += '<h3 style="font-size:12px;margin:0 0 4px;color:#123a6f;">🔎 RELASI KURANG NYAMAN</h3>';
-    html += '<p style="font-size:10px;margin:2px 0;color:#555;">Pilih 1 teman yang paling sulit diajak interaksi.</p>';
-    html += '<div style="font-size:9px;margin:4px 0;padding:2px 0;">Nama: _________________ &nbsp;&nbsp; Alasan: _________________</div></div>';
-    html += '<div style="text-align:center;font-size:8px;color:#647687;margin-top:8px;border-top:1px solid #d9e4ef;padding-top:4px;">';
-    html += '📌 <b>Keterangan:</b> ❤️ = Pertemanan &nbsp;|&nbsp; 🤝 = Kerja Sama &nbsp;|&nbsp; ⭐ = Kepemimpinan &nbsp;|&nbsp; 🔎 = Kurang Nyaman';
-    html += '</div>';
-    html += '<div style="text-align:center;font-size:8px;color:#647687;margin-top:2px;">';
-    html += 'SOSIO DIGITAL NaFaS BK • Data untuk BK';
-    html += '</div>';
-    document.getElementById('paperRows').innerHTML = html;
-}
-
-function muatPaper() {
-    if (!sesiAktif) {
-        var sessions = getSessions();
-        if (sessions.length > 0) {
-            sesiAktif = sessions[0];
-            localStorage.setItem('NAFAS_SOSIO_CURRENT_SESSION', JSON.stringify(sesiAktif));
-        } else {
-            document.getElementById('paperEntry').innerHTML = '<div class="error">⚠️ Belum ada sesi.</div>';
-            return;
-        }
-    }
-    renderPaperRows();
-    var optsHtml = '<option value="">— Pilih —</option>';
-    for (var i = 0; i < sesiAktif.students.length; i++) {
-        optsHtml += '<option value="' + esc(sesiAktif.students[i].id) + '">' + esc(sesiAktif.students[i].name) + '</option>';
-    }
-    var entryHtml = '';
-    for (var j = 0; j < sesiAktif.students.length; j++) {
-        var s = sesiAktif.students[j];
-        entryHtml += '<div class="panel" style="padding:8px;margin-bottom:6px;">';
-        entryHtml += '<h3 style="margin:0 0 4px;font-size:12px;">👤 ' + (j + 1) + '. ' + esc(s.name) + '</h3>';
-        entryHtml += '<div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;">';
-        var categories = ['heart', 'heart', 'coop', 'coop', 'lead', 'uncomfortable'];
-        var labels = ['❤️ 1', '❤️ 2', '🤝 1', '🤝 2', '⭐', '🔎'];
-        for (var k = 0; k < 6; k++) {
-            entryHtml += '<div><label style="font-size:9px;">' + labels[k] + '</label>';
-            entryHtml += '<select class="pe ' + categories[k] + '">' + optsHtml + '</select>';
-            entryHtml += '<label style="font-size:9px;">Alasan</label>';
-            entryHtml += '<input class="pr ' + categories[k] + '" placeholder="Alasan..." style="padding:4px;font-size:10px;"></div>';
-        }
-        entryHtml += '</div></div>';
-    }
-    document.getElementById('paperEntry').innerHTML = entryHtml;
-}
-
-function cetakLembarBaru() {
-    if (!sesiAktif) {
-        alert('⚠️ Pilih sesi dulu.');
+    if (!code || !pin) {
+        document.getElementById('res').innerHTML = '<div class="error">⚠️ Kode atau PIN kosong. Pastikan sesi sudah dibuat.</div>';
         return;
     }
 
-    var className = sesiAktif.className || '______________';
-    var code = sesiAktif.code || '______________';
-
-    var htmlContent = '<!DOCTYPE html>\n';
-    htmlContent += '<html>\n';
-    htmlContent += '<head>\n';
-    htmlContent += '<title>Lembar Sosiometri</title>\n';
-    htmlContent += '<meta charset="utf-8">\n';
-    htmlContent += '<style>\n';
-    htmlContent += '* { box-sizing: border-box; margin: 0; padding: 0; }\n';
-    htmlContent += 'body { font-family: Arial, Helvetica, sans-serif; padding: 20px; background: white; color: #1a2a3a; max-width: 800px; margin: 0 auto; }\n';
-    htmlContent += '.print-header { text-align: center; border-bottom: 2px solid #123a6f; padding-bottom: 8px; margin-bottom: 12px; }\n';
-    htmlContent += '.print-header h1 { font-size: 20px; color: #123a6f; margin: 0; }\n';
-    htmlContent += '.print-header h2 { font-size: 14px; font-weight: 400; color: #4a5d70; margin: 4px 0; }\n';
-    htmlContent += '.print-meta { display: flex; justify-content: center; gap: 20px; font-size: 11px; color: #6b7d90; margin-top: 4px; flex-wrap: wrap; }\n';
-    htmlContent += '.print-meta b { color: #123a6f; }\n';
-    htmlContent += '.instruction { font-size: 10px; background: #f6f9fc; border: 1px solid #d9e4ef; border-radius: 4px; padding: 6px 10px; margin-bottom: 10px; }\n';
-    htmlContent += '.question-block { border: 1px solid #d9e4ef; border-radius: 5px; padding: 10px; margin: 8px 0; background: #fafcfe; }\n';
-    htmlContent += '.question-block h3 { font-size: 13px; color: #123a6f; margin: 0 0 4px 0; }\n';
-    htmlContent += '.question-block p { font-size: 10px; color: #555; margin: 2px 0 6px 0; }\n';
-    htmlContent += '.question-block .line { font-size: 10px; margin: 3px 0; padding: 3px 0; border-bottom: 1px dotted #ddd; }\n';
-    htmlContent += '.footer { text-align: center; font-size: 8px; color: #8a9daf; margin-top: 12px; border-top: 1px solid #d9e4ef; padding-top: 6px; }\n';
-    htmlContent += '.no-print { display: none; }\n';
-    htmlContent += '@media print { body { padding: 10px; } .no-print { display: none; } }\n';
-    htmlContent += '</style>\n';
-    htmlContent += '</head>\n';
-    htmlContent += '<body>\n';
-    htmlContent += '<div class="no-print" style="text-align:center;margin-bottom:10px;padding:6px;background:#f0f4f8;border-radius:4px;">\n';
-    htmlContent += '<button onclick="window.print()" style="padding:6px 16px;background:#f4b400;border:0;border-radius:4px;font-weight:700;cursor:pointer;">🖨️ Cetak / PDF</button>\n';
-    htmlContent += '<button onclick="window.close()" style="padding:6px 16px;background:#e4edf4;border:0;border-radius:4px;font-weight:700;cursor:pointer;margin-left:6px;">✖ Tutup</button>\n';
-    htmlContent += '<span style="margin-left:12px;font-size:11px;color:#555;">Kode: <b>' + code + '</b></span>\n';
-    htmlContent += '</div>\n';
-    htmlContent += '<div class="print-header">\n';
-    htmlContent += '<h1>SOSIO DIGITAL NaFaS BK</h1>\n';
-    htmlContent += '<h2>LEMBAR SOSIOMETRI</h2>\n';
-    htmlContent += '<div class="print-meta">\n';
-    htmlContent += '<span><b>Nama:</b> _________________</span>\n';
-    htmlContent += '<span><b>Kelas:</b> ' + className + '</span>\n';
-    htmlContent += '<span><b>Sesi:</b> ' + code + '</span>\n';
-    htmlContent += '</div></div>\n';
-    htmlContent += '<div class="instruction"><b>📌 Petunjuk:</b> Jawab dengan jujur dan pilih teman yang sesuai dengan pertanyaan.</div>\n';
-    htmlContent += '<div class="question-block"><h3>❤️ PERTEMANAN</h3><p>Pilih 2 teman yang paling nyaman diajak berteman.</p>';
-    htmlContent += '<div class="line">1) _________________ &nbsp;&nbsp; Alasan: _________________</div>';
-    htmlContent += '<div class="line">2) _________________ &nbsp;&nbsp; Alasan: _________________</div></div>\n';
-    htmlContent += '<div class="question-block"><h3>🤝 KERJA SAMA</h3><p>Pilih 2 teman yang paling dipilih untuk bekerja sama.</p>';
-    htmlContent += '<div class="line">1) _________________ &nbsp;&nbsp; Alasan: _________________</div>';
-    htmlContent += '<div class="line">2) _________________ &nbsp;&nbsp; Alasan: _________________</div></div>\n';
-    htmlContent += '<div class="question-block"><h3>⭐ KEPEMIMPINAN</h3><p>Pilih 1 teman yang mampu memimpin.</p>';
-    htmlContent += '<div class="line">Nama: _________________ &nbsp;&nbsp; Alasan: _________________</div></div>\n';
-    htmlContent += '<div class="question-block"><h3>🔎 RELASI KURANG NYAMAN</h3><p>Pilih 1 teman yang paling sulit diajak interaksi.</p>';
-    htmlContent += '<div class="line">Nama: _________________ &nbsp;&nbsp; Alasan: _________________</div></div>\n';
-    htmlContent += '<div style="text-align:center;font-size:9px;color:#647687;margin-top:12px;border-top:1px solid #d9e4ef;padding-top:6px;">';
-    htmlContent += '📌 <b>Keterangan:</b> ❤️ = Pertemanan &nbsp;|&nbsp; 🤝 = Kerja Sama &nbsp;|&nbsp; ⭐ = Kepemimpinan &nbsp;|&nbsp; 🔎 = Kurang Nyaman';
-    htmlContent += '</div>';
-    htmlContent += '<div style="text-align:center;font-size:8px;color:#8a9daf;margin-top:2px;">';
-    htmlContent += '🔐 SOSIO DIGITAL NaFaS BK • Data untuk BK';
-    htmlContent += '</div>';
-    htmlContent += '<script>\n';
-    htmlContent += 'setTimeout(function() { window.print(); }, 600);\n';
-    htmlContent += '<\/script>\n';
-    htmlContent += '</body>\n';
-    htmlContent += '</html>';
-
-    var w = window.open('', '_blank', 'width=800,height=600');
-    if (!w) {
-        alert('⚠️ Izinkan pop-up untuk mencetak.');
-        return;
-    }
-    w.document.write(htmlContent);
-    w.document.close();
-    w.focus();
-}
-
-function simpanPaper() {
-    if (!sesiAktif) { pesan('pmsg', '⚠️ Pilih sesi.', 'error'); return; }
-    var cards = document.querySelectorAll('#paperEntry .panel');
-    var sessionData = getSessionByCode(sesiAktif.code);
-    if (!sessionData) { pesan('pmsg', '❌ Sesi tidak ditemukan.', 'error'); return; }
-    if (!sessionData.responses) sessionData.responses = [];
-    for (var i = 0; i < cards.length; i++) {
-        var s = sesiAktif.students[i];
-        var sels = cards[i].querySelectorAll('select');
-        var ins = cards[i].querySelectorAll('input');
-        var h = [];
-        for (var a = 0; a < 2; a++) { if (sels[a].value) h.push(sels[a].value); }
-        var c = [];
-        for (var b = 2; b < 4; b++) { if (sels[b].value) c.push(sels[b].value); }
-        var l = sels[4] && sels[4].value ? [sels[4].value] : [];
-        var u = sels[5] && sels[5].value ? [sels[5].value] : [];
-        var hr = [];
-        for (var d = 0; d < 2; d++) hr.push(ins[d].value.trim());
-        var cr = [];
-        for (var e = 2; e < 4; e++) cr.push(ins[e].value.trim());
-        var lr = ins[4] && ins[4].value.trim() ? [ins[4].value.trim()] : [];
-        var ur = ins[5] && ins[5].value.trim() ? [ins[5].value.trim()] : [];
-        if (h.length !== 2 || c.length !== 2 || l.length !== 1) {
-            pesan('pmsg', '⚠️ Entri ' + (i + 1) + ' belum lengkap.', 'error');
+    db.collection('sessions').where('code', '==', code).get().then(function(snapshot) {
+        if (snapshot.empty) {
+            document.getElementById('res').innerHTML = '<div class="error">❌ Sesi dengan kode <b>' + code + '</b> tidak ditemukan.</div>';
             return;
         }
-        for (var f = 0; f < hr.length; f++) { if (!hr[f]) { pesan('pmsg', '⚠️ Entri ' + (i + 1) + ' alasan belum lengkap.', 'error'); return; } }
-        for (var g = 0; g < cr.length; g++) { if (!cr[g]) { pesan('pmsg', '⚠️ Entri ' + (i + 1) + ' alasan belum lengkap.', 'error'); return; } }
-        if (!lr[0]) { pesan('pmsg', '⚠️ Entri ' + (i + 1) + ' alasan kepemimpinan belum lengkap.', 'error'); return; }
-        var alreadyExists = false;
-        for (var hh = 0; hh < sessionData.responses.length; hh++) {
-            if (sessionData.responses[hh].respondent === s.id) { alreadyExists = true; break; }
-        }
-        if (alreadyExists) continue;
-        sessionData.responses.push({
-            respondent: s.id,
-            heart: h,
-            heartReason: hr,
-            coop: c,
-            coopReason: cr,
-            lead: l,
-            leadReason: lr,
-            uncomfortable: u,
-            uncomfortableReason: ur,
-            submittedAt: new Date().toISOString()
+        var sessionData = null;
+        snapshot.forEach(function(doc) {
+            sessionData = doc.data();
+            sessionData.id = doc.id;
         });
-    }
-    var sessions = getSessions();
-    for (var ii = 0; ii < sessions.length; ii++) {
-        if (sessions[ii].code === sessionData.code) sessions[ii] = sessionData;
-    }
-    saveSessions(sessions);
-    pesan('pmsg', '✅ Semua entri berhasil disimpan!', 'ok');
-    renderSessionList();
+        if (!sessionData) {
+            document.getElementById('res').innerHTML = '<div class="error">❌ Data sesi tidak valid.</div>';
+            return;
+        }
+        if (sessionData.pin !== pin) {
+            document.getElementById('res').innerHTML = '<div class="error">❌ PIN salah. PIN yang benar: <b>' + sessionData.pin + '</b></div>';
+            return;
+        }
+        var hasilHTML = renderHasil(sessionData);
+        document.getElementById('res').innerHTML = hasilHTML;
+    }).catch(function(err) {
+        document.getElementById('res').innerHTML = '<div class="error">❌ Gagal memuat hasil: ' + err.message + '</div>';
+    });
+}
+
+function lihatHasil() {
+    tampilkanHasilOtomatis();
 }
 
 // ============================================================
-// HASIL
+// RENDER HASIL
 // ============================================================
 function renderHasil(data) {
     var sessionData = data;
@@ -1310,10 +1108,6 @@ function renderHasil(data) {
     return html;
 }
 
-function lihatHasil() {
-    tampilkanHasilOtomatis();
-}
-
 function cetakHasil() {
     var source = document.getElementById('res');
     if (!source || !source.innerHTML.trim() || source.innerHTML.indexOf('⚠️') !== -1 || source.innerHTML.indexOf('❌') !== -1) {
@@ -1323,21 +1117,14 @@ function cetakHasil() {
     
     var code = document.getElementById('rcode') ? document.getElementById('rcode').value.trim() : '';
     var pin = document.getElementById('rpin') ? document.getElementById('rpin').value.trim() : '';
-    var found = getSessionByCode(code);
-    var className = found ? found.className || '' : '';
-    var school = found ? found.school || '' : '';
-    var students = found ? found.students || [] : [];
-    var responses = found ? found.responses || [] : [];
-    var doneCount = responses.length;
-    var totalCount = students.length;
-    
-    var contentHTML = source.innerHTML;
     
     var w = window.open('', '_blank', 'width=800,height=600');
     if (!w) { 
         alert('⚠️ Mohon izinkan pop-up untuk mencetak hasil.');
         return; 
     }
+    
+    var contentHTML = source.innerHTML;
     
     w.document.write('<!doctype html><html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">');
     w.document.write('<title>Hasil Sosiometri ' + code + '</title><style>');
@@ -1377,17 +1164,16 @@ function cetakHasil() {
     w.document.write('</style></head><body>');
     
     w.document.write('<div class="print-header"><h1>📊 HASIL SOSIOMETRI</h1>');
-    w.document.write('<h2>' + esc(school) + ' • ' + esc(className) + '</h2>');
+    w.document.write('<h2>' + esc(sesiAktif?.school || '') + ' • ' + esc(sesiAktif?.className || '') + '</h2>');
     w.document.write('<div class="print-meta"><span>Kode: <strong>' + esc(code) + '</strong></span>');
     w.document.write('<span>PIN: <strong>' + esc(pin) + '</strong></span>');
     w.document.write('<span>' + new Date().toLocaleDateString('id-ID') + '</span>');
-    w.document.write('<span>👥 ' + doneCount + '/' + totalCount + ' mengisi</span></div></div>');
+    w.document.write('</div></div>');
     w.document.write(contentHTML);
     
     w.document.write('<div class="no-print" style="text-align:center;margin-top:10px;padding:8px;background:#e8f5e9;border-radius:6px;border:1px solid #159a7c;font-size:11px;color:#0d6b4a;">');
     w.document.write('📌 <b>Petunjuk:</b> Pilih <b>"Save as PDF"</b> atau <b>"Cetak"</b> di dialog yang muncul.<br>');
-    w.document.write('Jika dialog tidak muncul, klik tombol di bawah ini:');
-    w.document.write('<br><br><button onclick="window.print()" style="padding:8px 20px;background:#f4b400;border:0;border-radius:6px;font-weight:700;font-size:14px;cursor:pointer;">🖨️ Cetak / Simpan PDF</button>');
+    w.document.write('<br><button onclick="window.print()" style="padding:8px 20px;background:#f4b400;border:0;border-radius:6px;font-weight:700;font-size:14px;cursor:pointer;">🖨️ Cetak / Simpan PDF</button>');
     w.document.write('</div>');
     
     w.document.write('</body></html>');
@@ -1402,12 +1188,187 @@ function cetakHasil() {
 }
 
 // ============================================================
-// BACKUP & RESTORE
+// PAPER MODE
+// ============================================================
+function renderPaperRows() {
+    if (!sesiAktif) {
+        document.getElementById('paperRows').innerHTML = '<div class="notice">⚠️ Pilih sesi dulu.</div>';
+        return;
+    }
+    var html = '<div style="border:1px solid #d8e2ec;border-radius:8px;padding:10px;background:#fff;max-width:100%;">';
+    html += '<div style="text-align:center;border-bottom:2px solid #123a6f;padding-bottom:8px;margin-bottom:10px;">';
+    html += '<h1 style="font-size:18px;margin:0;color:#123a6f;">SOSIO DIGITAL NaFaS BK</h1>';
+    html += '<h2 style="font-size:13px;margin:4px 0;font-weight:400;">LEMBAR SOSIOMETRI</h2>';
+    html += '<div style="display:flex;justify-content:center;gap:15px;font-size:11px;color:#6b7d90;flex-wrap:wrap;margin-top:4px;">';
+    html += '<span><b>Nama:</b> _________________</span>';
+    html += '<span><b>Kelas:</b> ' + esc(sesiAktif.className || '______________') + '</span>';
+    html += '<span><b>Sesi:</b> ' + esc(sesiAktif.code || '______________') + '</span>';
+    html += '</div></div>';
+    html += '<div style="font-size:10px;background:#f6f9fc;border:1px solid #d9e4ef;border-radius:5px;padding:6px;margin-bottom:8px;">';
+    html += '<b>📌 Petunjuk:</b> Jawab dengan jujur dan pilih teman yang sesuai dengan pertanyaan.</div>';
+    html += '<div style="border:1px solid #cfdbe7;border-radius:5px;padding:8px;margin:6px 0;">';
+    html += '<h3 style="font-size:12px;margin:0 0 4px;color:#123a6f;">❤️ PERTEMANAN</h3>';
+    html += '<p style="font-size:10px;margin:2px 0;color:#555;">Pilih 2 teman yang paling nyaman diajak berteman.</p>';
+    html += '<div style="font-size:9px;margin:4px 0;padding:2px 0;">1) _________________ &nbsp;&nbsp; Alasan: _________________</div>';
+    html += '<div style="font-size:9px;margin:4px 0;padding:2px 0;">2) _________________ &nbsp;&nbsp; Alasan: _________________</div></div>';
+    html += '<div style="border:1px solid #cfdbe7;border-radius:5px;padding:8px;margin:6px 0;">';
+    html += '<h3 style="font-size:12px;margin:0 0 4px;color:#123a6f;">🤝 KERJA SAMA</h3>';
+    html += '<p style="font-size:10px;margin:2px 0;color:#555;">Pilih 2 teman yang paling dipilih untuk bekerja sama.</p>';
+    html += '<div style="font-size:9px;margin:4px 0;padding:2px 0;">1) _________________ &nbsp;&nbsp; Alasan: _________________</div>';
+    html += '<div style="font-size:9px;margin:4px 0;padding:2px 0;">2) _________________ &nbsp;&nbsp; Alasan: _________________</div></div>';
+    html += '<div style="border:1px solid #cfdbe7;border-radius:5px;padding:8px;margin:6px 0;">';
+    html += '<h3 style="font-size:12px;margin:0 0 4px;color:#123a6f;">⭐ KEPEMIMPINAN</h3>';
+    html += '<p style="font-size:10px;margin:2px 0;color:#555;">Pilih 1 teman yang mampu memimpin.</p>';
+    html += '<div style="font-size:9px;margin:4px 0;padding:2px 0;">Nama: _________________ &nbsp;&nbsp; Alasan: _________________</div></div>';
+    html += '<div style="border:1px solid #cfdbe7;border-radius:5px;padding:8px;margin:6px 0;">';
+    html += '<h3 style="font-size:12px;margin:0 0 4px;color:#123a6f;">🔎 RELASI KURANG NYAMAN</h3>';
+    html += '<p style="font-size:10px;margin:2px 0;color:#555;">Pilih 1 teman yang paling sulit diajak interaksi.</p>';
+    html += '<div style="font-size:9px;margin:4px 0;padding:2px 0;">Nama: _________________ &nbsp;&nbsp; Alasan: _________________</div></div>';
+    html += '<div style="text-align:center;font-size:8px;color:#647687;margin-top:8px;border-top:1px solid #d9e4ef;padding-top:4px;">';
+    html += '📌 <b>Keterangan:</b> ❤️ = Pertemanan &nbsp;|&nbsp; 🤝 = Kerja Sama &nbsp;|&nbsp; ⭐ = Kepemimpinan &nbsp;|&nbsp; 🔎 = Kurang Nyaman';
+    html += '</div>';
+    html += '<div style="text-align:center;font-size:8px;color:#647687;margin-top:2px;">';
+    html += 'SOSIO DIGITAL NaFaS BK • Data untuk BK';
+    html += '</div>';
+    document.getElementById('paperRows').innerHTML = html;
+}
+
+function muatPaper() {
+    if (!sesiAktif) {
+        renderSessionList();
+        var msg = '⚠️ Pilih sesi dulu. Klik "📂 Buka" di daftar sesi.';
+        document.getElementById('paperEntry').innerHTML = '<div class="error">' + msg + '</div>';
+        return;
+    }
+    renderPaperRows();
+    var optsHtml = '<option value="">— Pilih —</option>';
+    for (var i = 0; i < sesiAktif.students.length; i++) {
+        optsHtml += '<option value="' + esc(sesiAktif.students[i].id) + '">' + esc(sesiAktif.students[i].name) + '</option>';
+    }
+    var entryHtml = '';
+    for (var j = 0; j < sesiAktif.students.length; j++) {
+        var s = sesiAktif.students[j];
+        entryHtml += '<div class="panel" style="padding:8px;margin-bottom:6px;">';
+        entryHtml += '<h3 style="margin:0 0 4px;font-size:12px;">👤 ' + (j + 1) + '. ' + esc(s.name) + '</h3>';
+        entryHtml += '<div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;">';
+        var categories = ['heart', 'heart', 'coop', 'coop', 'lead', 'uncomfortable'];
+        var labels = ['❤️ 1', '❤️ 2', '🤝 1', '🤝 2', '⭐', '🔎'];
+        for (var k = 0; k < 6; k++) {
+            entryHtml += '<div><label style="font-size:9px;">' + labels[k] + '</label>';
+            entryHtml += '<select class="pe ' + categories[k] + '">' + optsHtml + '</select>';
+            entryHtml += '<label style="font-size:9px;">Alasan</label>';
+            entryHtml += '<input class="pr ' + categories[k] + '" placeholder="Alasan..." style="padding:4px;font-size:10px;"></div>';
+        }
+        entryHtml += '</div></div>';
+    }
+    document.getElementById('paperEntry').innerHTML = entryHtml;
+}
+
+function cetakLembarBaru() {
+    if (!sesiAktif) {
+        alert('⚠️ Pilih sesi dulu.');
+        return;
+    }
+    window.print();
+}
+
+function simpanPaper() {
+    if (!sesiAktif) { pesan('pmsg', '⚠️ Pilih sesi.', 'error'); return; }
+    var cards = document.querySelectorAll('#paperEntry .panel');
+    var sessionRef = db.collection('sessions').doc(sesiAktif.id);
+    
+    // Ambil data terbaru dari cloud
+    sessionRef.get().then(function(doc) {
+        if (!doc.exists) {
+            pesan('pmsg', '❌ Sesi tidak ditemukan di cloud.', 'error');
+            return;
+        }
+        var sessionData = doc.data();
+        var responses = sessionData.responses || [];
+        var newResponses = [];
+        
+        for (var i = 0; i < cards.length; i++) {
+            var s = sesiAktif.students[i];
+            var sels = cards[i].querySelectorAll('select');
+            var ins = cards[i].querySelectorAll('input');
+            var h = [];
+            for (var a = 0; a < 2; a++) { if (sels[a].value) h.push(sels[a].value); }
+            var c = [];
+            for (var b = 2; b < 4; b++) { if (sels[b].value) c.push(sels[b].value); }
+            var l = sels[4] && sels[4].value ? [sels[4].value] : [];
+            var u = sels[5] && sels[5].value ? [sels[5].value] : [];
+            var hr = [];
+            for (var d = 0; d < 2; d++) hr.push(ins[d].value.trim());
+            var cr = [];
+            for (var e = 2; e < 4; e++) cr.push(ins[e].value.trim());
+            var lr = ins[4] && ins[4].value.trim() ? [ins[4].value.trim()] : [];
+            var ur = ins[5] && ins[5].value.trim() ? [ins[5].value.trim()] : [];
+            if (h.length !== 2 || c.length !== 2 || l.length !== 1) {
+                pesan('pmsg', '⚠️ Entri ' + (i + 1) + ' belum lengkap.', 'error');
+                return;
+            }
+            for (var f = 0; f < hr.length; f++) { if (!hr[f]) { pesan('pmsg', '⚠️ Entri ' + (i + 1) + ' alasan belum lengkap.', 'error'); return; } }
+            for (var g = 0; g < cr.length; g++) { if (!cr[g]) { pesan('pmsg', '⚠️ Entri ' + (i + 1) + ' alasan belum lengkap.', 'error'); return; } }
+            if (!lr[0]) { pesan('pmsg', '⚠️ Entri ' + (i + 1) + ' alasan kepemimpinan belum lengkap.', 'error'); return; }
+            
+            // Cek apakah sudah ada
+            var sudahAda = false;
+            for (var m = 0; m < responses.length; m++) {
+                if (responses[m].respondent === s.id) { sudahAda = true; break; }
+            }
+            if (sudahAda) continue;
+            
+            newResponses.push({
+                respondent: s.id,
+                heart: h,
+                heartReason: hr,
+                coop: c,
+                coopReason: cr,
+                lead: l,
+                leadReason: lr,
+                uncomfortable: u,
+                uncomfortableReason: ur,
+                submittedAt: new Date().toISOString()
+            });
+        }
+        
+        if (newResponses.length === 0) {
+            pesan('pmsg', 'ℹ️ Tidak ada entri baru yang disimpan.', 'notice');
+            return;
+        }
+        
+        // Simpan ke cloud
+        pesan('pmsg', '⏳ Menyimpan ' + newResponses.length + ' entri...', 'notice');
+        for (var n = 0; n < newResponses.length; n++) {
+            sessionRef.update({
+                responses: firebase.firestore.FieldValue.arrayUnion(newResponses[n])
+            });
+        }
+        // Tunggu sebentar lalu refresh
+        setTimeout(function() {
+            pesan('pmsg', '✅ ' + newResponses.length + ' entri berhasil disimpan!', 'ok');
+            renderSessionList();
+            // Update sesiAktif
+            sessionRef.get().then(function(doc2) {
+                if (doc2.exists) {
+                    var updated = doc2.data();
+                    updated.id = doc2.id;
+                    sesiAktif = updated;
+                    window.sesiAktif = updated;
+                }
+            });
+        }, 1000);
+    }).catch(function(err) {
+        pesan('pmsg', '❌ Gagal: ' + err.message, 'error');
+    });
+}
+
+// ============================================================
+// BACKUP & RESTORE (LOCAL)
 // ============================================================
 function exportData() {
     var data = {
         users: JSON.parse(localStorage.getItem(USER_KEY) || '{}'),
-        sessions: JSON.parse(localStorage.getItem(KEY_SESI) || '[]'),
         exportedAt: new Date().toISOString()
     };
     var blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
@@ -1427,10 +1388,8 @@ function importData(event) {
         try {
             var data = JSON.parse(e.target.result);
             if (data.users) localStorage.setItem(USER_KEY, JSON.stringify(data.users));
-            if (data.sessions) localStorage.setItem(KEY_SESI, JSON.stringify(data.sessions));
             pesan('backupMsg', '✅ Data berhasil dipulihkan!', 'ok');
             initApp();
-            renderSessionList();
         } catch (err) {
             pesan('backupMsg', '❌ File tidak valid.', 'error');
         }
@@ -1440,25 +1399,41 @@ function importData(event) {
 }
 
 function resetAllData() {
-    if (!confirm('⚠️ Yakin ingin menghapus SEMUA data? (akun, sesi, jawaban)')) return;
+    if (!confirm('⚠️ Yakin ingin menghapus SEMUA data lokal? (akun)')) return;
     if (!confirm('⚠️⚠️ Ini tidak bisa dibatalkan! Lanjutkan?')) return;
     localStorage.removeItem(USER_KEY);
-    localStorage.removeItem(KEY_SESI);
-    localStorage.removeItem('NAFAS_SOSIO_CURRENT_SESSION');
     localStorage.removeItem(SESSION_KEY);
-    alert('✅ Semua data telah direset. Halaman akan dimuat ulang.');
+    alert('✅ Semua data lokal telah direset. Halaman akan dimuat ulang.');
     location.reload();
 }
 
 // ============================================================
-// JIKA TIDAK ADA HASH SESI, CEK SESSION LOGIN
+// DETEKSI LINK SISWA
+// ============================================================
+(function() {
+    var hash = window.location.hash;
+    if (hash && hash.indexOf('#sesi=') === 0) {
+        var kodeSesi = decodeURIComponent(hash.substring(6));
+        document.getElementById('loginPage').style.display = 'none';
+        document.getElementById('appPage').style.display = 'block';
+        // Langsung buka tab siswa dan isi kode
+        page('student');
+        document.getElementById('scode').value = kodeSesi;
+        setTimeout(cariSesiSiswa, 500);
+    }
+})();
+
+// ============================================================
+// INISIALISASI
 // ============================================================
 if (window.location.hash.indexOf('#sesi=') !== 0) {
     if (!checkSession()) {
         showLogin();
     }
 }
-function openPrintPage(){let code=document.getElementById('rcode')?.value.trim()||'';let pin=document.getElementById('rpin')?.value.trim()||'';if(!code||!pin){alert('Masukkan Kode Sesi dan PIN Guru BK terlebih dahulu.');return}let u='cetak-hasil.html?code='+encodeURIComponent(code)+'&pin='+encodeURIComponent(pin);let w=window.open(u,'_blank');if(!w)alert('Izinkan pop-up agar laporan dapat dibuka.')}
+
+// Variabel untuk cetak hasil
+var sessionData = null;
 </script>
 </body>
 </html>

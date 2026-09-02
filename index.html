@@ -232,7 +232,7 @@ button:hover{transform:translateY(-1px)}
                         <button class="dark" onclick="lihatHasil()">🔐 Buka Hasil</button>
                         <button class="gold" onclick="cetakHasil()">🖨️ Cetak / PDF</button>
                     </div>
-                    <div id="res"></div>
+                    <div id="res"><div class="notice">ℹ️ Klik tab Hasil atau tombol "Buka Hasil" untuk melihat.</div></div>
                 </div>
             </section>
         </div>
@@ -431,6 +431,7 @@ function generatePin() { return String(Math.floor(1000 + Math.random() * 9000));
 
 // ===== NAVIGASI =====
 function page(id) {
+    console.log('📌 Pindah ke tab:', id);
     var sections = ['teacher', 'student', 'paper', 'result'];
     for (var i = 0; i < sections.length; i++) {
         var el = document.getElementById(sections[i]);
@@ -462,22 +463,27 @@ function page(id) {
         renderSessionList();
     }
     if (id === 'result') {
+        console.log('📌 Tab Hasil diklik, sesiAktif:', sesiAktif);
         if (sesiAktif) {
             document.getElementById('rcode').value = sesiAktif.code || '';
             document.getElementById('rpin').value = sesiAktif.pin || '';
+            console.log('📌 Kode:', sesiAktif.code, 'PIN:', sesiAktif.pin);
             setTimeout(function() {
                 tampilkanHasilOtomatis();
             }, 500);
         } else {
             document.getElementById('res').innerHTML = '<div class="notice">ℹ️ Belum ada sesi yang dipilih. Buka sesi dulu.</div>';
+            console.log('📌 Tidak ada sesi aktif');
         }
     }
 }
 
-// ===== TAMPILKAN HASIL OTOMATIS =====
+// ===== TAMPILKAN HASIL OTOMATIS (DIPERBAIKI) =====
 function tampilkanHasilOtomatis() {
     var code = document.getElementById('rcode').value.trim();
     var pin = document.getElementById('rpin').value.trim();
+
+    console.log('🔍 Cek Hasil - Kode:', code, 'PIN:', pin);
 
     if (!code || !pin) {
         document.getElementById('res').innerHTML = '<div class="notice">ℹ️ Masukkan kode sesi dan PIN.</div>';
@@ -485,17 +491,25 @@ function tampilkanHasilOtomatis() {
     }
 
     var sessionData = getSessionByCode(code);
+    
     if (!sessionData) {
         document.getElementById('res').innerHTML = '<div class="error">❌ Sesi dengan kode <b>' + code + '</b> tidak ditemukan.</div>';
+        console.log('❌ Sesi tidak ditemukan untuk kode:', code);
         return;
     }
+
+    console.log('✅ Sesi ditemukan:', sessionData.code, 'PIN di data:', sessionData.pin);
 
     if (sessionData.pin !== pin) {
         document.getElementById('res').innerHTML = '<div class="error">❌ PIN salah. PIN yang benar: <b>' + sessionData.pin + '</b></div>';
+        console.log('❌ PIN salah. PIN di data:', sessionData.pin, 'PIN input:', pin);
         return;
     }
 
-    document.getElementById('res').innerHTML = renderHasil(sessionData);
+    console.log('✅ PIN cocok! Menampilkan hasil...');
+    var hasilHTML = renderHasil(sessionData);
+    document.getElementById('res').innerHTML = hasilHTML;
+    console.log('✅ Hasil ditampilkan');
 }
 
 // ===== RENDER SESSION LIST =====
@@ -879,7 +893,7 @@ function muatPaper() {
     document.getElementById('paperEntry').innerHTML = entryHtml;
 }
 
-// ===== FUNGSI CETAK LEMBAR SISWA (PASTI BERHASIL) =====
+// ===== FUNGSI CETAK LEMBAR SISWA =====
 function cetakLembarBaru() {
     if (!sesiAktif) {
         alert('⚠️ Pilih sesi dulu.');
@@ -1011,14 +1025,23 @@ function simpanPaper() {
 }
 
 // ============================================================
-// HASIL
+// HASIL (DIPERBAIKI)
 // ============================================================
 function renderHasil(data) {
+    console.log('📊 renderHasil dipanggil dengan data:', data);
+    
     var rs = data.responses || [];
     var st = data.session.students || [];
     var className = data.session.className || '';
     var code = data.session.code || '';
     var school = data.session.school || '';
+    
+    console.log('📊 Jumlah siswa:', st.length, 'Jumlah respons:', rs.length);
+    
+    if (st.length === 0) {
+        return '<div class="notice">ℹ️ Belum ada siswa dalam sesi ini.</div>';
+    }
+    
     var counts = { heart: {}, coop: {}, lead: {}, uncomfortable: {} };
     for (var i = 0; i < st.length; i++) {
         var id = st[i].id;
@@ -1027,6 +1050,7 @@ function renderHasil(data) {
         counts.lead[id] = 0;
         counts.uncomfortable[id] = 0;
     }
+    
     for (var j = 0; j < rs.length; j++) {
         var x = rs[j];
         var categories = ['heart', 'coop', 'lead', 'uncomfortable'];
@@ -1034,16 +1058,23 @@ function renderHasil(data) {
             var cat = categories[k];
             var items = x[cat] || [];
             for (var l = 0; l < items.length; l++) {
-                if (counts[cat][items[l]] !== undefined) counts[cat][items[l]]++;
+                if (counts[cat][items[l]] !== undefined) {
+                    counts[cat][items[l]]++;
+                }
             }
         }
     }
+    
     var respondedIds = {};
-    for (var m = 0; m < rs.length; m++) respondedIds[rs[m].respondent] = true;
+    for (var m = 0; m < rs.length; m++) {
+        respondedIds[rs[m].respondent] = true;
+    }
+    
     var sorted = [];
     for (var n = 0; n < st.length; n++) {
         var s = st[n];
-        var total = (counts.heart[s.id] || 0) + (counts.coop[s.id] || 0) + (counts.lead[s.id] || 0) + (counts.uncomfortable[s.id] || 0);
+        var total = (counts.heart[s.id] || 0) + (counts.coop[s.id] || 0) + 
+                    (counts.lead[s.id] || 0) + (counts.uncomfortable[s.id] || 0);
         sorted.push({
             id: s.id,
             name: s.name,
@@ -1055,10 +1086,12 @@ function renderHasil(data) {
             status: respondedIds[s.id] ? '✅ Sudah' : '⏳ Belum'
         });
     }
+    
     sorted.sort(function(a, b) {
         if (b.total !== a.total) return b.total - a.total;
         return a.name.localeCompare(b.name, 'id');
     });
+    
     var totalResponded = rs.length;
     var totalStudents = st.length;
 
@@ -1071,6 +1104,7 @@ function renderHasil(data) {
     html += '<th style="width:28px;">❤️</th><th style="width:28px;">🤝</th>';
     html += '<th style="width:28px;">⭐</th><th style="width:28px;">🔎</th>';
     html += '<th style="width:32px;">Total</th><th style="width:50px;">Status</th></tr></thead><tbody>';
+    
     for (var o = 0; o < sorted.length; o++) {
         var s = sorted[o];
         var rankClass = '';
@@ -1079,21 +1113,24 @@ function renderHasil(data) {
             else if (o === 1) rankClass = 'rank-2';
             else if (o === 2) rankClass = 'rank-3';
         }
-        var total = s.total;
         html += '<tr><td>';
-        if (total > 0) html += '<span class="rank-badge ' + rankClass + '">' + (o + 1) + '</span>';
-        else html += '-';
+        if (s.total > 0) {
+            html += '<span class="rank-badge ' + rankClass + '">' + (o + 1) + '</span>';
+        } else {
+            html += '-';
+        }
         html += '</td>';
         html += '<td class="name-col">' + esc(s.name) + '</td>';
         html += '<td>' + (s.heart > 0 ? '<span class="count">' + s.heart + '</span>' : '-') + '</td>';
         html += '<td>' + (s.coop > 0 ? '<span class="count">' + s.coop + '</span>' : '-') + '</td>';
         html += '<td>' + (s.lead > 0 ? '<span class="count">' + s.lead + '</span>' : '-') + '</td>';
         html += '<td>' + (s.uncomfortable > 0 ? '<span class="count count-low">' + s.uncomfortable + '</span>' : '-') + '</td>';
-        html += '<td class="total-col">' + total + '</td>';
+        html += '<td class="total-col">' + s.total + '</td>';
         html += '<td style="font-size:9px;">' + s.status + '</td></tr>';
     }
     html += '</tbody></table></div>';
     html += '<div class="result-footer">🔐 Khusus Guru BK • Dicetak: ' + new Date().toLocaleDateString('id-ID') + '</div>';
+    
     return html;
 }
 
@@ -1231,7 +1268,6 @@ window.addEventListener('DOMContentLoaded', function() {
 if (!checkSession()) {
     showLogin();
 }
-function openPrintPage(){let code=document.getElementById('rcode')?.value.trim()||'';let pin=document.getElementById('rpin')?.value.trim()||'';if(!code||!pin){alert('Masukkan Kode Sesi dan PIN Guru BK terlebih dahulu.');return}let u='cetak-hasil.html?code='+encodeURIComponent(code)+'&pin='+encodeURIComponent(pin);let w=window.open(u,'_blank');if(!w)alert('Izinkan pop-up agar laporan dapat dibuka.')}
 </script>
 </body>
 </html>

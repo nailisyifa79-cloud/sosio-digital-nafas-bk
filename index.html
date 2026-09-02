@@ -1190,13 +1190,16 @@ function lihatHasil() {
     tampilkanHasilOtomatis();
 }
 
-// ===== CETAK HASIL =====
+// ============================================================
+// CETAK HASIL - LANGSUNG MUNCUL DIALOG PRINT/SIMPAN PDF
+// ============================================================
 function cetakHasil() {
     var source = document.getElementById('res');
     if (!source || !source.innerHTML.trim() || source.innerHTML.indexOf('⚠️') !== -1 || source.innerHTML.indexOf('❌') !== -1) {
         alert('⚠️ Pastikan hasil sudah terbuka dengan benar (klik "Buka Hasil").');
         return;
     }
+    
     var code = document.getElementById('rcode') ? document.getElementById('rcode').value.trim() : '';
     var pin = document.getElementById('rpin') ? document.getElementById('rpin').value.trim() : '';
     var found = getSessionByCode(code);
@@ -1206,11 +1209,18 @@ function cetakHasil() {
     var responses = found ? found.responses || [] : [];
     var doneCount = responses.length;
     var totalCount = students.length;
-    var w = window.open('', '_blank', 'width=900,height=700');
-    if (!w) { alert('⚠️ Izinkan pop-up.'); return; }
     
+    // Ambil konten hasil dan modifikasi untuk cetak
     var contentHTML = source.innerHTML;
     
+    // Buka jendela baru dengan ukuran lebih kecil agar fokus ke print
+    var w = window.open('', '_blank', 'width=800,height=600');
+    if (!w) { 
+        alert('⚠️ Mohon izinkan pop-up untuk mencetak hasil.');
+        return; 
+    }
+    
+    // Tulis HTML dengan auto-print setelah 1 detik
     w.document.write('<!doctype html><html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">');
     w.document.write('<title>Hasil Sosiometri ' + code + '</title><style>');
     w.document.write('*{box-sizing:border-box;margin:0;padding:0}');
@@ -1245,9 +1255,8 @@ function cetakHasil() {
     w.document.write('.reason-empty{color:#aaa;font-size:5px;font-style:italic}');
     w.document.write('.result-head .info{font-size:6.5px}');
     w.document.write('</style></head><body>');
-    w.document.write('<div class="no-print" style="position:sticky;top:0;background:#fff;padding:2px 0;text-align:center;border-bottom:1px solid #d0dae6;margin-bottom:3px;z-index:10;">');
-    w.document.write('<button onclick="window.print()" style="border:0;border-radius:3px;padding:2px 10px;background:#f4b400;color:#17324d;font-weight:700;cursor:pointer;font-size:8px;">🖨️ CETAK / PDF</button>');
-    w.document.write('<button onclick="window.close()" style="border:0;border-radius:3px;padding:2px 10px;background:#e4edf4;color:#17324d;font-weight:700;cursor:pointer;font-size:8px;margin-left:4px;">✖ Tutup</button></div>');
+    
+    // Tampilkan header dan konten (tanpa tombol cetak, karena akan auto-print)
     w.document.write('<div class="print-header"><h1>📊 HASIL SOSIOMETRI</h1>');
     w.document.write('<h2>' + esc(school) + ' • ' + esc(className) + '</h2>');
     w.document.write('<div class="print-meta"><span>Kode: <strong>' + esc(code) + '</strong></span>');
@@ -1255,9 +1264,26 @@ function cetakHasil() {
     w.document.write('<span>' + new Date().toLocaleDateString('id-ID') + '</span>');
     w.document.write('<span>👥 ' + doneCount + '/' + totalCount + ' mengisi</span></div></div>');
     w.document.write(contentHTML);
+    
+    // Tambahan instruksi untuk guru (akan hilang saat print)
+    w.document.write('<div class="no-print" style="text-align:center;margin-top:10px;padding:8px;background:#e8f5e9;border-radius:6px;border:1px solid #159a7c;font-size:11px;color:#0d6b4a;">');
+    w.document.write('📌 <b>Petunjuk:</b> Pilih <b>"Save as PDF"</b> atau <b>"Cetak"</b> di dialog yang muncul.<br>');
+    w.document.write('Jika dialog tidak muncul, klik tombol di bawah ini:');
+    w.document.write('<br><br><button onclick="window.print()" style="padding:8px 20px;background:#f4b400;border:0;border-radius:6px;font-weight:700;font-size:14px;cursor:pointer;">🖨️ Cetak / Simpan PDF</button>');
+    w.document.write('</div>');
+    
     w.document.write('</body></html>');
     w.document.close();
     w.focus();
+    
+    // Auto-print setelah 1 detik (dialog print/simpan PDF langsung muncul)
+    setTimeout(function() {
+        try {
+            w.print();
+        } catch(e) {
+            // Jika gagal, biarkan tombol manual
+        }
+    }, 1000);
 }
 
 // ============================================================
@@ -1329,7 +1355,6 @@ window.addEventListener('DOMContentLoaded', function() {
 if (!checkSession()) {
     showLogin();
 }
-function openPrintPage(){let code=document.getElementById('rcode')?.value.trim()||'';let pin=document.getElementById('rpin')?.value.trim()||'';if(!code||!pin){alert('Masukkan Kode Sesi dan PIN Guru BK terlebih dahulu.');return}let u='cetak-hasil.html?code='+encodeURIComponent(code)+'&pin='+encodeURIComponent(pin);let w=window.open(u,'_blank');if(!w)alert('Izinkan pop-up agar laporan dapat dibuka.')}
 </script>
 </body>
 </html>

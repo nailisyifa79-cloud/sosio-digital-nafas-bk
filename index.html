@@ -99,6 +99,18 @@ button:hover{transform:translateY(-1px)}
 .lead{border-left-color:#7b61ff}
 .uncomfortable{border-left-color:#d96b7b}
 @media(max-width:650px){.brand{font-size:15px}.flex-header{flex-direction:column;align-items:stretch;gap:4px}}
+
+/* ===== STYLE UNTUK ALASAN ===== */
+.reason-toggle{cursor:pointer;color:#1a5a9e;font-weight:700;font-size:9px;background:#eaf4ff;padding:1px 6px;border-radius:4px;border:1px solid #c9d8e6;display:inline-block}
+.reason-toggle:hover{background:#d4e4ff}
+.reason-detail{display:none;font-size:8px;background:#f6f9fc;border:1px solid #d9e4ef;border-radius:4px;padding:4px 6px;margin-top:2px;text-align:left;color:#2a4a6a}
+.reason-detail.show{display:block}
+.reason-detail .from{font-weight:700;color:#123a6f}
+.reason-detail .reason-text{color:#4a6a8a}
+.reason-list{max-height:100px;overflow-y:auto}
+.table-main .reason-cell{font-size:8px;text-align:left;padding:2px 4px;max-width:150px}
+@media print{.reason-detail{display:block!important;border:1px solid #ccc;padding:3px 5px;margin:2px 0;font-size:7px;background:#f9f9f9}.reason-toggle{display:none!important}.table-main .reason-cell{max-width:200px}.print-only{display:block!important}}
+.print-only{display:none}
 </style>
 </head>
 <body>
@@ -431,7 +443,6 @@ function generatePin() { return String(Math.floor(1000 + Math.random() * 9000));
 
 // ===== NAVIGASI =====
 function page(id) {
-    console.log('📌 Pindah ke tab:', id);
     var sections = ['teacher', 'student', 'paper', 'result'];
     for (var i = 0; i < sections.length; i++) {
         var el = document.getElementById(sections[i]);
@@ -479,8 +490,6 @@ function page(id) {
 function tampilkanHasilOtomatis() {
     var code = document.getElementById('rcode').value.trim();
     var pin = document.getElementById('rpin').value.trim();
-
-    console.log('🔍 Cek Hasil - Kode:', code, 'PIN:', pin);
 
     if (!code || !pin) {
         document.getElementById('res').innerHTML = '<div class="error">⚠️ Kode atau PIN kosong. Pastikan sesi sudah dibuat.</div>';
@@ -1016,13 +1025,10 @@ function simpanPaper() {
 }
 
 // ============================================================
-// HASIL (DIPERBAIKI - MENERIMA DUA FORMAT DATA)
+// HASIL (DENGAN FITUR ALASAN)
 // ============================================================
 function renderHasil(data) {
-    console.log('📊 renderHasil dipanggil dengan data:', data);
-
-    // --- PERBAIKAN UTAMA: Cek format data ---
-    // Jika data memiliki properti 'session', ambil dari dalamnya
+    // Normalisasi data
     var sessionData = data;
     if (data.session) {
         sessionData = data.session;
@@ -1034,31 +1040,49 @@ function renderHasil(data) {
     var code = sessionData.code || '';
     var school = sessionData.school || '';
 
-    console.log('📊 Data setelah normalisasi:', { students: st.length, responses: rs.length });
-
     if (!st || st.length === 0) {
         return '<div class="notice">ℹ️ Belum ada siswa dalam sesi ini.</div>';
     }
 
-    // Hitung perolehan suara
+    // Buat map nama siswa dari ID
+    var studentMap = {};
+    for (var i = 0; i < st.length; i++) {
+        studentMap[st[i].id] = st[i].name;
+    }
+
+    // Hitung perolehan suara dan kumpulkan alasan
     var counts = { heart: {}, coop: {}, lead: {}, uncomfortable: {} };
+    var reasons = { heart: {}, coop: {}, lead: {}, uncomfortable: {} };
     for (var i = 0; i < st.length; i++) {
         var id = st[i].id;
         counts.heart[id] = 0;
         counts.coop[id] = 0;
         counts.lead[id] = 0;
         counts.uncomfortable[id] = 0;
+        reasons.heart[id] = [];
+        reasons.coop[id] = [];
+        reasons.lead[id] = [];
+        reasons.uncomfortable[id] = [];
     }
 
     for (var j = 0; j < rs.length; j++) {
         var x = rs[j];
+        var respondentName = studentMap[x.respondent] || x.respondent;
         var categories = ['heart', 'coop', 'lead', 'uncomfortable'];
+        var reasonKeys = ['heartReason', 'coopReason', 'leadReason', 'uncomfortableReason'];
         for (var k = 0; k < categories.length; k++) {
             var cat = categories[k];
             var items = x[cat] || [];
+            var reasonItems = x[reasonKeys[k]] || [];
             for (var l = 0; l < items.length; l++) {
-                if (counts[cat][items[l]] !== undefined) {
-                    counts[cat][items[l]]++;
+                var targetId = items[l];
+                if (counts[cat][targetId] !== undefined) {
+                    counts[cat][targetId]++;
+                    var reasonText = reasonItems[l] || '(tanpa alasan)';
+                    reasons[cat][targetId].push({
+                        from: respondentName,
+                        reason: reasonText
+                    });
                 }
             }
         }
@@ -1083,11 +1107,14 @@ function renderHasil(data) {
             lead: counts.lead[s.id] || 0,
             uncomfortable: counts.uncomfortable[s.id] || 0,
             total: total,
-            status: respondedIds[s.id] ? '✅ Sudah' : '⏳ Belum'
+            status: respondedIds[s.id] ? '✅ Sudah' : '⏳ Belum',
+            heartReasons: reasons.heart[s.id] || [],
+            coopReasons: reasons.coop[s.id] || [],
+            leadReasons: reasons.lead[s.id] || [],
+            uncomfortableReasons: reasons.uncomfortable[s.id] || []
         });
     }
 
-    // Urutkan berdasarkan total tertinggi
     sorted.sort(function(a, b) {
         if (b.total !== a.total) return b.total - a.total;
         return a.name.localeCompare(b.name, 'id');
@@ -1096,16 +1123,23 @@ function renderHasil(data) {
     var totalResponded = rs.length;
     var totalStudents = st.length;
 
-    // Buat HTML tabel
+    // Buat HTML tabel dengan alasan
     var html = '<div class="result-head">';
     html += '<div class="info"><strong>' + esc(school) + '</strong> • ' + esc(className) + '</div>';
     html += '<div class="info">📊 ' + totalResponded + '/' + totalStudents + ' siswa mengisi</div>';
     html += '<div class="info">🔑 ' + esc(code) + '</div></div>';
+    
+    html += '<div style="font-size:9px;color:#6a8aaa;margin-bottom:4px;">';
+    html += '💡 Klik <b>"Lihat Alasan"</b> untuk melihat siapa yang memilih dan alasannya. Saat dicetak, semua alasan akan otomatis muncul.';
+    html += '</div>';
+    
     html += '<div class="table-wrap"><table class="table-main"><thead><tr>';
     html += '<th style="width:20px;">#</th><th style="text-align:left;min-width:70px;">Nama</th>';
     html += '<th style="width:28px;">❤️</th><th style="width:28px;">🤝</th>';
     html += '<th style="width:28px;">⭐</th><th style="width:28px;">🔎</th>';
-    html += '<th style="width:32px;">Total</th><th style="width:50px;">Status</th></tr></thead><tbody>';
+    html += '<th style="width:32px;">Total</th>';
+    html += '<th style="width:50px;">Status</th>';
+    html += '<th style="width:60px;">Alasan</th></tr></thead><tbody>';
 
     for (var o = 0; o < sorted.length; o++) {
         var s = sorted[o];
@@ -1115,6 +1149,41 @@ function renderHasil(data) {
             else if (o === 1) rankClass = 'rank-2';
             else if (o === 2) rankClass = 'rank-3';
         }
+        
+        // Kumpulkan semua alasan untuk siswa ini
+        var allReasons = [];
+        var reasonLabels = [
+            { cat: '❤️ Pertemanan', list: s.heartReasons },
+            { cat: '🤝 Kerja Sama', list: s.coopReasons },
+            { cat: '⭐ Kepemimpinan', list: s.leadReasons },
+            { cat: '🔎 Kurang Nyaman', list: s.uncomfortableReasons }
+        ];
+        for (var r = 0; r < reasonLabels.length; r++) {
+            for (var q = 0; q < reasonLabels[r].list.length; q++) {
+                var item = reasonLabels[r].list[q];
+                allReasons.push({
+                    category: reasonLabels[r].cat,
+                    from: item.from,
+                    reason: item.reason
+                });
+            }
+        }
+        
+        var reasonId = 'reason-' + s.id;
+        var reasonHtml = '';
+        if (allReasons.length === 0) {
+            reasonHtml = '<span style="color:#aaa;font-size:8px;">Tidak ada</span>';
+        } else {
+            reasonHtml = '<span class="reason-toggle" onclick="toggleReason(\'' + reasonId + '\')">📋 Lihat Alasan (' + allReasons.length + ')</span>';
+            reasonHtml += '<div id="' + reasonId + '" class="reason-detail">';
+            for (var p = 0; p < allReasons.length; p++) {
+                reasonHtml += '<div><span class="from">' + esc(allReasons[p].from) + '</span> ';
+                reasonHtml += '<span style="color:#6a8aaa;font-size:7px;">[' + allReasons[p].category + ']</span><br>';
+                reasonHtml += '<span class="reason-text">" ' + esc(allReasons[p].reason) + ' "</span></div>';
+            }
+            reasonHtml += '</div>';
+        }
+
         html += '<tr><td>';
         if (s.total > 0) {
             html += '<span class="rank-badge ' + rankClass + '">' + (o + 1) + '</span>';
@@ -1128,18 +1197,29 @@ function renderHasil(data) {
         html += '<td>' + (s.lead > 0 ? '<span class="count">' + s.lead + '</span>' : '-') + '</td>';
         html += '<td>' + (s.uncomfortable > 0 ? '<span class="count count-low">' + s.uncomfortable + '</span>' : '-') + '</td>';
         html += '<td class="total-col">' + s.total + '</td>';
-        html += '<td style="font-size:9px;">' + s.status + '</td></tr>';
+        html += '<td style="font-size:8px;">' + s.status + '</td>';
+        html += '<td class="reason-cell" style="font-size:8px;text-align:left;max-width:150px;">' + reasonHtml + '</td>';
+        html += '</tr>';
     }
     html += '</tbody></table></div>';
     html += '<div class="result-footer">🔐 Khusus Guru BK • Dicetak: ' + new Date().toLocaleDateString('id-ID') + '</div>';
-
+    
     return html;
+}
+
+// ===== FUNGSI TOGGLE ALASAN =====
+function toggleReason(id) {
+    var el = document.getElementById(id);
+    if (el) {
+        el.classList.toggle('show');
+    }
 }
 
 function lihatHasil() {
     tampilkanHasilOtomatis();
 }
 
+// ===== CETAK HASIL (DIPERBAIKI UNTUK MENAMPILKAN ALASAN) =====
 function cetakHasil() {
     var source = document.getElementById('res');
     if (!source || !source.innerHTML.trim() || source.innerHTML.indexOf('⚠️') !== -1 || source.innerHTML.indexOf('❌') !== -1) {
@@ -1157,45 +1237,57 @@ function cetakHasil() {
     var totalCount = students.length;
     var w = window.open('', '_blank', 'width=900,height=700');
     if (!w) { alert('⚠️ Izinkan pop-up.'); return; }
+    
+    // Ambil konten hasil dan pastikan semua alasan terlihat untuk cetak
+    var contentHTML = source.innerHTML;
+    // Ganti semua toggle dengan konten yang sudah terbuka untuk cetak
+    contentHTML = contentHTML.replace(/<span class="reason-toggle"[^>]*>.*?<\/span>/g, '');
+    contentHTML = contentHTML.replace(/<div id="reason-[^"]+" class="reason-detail"/g, '<div class="reason-detail" style="display:block!important;"');
+    
     w.document.write('<!doctype html><html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">');
     w.document.write('<title>Hasil Sosiometri ' + code + '</title><style>');
     w.document.write('*{box-sizing:border-box;margin:0;padding:0}');
-    w.document.write('body{font-family:Arial,sans-serif;font-size:8px;padding:4mm;background:#fff;color:#1a2a3a;margin:0}');
-    w.document.write('.print-header{text-align:center;border-bottom:2px solid #123a6f;padding-bottom:3px;margin-bottom:5px}');
-    w.document.write('.print-header h1{font-size:14px;color:#123a6f;margin:0}');
-    w.document.write('.print-header h2{font-size:10px;font-weight:400;color:#4a5d70;margin:2px 0}');
-    w.document.write('.print-meta{display:flex;justify-content:center;gap:12px;font-size:7px;color:#6b7d90;margin-top:2px;flex-wrap:wrap}');
+    w.document.write('body{font-family:Arial,sans-serif;font-size:7px;padding:3mm;background:#fff;color:#1a2a3a;margin:0}');
+    w.document.write('.print-header{text-align:center;border-bottom:2px solid #123a6f;padding-bottom:3px;margin-bottom:4px}');
+    w.document.write('.print-header h1{font-size:13px;color:#123a6f;margin:0}');
+    w.document.write('.print-header h2{font-size:9px;font-weight:400;color:#4a5d70;margin:2px 0}');
+    w.document.write('.print-meta{display:flex;justify-content:center;gap:10px;font-size:6px;color:#6b7d90;margin-top:2px;flex-wrap:wrap}');
     w.document.write('.print-meta strong{color:#123a6f}');
-    w.document.write('table{width:100%;border-collapse:collapse;font-size:7.5px;margin-top:4px}');
-    w.document.write('th{background:#123a6f;color:#fff;padding:2px 3px;text-align:center;font-weight:700;font-size:6.5px;text-transform:uppercase;letter-spacing:0.3px}');
+    w.document.write('table{width:100%;border-collapse:collapse;font-size:6.5px;margin-top:3px}');
+    w.document.write('th{background:#123a6f;color:#fff;padding:2px 3px;text-align:center;font-weight:700;font-size:5.5px;text-transform:uppercase;letter-spacing:0.3px}');
     w.document.write('td{padding:2px 3px;border-bottom:1px solid #e8edf2;text-align:center;vertical-align:middle}');
     w.document.write('.name-col{text-align:left;font-weight:600;padding-left:4px}');
-    w.document.write('.rank-badge{display:inline-block;min-width:14px;height:14px;line-height:14px;border-radius:50%;background:#eef2f6;color:#123a6f;font-weight:700;font-size:6.5px;text-align:center}');
+    w.document.write('.rank-badge{display:inline-block;min-width:12px;height:12px;line-height:12px;border-radius:50%;background:#eef2f6;color:#123a6f;font-weight:700;font-size:5.5px;text-align:center}');
     w.document.write('.rank-1{background:#f4b400;color:#fff}');
     w.document.write('.rank-2{background:#b8c8d8;color:#fff}');
     w.document.write('.rank-3{background:#d9b382;color:#fff}');
-    w.document.write('.count{display:inline-block;background:#eaf1f9;padding:0 4px;border-radius:4px;font-weight:700;font-size:8px;color:#123a6f;min-width:16px}');
+    w.document.write('.count{display:inline-block;background:#eaf1f9;padding:0 3px;border-radius:3px;font-weight:700;font-size:7px;color:#123a6f;min-width:14px}');
     w.document.write('.count-low{background:#fde8ec;color:#b84a5a}');
-    w.document.write('.total-col{font-weight:900;color:#123a6f;font-size:9px}');
-    w.document.write('.result-footer{margin-top:4px;font-size:5.5px;color:#8a9daf;text-align:center;border-top:1px solid #d9e4ef;padding-top:3px}');
-    w.document.write('.summary-bar{display:flex;justify-content:space-between;background:#f6f9fc;padding:2px 6px;border-radius:3px;font-size:7px;color:#4a5d70;margin-bottom:3px;border:1px solid #d9e4ef}');
-    w.document.write('.summary-bar strong{color:#123a6f}');
-    w.document.write('@page{size:A4 landscape;margin:4mm}');
+    w.document.write('.total-col{font-weight:900;color:#123a6f;font-size:8px}');
+    w.document.write('.reason-detail{display:block!important;border:1px solid #d9e4ef;border-radius:3px;padding:2px 4px;margin:2px 0;font-size:6px;background:#f6f9fc;text-align:left}');
+    w.document.write('.reason-detail .from{font-weight:700;color:#123a6f}');
+    w.document.write('.reason-detail .reason-text{color:#4a6a8a}');
+    w.document.write('.result-footer{margin-top:3px;font-size:5px;color:#8a9daf;text-align:center;border-top:1px solid #d9e4ef;padding-top:2px}');
+    w.document.write('.result-head{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;padding:2px 6px;background:#eaf1f9;border-radius:3px;margin-bottom:3px;font-size:8px}');
+    w.document.write('.result-head .info{color:#4a6a8a}');
+    w.document.write('.result-head .info strong{color:#123a6f}');
+    w.document.write('.reason-toggle{display:none!important}');
+    w.document.write('.no-print{display:none!important}');
+    w.document.write('@page{size:A4 landscape;margin:3mm}');
     w.document.write('@media print{body{padding:2mm}.no-print{display:none!important}table{page-break-inside:auto}tr{page-break-inside:avoid}}');
+    w.document.write('.reason-cell{font-size:6px;text-align:left;max-width:180px}');
+    w.document.write('.result-head .info{font-size:7px}');
     w.document.write('</style></head><body>');
-    w.document.write('<div class="no-print" style="position:sticky;top:0;background:#fff;padding:3px 0;text-align:center;border-bottom:1px solid #d0dae6;margin-bottom:4px;z-index:10;">');
-    w.document.write('<button onclick="window.print()" style="border:0;border-radius:4px;padding:3px 12px;background:#f4b400;color:#17324d;font-weight:700;cursor:pointer;font-size:9px;">🖨️ CETAK / PDF</button>');
-    w.document.write('<button onclick="window.close()" style="border:0;border-radius:4px;padding:3px 12px;background:#e4edf4;color:#17324d;font-weight:700;cursor:pointer;font-size:9px;margin-left:4px;">✖ Tutup</button></div>');
+    w.document.write('<div class="no-print" style="position:sticky;top:0;background:#fff;padding:2px 0;text-align:center;border-bottom:1px solid #d0dae6;margin-bottom:3px;z-index:10;">');
+    w.document.write('<button onclick="window.print()" style="border:0;border-radius:3px;padding:2px 10px;background:#f4b400;color:#17324d;font-weight:700;cursor:pointer;font-size:8px;">🖨️ CETAK / PDF</button>');
+    w.document.write('<button onclick="window.close()" style="border:0;border-radius:3px;padding:2px 10px;background:#e4edf4;color:#17324d;font-weight:700;cursor:pointer;font-size:8px;margin-left:4px;">✖ Tutup</button></div>');
     w.document.write('<div class="print-header"><h1>📊 HASIL SOSIOMETRI</h1>');
     w.document.write('<h2>' + esc(school) + ' • ' + esc(className) + '</h2>');
     w.document.write('<div class="print-meta"><span>Kode: <strong>' + esc(code) + '</strong></span>');
     w.document.write('<span>PIN: <strong>' + esc(pin) + '</strong></span>');
     w.document.write('<span>' + new Date().toLocaleDateString('id-ID') + '</span>');
     w.document.write('<span>👥 ' + doneCount + '/' + totalCount + ' mengisi</span></div></div>');
-    w.document.write('<div class="summary-bar"><span>❤️ Pertemanan • 🤝 Kerja Sama • ⭐ Kepemimpinan • 🔎 Kurang Nyaman</span>');
-    w.document.write('<span>Total skor = jumlah pemilihan</span></div>');
-    w.document.write(source.innerHTML);
-    w.document.write('<div class="result-footer">🔐 Data rahasia • Hanya untuk Guru BK • Dicetak: ' + new Date().toLocaleString('id-ID') + '</div>');
+    w.document.write(contentHTML);
     w.document.write('</body></html>');
     w.document.close();
     w.focus();
@@ -1270,7 +1362,6 @@ window.addEventListener('DOMContentLoaded', function() {
 if (!checkSession()) {
     showLogin();
 }
-function openPrintPage(){let code=document.getElementById('rcode')?.value.trim()||'';let pin=document.getElementById('rpin')?.value.trim()||'';if(!code||!pin){alert('Masukkan Kode Sesi dan PIN Guru BK terlebih dahulu.');return}let u='cetak-hasil.html?code='+encodeURIComponent(code)+'&pin='+encodeURIComponent(pin);let w=window.open(u,'_blank');if(!w)alert('Izinkan pop-up agar laporan dapat dibuka.')}
 </script>
 </body>
 </html>

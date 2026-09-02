@@ -5,8 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Sosio Digital NaFaS BK</title>
 <!-- Firebase SDK -->
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js">function openPrintPage(){let code=document.getElementById('rcode')?.value.trim()||'';let pin=document.getElementById('rpin')?.value.trim()||'';if(!code||!pin){alert('Masukkan Kode Sesi dan PIN Guru BK terlebih dahulu.');return}let u='cetak-hasil.html?code='+encodeURIComponent(code)+'&pin='+encodeURIComponent(pin);let w=window.open(u,'_blank');if(!w)alert('Izinkan pop-up agar laporan dapat dibuka.')}
-</script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
@@ -177,7 +176,7 @@ button:hover{transform:translateY(-1px)}
 .license-container .success{background:#eaf8f2;color:#0a6b4a;padding:10px;border-radius:6px;font-size:13px;margin-bottom:12px;display:none}
 .license-container .info{background:#fff8df;color:#7a6300;padding:10px;border-radius:6px;font-size:13px;margin-bottom:12px;display:none}
 
-/* ===== STYLE UNTUK INPUT PASSWORD DENGAN IKON MATA (DIPERBAIKI) ===== */
+/* ===== STYLE UNTUK INPUT PASSWORD DENGAN IKON MATA (RAPI DI SAMPING) ===== */
 .password-wrapper {
     position: relative;
     width: 100%;
@@ -185,7 +184,7 @@ button:hover{transform:translateY(-1px)}
 }
 .password-wrapper input {
     width: 100%;
-    padding: 10px 45px 10px 14px !important;
+    padding: 10px 50px 10px 14px !important;
     border: 1px solid #d0ddee;
     border-radius: 8px;
     font-size: 14px;
@@ -199,22 +198,22 @@ button:hover{transform:translateY(-1px)}
 }
 .toggle-password {
     position: absolute;
-    right: 10px;
+    right: 12px;
     top: 50%;
     transform: translateY(-50%);
     background: none;
     border: none;
     font-size: 18px;
     cursor: pointer;
-    color: #8a9aae;
-    padding: 4px 6px;
-    border-radius: 4px;
+    color: #6a8aaa;
+    padding: 0;
     line-height: 1;
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 32px;
-    width: 32px;
+    height: 34px;
+    width: 34px;
+    border-radius: 4px;
     transition: all 0.2s;
 }
 .toggle-password:hover {

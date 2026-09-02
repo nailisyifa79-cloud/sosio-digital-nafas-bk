@@ -5,8 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Sosio Digital NaFaS BK</title>
 <!-- Firebase SDK -->
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js">function openPrintPage(){let code=document.getElementById('rcode')?.value.trim()||'';let pin=document.getElementById('rpin')?.value.trim()||'';if(!code||!pin){alert('Masukkan Kode Sesi dan PIN Guru BK terlebih dahulu.');return}let u='cetak-hasil.html?code='+encodeURIComponent(code)+'&pin='+encodeURIComponent(pin);let w=window.open(u,'_blank');if(!w)alert('Izinkan pop-up agar laporan dapat dibuka.')}
-</script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
@@ -119,7 +118,7 @@ button:hover{transform:translateY(-1px)}
 @keyframes spin{to{transform:rotate(360deg)}}
 @media print{.reason-cell{max-width:300px;min-width:180px;font-size:6.5px}.reason-item{font-size:6.5px;padding:0.5px 0}.reason-item .cat{font-size:5px}.reason-item .reason-text{font-size:6.5px}.table-main td{padding:2px 3px;font-size:7px;border-right:1px solid #ccc}.table-main th{font-size:6px;padding:2px 3px;border-right:1px solid #2a5a8a}.legend-footer{font-size:6.5px;padding:2px 6px;gap:3px 10px}.legend-footer .icon{font-size:9px}}
 
-/* ===== MODE SISWA - AMAN ===== */
+/* ===== MODE SISWA ===== */
 .student-mode-only nav, 
 .student-mode-only #dashboardPanel, 
 .student-mode-only #teacher, 
@@ -178,7 +177,7 @@ button:hover{transform:translateY(-1px)}
 </head>
 <body>
 
-<!-- ===== LISENSI / AKTIVASI ===== -->
+<!-- ===== LISENSI ===== -->
 <div id="licensePage" class="license-container">
     <div class="brand">🔑</div>
     <h1>Sosio Digital <span style="color:#f4b400;">NaFaS BK</span></h1>
@@ -187,10 +186,10 @@ button:hover{transform:translateY(-1px)}
     <div id="licenseSuccess" class="success"></div>
     <div id="licenseInfo" class="info"></div>
     <label>🔑 Kode Lisensi</label>
-    <input type="text" id="licenseKey" placeholder="Masukkan kode lisensi (contoh: NAFAS-2024-A7X9)">
+    <input type="text" id="licenseKey" placeholder="Masukkan kode lisensi" value="NAFAS-2025-GLOBAL-001">
     <button onclick="aktivasiLisensi()">🔓 Aktifkan Aplikasi</button>
     <div class="toggle-link" style="text-align:center;margin-top:14px;font-size:12px;color:#6a8aaa;">
-        💡 Kode lisensi didapatkan setelah pembelian. Hubungi admin jika belum punya.
+        💡 Masukkan kode lisensi yang Anda dapatkan saat pembelian.
     </div>
 </div>
 
@@ -222,7 +221,7 @@ button:hover{transform:translateY(-1px)}
     </div>
 </div>
 
-<!-- ===== APLIKASI UTAMA ===== -->
+<!-- ===== APLIKASI ===== -->
 <div id="appPage" style="display:none;width:100%;max-width:1100px;margin:auto;">
     <header>
         <div class="wrap flex-header">
@@ -354,7 +353,7 @@ firebase.initializeApp(firebaseConfig);
 var db = firebase.firestore();
 
 // ============================================================
-// SISTEM LISENSI
+// SISTEM LISENSI - 1 KODE GLOBAL
 // ============================================================
 var LISENSI_KEY = 'NAFAS_LICENSE';
 
@@ -365,13 +364,9 @@ function saveLicense(key) {
     localStorage.setItem(LISENSI_KEY, key);
 }
 
-// DAFTAR KODE LISENSI YANG VALID (Anda bisa tambahkan sendiri)
+// ===== 1 KODE GLOBAL UNTUK SEMUA PEMBELI =====
 var VALID_LICENSES = [
-    'NAFAS-2024-A7X9',
-    'NAFAS-2024-B8Y1',
-    'NAFAS-2024-C9Z2',
-    'NAFAS-2025-D1A3',
-    'NAFAS-2025-E2B4'
+    'NAFAS-2025-GLOBAL-001'
 ];
 
 function aktivasiLisensi() {
@@ -390,7 +385,6 @@ function aktivasiLisensi() {
         return;
     }
     
-    // Cek apakah kode valid
     var valid = false;
     for (var i = 0; i < VALID_LICENSES.length; i++) {
         if (VALID_LICENSES[i] === key) {
@@ -405,7 +399,6 @@ function aktivasiLisensi() {
         return;
     }
     
-    // Simpan lisensi
     saveLicense(key);
     successEl.textContent = '✅ Aktivasi berhasil! Silakan login.';
     successEl.style.display = 'block';
@@ -1529,10 +1522,8 @@ function resetAllData() {
     var hash = window.location.hash;
     if (hash && hash.indexOf('#sesi=') === 0) {
         var kodeSesi = decodeURIComponent(hash.substring(6));
-        // Cek apakah sudah ada lisensi
         var license = getLicense();
         if (!license) {
-            // Tampilkan halaman lisensi dulu
             document.getElementById('licensePage').style.display = 'block';
             document.getElementById('loginPage').style.display = 'none';
             document.getElementById('appPage').style.display = 'none';
@@ -1569,7 +1560,6 @@ function resetAllData() {
 // ============================================================
 var license = getLicense();
 if (license) {
-    // Sudah ada lisensi, langsung ke login
     document.getElementById('licensePage').style.display = 'none';
     if (window.location.hash.indexOf('#sesi=') !== 0) {
         if (!checkSession()) {
@@ -1579,13 +1569,11 @@ if (license) {
         }
     }
 } else {
-    // Belum ada lisensi, tampilkan halaman aktivasi
     if (window.location.hash.indexOf('#sesi=') !== 0) {
         document.getElementById('licensePage').style.display = 'block';
         document.getElementById('loginPage').style.display = 'none';
         document.getElementById('appPage').style.display = 'none';
     } else {
-        // Jika ada hash sesi tapi belum lisensi, tetap tampilkan lisensi dulu
         document.getElementById('licensePage').style.display = 'block';
         document.getElementById('loginPage').style.display = 'none';
         document.getElementById('appPage').style.display = 'none';

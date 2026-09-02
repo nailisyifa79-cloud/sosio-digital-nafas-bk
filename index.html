@@ -463,22 +463,19 @@ function page(id) {
         renderSessionList();
     }
     if (id === 'result') {
-        console.log('📌 Tab Hasil diklik, sesiAktif:', sesiAktif);
         if (sesiAktif) {
             document.getElementById('rcode').value = sesiAktif.code || '';
             document.getElementById('rpin').value = sesiAktif.pin || '';
-            console.log('📌 Kode:', sesiAktif.code, 'PIN:', sesiAktif.pin);
             setTimeout(function() {
                 tampilkanHasilOtomatis();
             }, 500);
         } else {
             document.getElementById('res').innerHTML = '<div class="notice">ℹ️ Belum ada sesi yang dipilih. Buka sesi dulu.</div>';
-            console.log('📌 Tidak ada sesi aktif');
         }
     }
 }
 
-// ===== TAMPILKAN HASIL OTOMATIS (DIPERBAIKI) =====
+// ===== TAMPILKAN HASIL OTOMATIS =====
 function tampilkanHasilOtomatis() {
     var code = document.getElementById('rcode').value.trim();
     var pin = document.getElementById('rpin').value.trim();
@@ -486,30 +483,24 @@ function tampilkanHasilOtomatis() {
     console.log('🔍 Cek Hasil - Kode:', code, 'PIN:', pin);
 
     if (!code || !pin) {
-        document.getElementById('res').innerHTML = '<div class="notice">ℹ️ Masukkan kode sesi dan PIN.</div>';
+        document.getElementById('res').innerHTML = '<div class="error">⚠️ Kode atau PIN kosong. Pastikan sesi sudah dibuat.</div>';
         return;
     }
 
     var sessionData = getSessionByCode(code);
     
     if (!sessionData) {
-        document.getElementById('res').innerHTML = '<div class="error">❌ Sesi dengan kode <b>' + code + '</b> tidak ditemukan.</div>';
-        console.log('❌ Sesi tidak ditemukan untuk kode:', code);
+        document.getElementById('res').innerHTML = '<div class="error">❌ Sesi dengan kode <b>' + code + '</b> tidak ditemukan. Buat sesi dulu!</div>';
         return;
     }
-
-    console.log('✅ Sesi ditemukan:', sessionData.code, 'PIN di data:', sessionData.pin);
 
     if (sessionData.pin !== pin) {
         document.getElementById('res').innerHTML = '<div class="error">❌ PIN salah. PIN yang benar: <b>' + sessionData.pin + '</b></div>';
-        console.log('❌ PIN salah. PIN di data:', sessionData.pin, 'PIN input:', pin);
         return;
     }
 
-    console.log('✅ PIN cocok! Menampilkan hasil...');
     var hasilHTML = renderHasil(sessionData);
     document.getElementById('res').innerHTML = hasilHTML;
-    console.log('✅ Hasil ditampilkan');
 }
 
 // ===== RENDER SESSION LIST =====
@@ -1025,23 +1016,31 @@ function simpanPaper() {
 }
 
 // ============================================================
-// HASIL (DIPERBAIKI)
+// HASIL (DIPERBAIKI - MENERIMA DUA FORMAT DATA)
 // ============================================================
 function renderHasil(data) {
     console.log('📊 renderHasil dipanggil dengan data:', data);
-    
-    var rs = data.responses || [];
-    var st = data.session.students || [];
-    var className = data.session.className || '';
-    var code = data.session.code || '';
-    var school = data.session.school || '';
-    
-    console.log('📊 Jumlah siswa:', st.length, 'Jumlah respons:', rs.length);
-    
-    if (st.length === 0) {
-        return '<div class="notice">ℹ️ Belum ada siswa dalam sesi ini.</div>';
+
+    // --- PERBAIKAN UTAMA: Cek format data ---
+    // Jika data memiliki properti 'session', ambil dari dalamnya
+    var sessionData = data;
+    if (data.session) {
+        sessionData = data.session;
     }
     
+    var rs = sessionData.responses || [];
+    var st = sessionData.students || [];
+    var className = sessionData.className || '';
+    var code = sessionData.code || '';
+    var school = sessionData.school || '';
+
+    console.log('📊 Data setelah normalisasi:', { students: st.length, responses: rs.length });
+
+    if (!st || st.length === 0) {
+        return '<div class="notice">ℹ️ Belum ada siswa dalam sesi ini.</div>';
+    }
+
+    // Hitung perolehan suara
     var counts = { heart: {}, coop: {}, lead: {}, uncomfortable: {} };
     for (var i = 0; i < st.length; i++) {
         var id = st[i].id;
@@ -1050,7 +1049,7 @@ function renderHasil(data) {
         counts.lead[id] = 0;
         counts.uncomfortable[id] = 0;
     }
-    
+
     for (var j = 0; j < rs.length; j++) {
         var x = rs[j];
         var categories = ['heart', 'coop', 'lead', 'uncomfortable'];
@@ -1064,16 +1063,17 @@ function renderHasil(data) {
             }
         }
     }
-    
+
+    // Buat daftar siswa dengan skor
     var respondedIds = {};
     for (var m = 0; m < rs.length; m++) {
         respondedIds[rs[m].respondent] = true;
     }
-    
+
     var sorted = [];
     for (var n = 0; n < st.length; n++) {
         var s = st[n];
-        var total = (counts.heart[s.id] || 0) + (counts.coop[s.id] || 0) + 
+        var total = (counts.heart[s.id] || 0) + (counts.coop[s.id] || 0) +
                     (counts.lead[s.id] || 0) + (counts.uncomfortable[s.id] || 0);
         sorted.push({
             id: s.id,
@@ -1086,15 +1086,17 @@ function renderHasil(data) {
             status: respondedIds[s.id] ? '✅ Sudah' : '⏳ Belum'
         });
     }
-    
+
+    // Urutkan berdasarkan total tertinggi
     sorted.sort(function(a, b) {
         if (b.total !== a.total) return b.total - a.total;
         return a.name.localeCompare(b.name, 'id');
     });
-    
+
     var totalResponded = rs.length;
     var totalStudents = st.length;
 
+    // Buat HTML tabel
     var html = '<div class="result-head">';
     html += '<div class="info"><strong>' + esc(school) + '</strong> • ' + esc(className) + '</div>';
     html += '<div class="info">📊 ' + totalResponded + '/' + totalStudents + ' siswa mengisi</div>';
@@ -1104,7 +1106,7 @@ function renderHasil(data) {
     html += '<th style="width:28px;">❤️</th><th style="width:28px;">🤝</th>';
     html += '<th style="width:28px;">⭐</th><th style="width:28px;">🔎</th>';
     html += '<th style="width:32px;">Total</th><th style="width:50px;">Status</th></tr></thead><tbody>';
-    
+
     for (var o = 0; o < sorted.length; o++) {
         var s = sorted[o];
         var rankClass = '';
@@ -1130,7 +1132,7 @@ function renderHasil(data) {
     }
     html += '</tbody></table></div>';
     html += '<div class="result-footer">🔐 Khusus Guru BK • Dicetak: ' + new Date().toLocaleDateString('id-ID') + '</div>';
-    
+
     return html;
 }
 
@@ -1268,7 +1270,6 @@ window.addEventListener('DOMContentLoaded', function() {
 if (!checkSession()) {
     showLogin();
 }
-function openPrintPage(){let code=document.getElementById('rcode')?.value.trim()||'';let pin=document.getElementById('rpin')?.value.trim()||'';if(!code||!pin){alert('Masukkan Kode Sesi dan PIN Guru BK terlebih dahulu.');return}let u='cetak-hasil.html?code='+encodeURIComponent(code)+'&pin='+encodeURIComponent(pin);let w=window.open(u,'_blank');if(!w)alert('Izinkan pop-up agar laporan dapat dibuka.')}
 </script>
 </body>
 </html>

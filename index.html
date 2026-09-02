@@ -114,12 +114,23 @@ button:hover{transform:translateY(-1px)}
 .legend-footer .item{display:flex;align-items:center;gap:3px}
 .legend-footer .icon{font-size:11px}
 
+/* ===== MODE SISWA - TANPA LOGIN & TANPA AKSES GURU ===== */
+.student-mode-only nav, .student-mode-only #dashboardPanel, 
+.student-mode-only #teacher, .student-mode-only #paper, .student-mode-only #result,
+.student-mode-only .btn-logout, .student-mode-only #userDisplay,
+.student-mode-only .flex-header > div:last-child { display: none !important; }
+.student-mode-only #student { display: block !important; }
+.student-mode-only #student .hidden { display: block !important; }
+.student-mode-only header { border-radius: 10px 10px 0 0; }
+.student-mode-only .brand { font-size: 16px; }
+.student-mode-only .tag { font-size: 9px; }
+
 @media print{.reason-cell{max-width:300px;min-width:180px;font-size:6.5px}.reason-item{font-size:6.5px;padding:0.5px 0}.reason-item .cat{font-size:5px}.reason-item .reason-text{font-size:6.5px}.table-main td{padding:2px 3px;font-size:7px}.table-main th{font-size:6px;padding:2px 3px}.legend-footer{font-size:6.5px;padding:2px 6px;gap:3px 10px}.legend-footer .icon{font-size:9px}}
 </style>
 </head>
 <body>
 
-<!-- ===== LOGIN ===== -->
+<!-- ===== LOGIN (HANYA UNTUK GURU) ===== -->
 <div id="loginPage" class="login-container">
     <div class="brand">🌟</div>
     <h1>Sosio Digital <span style="color:#f4b400;">NaFaS BK</span></h1>
@@ -131,7 +142,7 @@ button:hover{transform:translateY(-1px)}
         <input type="email" id="loginEmail" placeholder="Masukkan email">
         <label>🔒 Password</label>
         <input type="password" id="loginPassword" placeholder="Masukkan password">
-        <button onclick="login()">🚀 Masuk</button>
+        <button onclick="login()">🚀 Masuk (Guru BK)</button>
         <div class="toggle-link">Belum punya akun? <a onclick="showRegister()">Daftar di sini</a></div>
     </div>
     <div id="formRegister" style="display:none;">
@@ -205,11 +216,14 @@ button:hover{transform:translateY(-1px)}
                 <div id="session" class="panel"></div>
             </section>
 
+            <!-- ===== MODE SISWA (TANPA NAVIGASI GURU) ===== -->
             <section id="student" class="hidden">
                 <div class="panel"><h2>📱 Pengisian Siswa</h2>
-                    <div class="notice">Hasil sosiometri hanya dapat dilihat Guru BK.</div>
-                    <label>Kode Sesi</label><input id="scode" placeholder="Masukkan kode sesi">
-                    <label>Nama Kamu</label><select id="me"></select>
+                    <div class="notice">✅ Hasil sosiometri hanya dapat dilihat oleh Guru BK. Jawaban Anda rahasia.</div>
+                    <label>Kode Sesi</label>
+                    <input id="scode" placeholder="Masukkan kode sesi dari guru" readonly style="background:#f0f4f8;font-weight:bold;color:#123a6f;">
+                    <label>Pilih Nama Kamu</label>
+                    <select id="me"></select>
                     <div id="q"></div>
                     <div class="actions"><button class="green" onclick="kirimJawaban()">📨 Kirim Jawaban</button></div>
                     <div id="smsg"></div>
@@ -361,6 +375,7 @@ function checkSession() {
 // ============================================================
 var KEY_SESI = 'NAFAS_SOSIO_SESSIONS';
 var sesiAktif = null;
+var isStudentMode = false;
 
 try {
     var saved = localStorage.getItem('NAFAS_SOSIO_CURRENT_SESSION');
@@ -378,6 +393,29 @@ function initApp() {
     updateDashboard();
     renderSessionList();
     showTeacherSession();
+    // Cek jika mode siswa
+    var hash = window.location.hash;
+    if (hash.indexOf('#sesi=') === 0) {
+        enableStudentMode();
+    }
+}
+
+function enableStudentMode() {
+    isStudentMode = true;
+    document.getElementById('appPage').classList.add('student-mode-only');
+    // Pindah ke tab siswa
+    page('student');
+    var hash = window.location.hash;
+    if (hash.indexOf('#sesi=') === 0) {
+        var code = decodeURIComponent(hash.substring(6));
+        document.getElementById('scode').value = code;
+        // Load data sesi
+        var sessionData = getSessionByCode(code);
+        if (sessionData) {
+            sesiAktif = sessionData;
+            loadStudent();
+        }
+    }
 }
 
 function updateDashboard() {
@@ -447,6 +485,11 @@ function generatePin() { return String(Math.floor(1000 + Math.random() * 9000));
 
 // ===== NAVIGASI =====
 function page(id) {
+    // Jika mode siswa, hanya student yang boleh diakses
+    if (isStudentMode && id !== 'student') {
+        return;
+    }
+    
     var sections = ['teacher', 'student', 'paper', 'result'];
     for (var i = 0; i < sections.length; i++) {
         var el = document.getElementById(sections[i]);
@@ -614,7 +657,7 @@ function showTeacherSession() {
     el.innerHTML += '<div><b>🔐 PIN GURU BK</b><div class="big">' + esc(sesiAktif.pin) + '</div>';
     el.innerHTML += '<button class="soft" onclick="copyText(\'' + sesiAktif.pin + '\')">📋 Salin PIN</button></div></div>';
     el.innerHTML += '<div class="share-siswa"><h3 style="margin:0 0 6px;color:#0d6b4a;">📱 LINK UNTUK SISWA (KLIK LANGSUNG)</h3>';
-    el.innerHTML += '<p style="font-size:11px;color:#4a6a8a;margin:0 0 8px;">Siswa cukup klik link ini — <b>tanpa perlu memasukkan kode</b>.</p>';
+    el.innerHTML += '<p style="font-size:11px;color:#4a6a8a;margin:0 0 8px;">Siswa cukup klik link ini — <b>tanpa perlu login</b> dan <b>tidak bisa melihat data guru</b>.</p>';
     el.innerHTML += '<div class="shareline"><input id="studentLink" readonly value="' + esc(studentLink) + '" style="flex:1;min-width:200px;padding:8px;border:1px solid #b8d4c8;border-radius:6px;background:#fafffd;font-size:12px;">';
     el.innerHTML += '<button class="green" onclick="copyText(document.getElementById(\'studentLink\').value)" style="padding:8px 16px;">📋 Salin Link</button>';
     el.innerHTML += '<button class="gold" onclick="bagikanWA()" style="padding:8px 16px;">💬 Bagikan WA</button></div>';
@@ -627,7 +670,7 @@ function showTeacherSession() {
 function bagikanWA() {
     var linkInput = document.getElementById('studentLink');
     if (!linkInput) return;
-    var pesan = encodeURIComponent('📝 *Sosiometri Digital NaFaS BK*\n\nSilakan klik link berikut untuk mengisi:\n' + linkInput.value + '\n\n🙏 Isi dengan jujur ya!');
+    var pesan = encodeURIComponent('📝 *Sosiometri Digital NaFaS BK*\n\nSilakan klik link berikut untuk mengisi:\n' + linkInput.value + '\n\n🙏 Isi dengan jujur ya! Jawaban Anda rahasia.');
     window.open('https://wa.me/?text=' + pesan, '_blank');
 }
 
@@ -718,26 +761,19 @@ function opts() {
 }
 
 function loadStudent() {
-    var hash = window.location.hash;
-    var code = '';
-    if (hash.indexOf('#sesi=') === 0) {
-        code = decodeURIComponent(hash.substring(6));
-    } else {
-        code = document.getElementById('scode').value.trim();
-    }
+    var code = document.getElementById('scode').value.trim();
     if (!code) {
-        document.getElementById('q').innerHTML = '<div class="notice">📝 Masukkan kode sesi atau buka link dari guru.</div>';
+        document.getElementById('q').innerHTML = '<div class="notice">📝 Masukkan kode sesi dari guru.</div>';
         document.getElementById('me').innerHTML = '<option value="">— Pilih nama —</option>';
         return;
     }
     var sessionData = getSessionByCode(code);
     if (!sessionData) {
-        document.getElementById('q').innerHTML = '<div class="error">❌ Sesi tidak ditemukan. Periksa kode atau link.</div>';
+        document.getElementById('q').innerHTML = '<div class="error">❌ Sesi tidak ditemukan. Periksa kode.</div>';
         document.getElementById('me').innerHTML = '<option value="">— Pilih nama —</option>';
         return;
     }
     sesiAktif = sessionData;
-    document.getElementById('scode').value = code;
     document.getElementById('me').innerHTML = opts();
     document.getElementById('q').innerHTML =
         block('heart', '❤️ Pertemanan', 'Pilih 2 teman yang paling nyaman diajak berteman.', 2) +
@@ -814,10 +850,10 @@ function kirimJawaban() {
     }
     saveSessions(sessions);
     pesan('smsg', '✅ Jawaban berhasil disimpan! 🙏', 'ok');
-    var allSelects = document.querySelectorAll('.ch');
-    for (var p = 0; p < allSelects.length; p++) allSelects[p].value = '';
-    var allTextareas = document.querySelectorAll('.rs');
-    for (var q = 0; q < allTextareas.length; q++) allTextareas[q].value = '';
+    document.querySelectorAll('.ch').forEach(function(x) { x.value = ''; });
+    document.querySelectorAll('.rs').forEach(function(x) { x.value = ''; });
+    document.getElementById('me').value = '';
+    document.getElementById('q').innerHTML = '<div class="ok">✅ Terima kasih! Jawabanmu sudah tersimpan.</div>';
 }
 
 // ============================================================
@@ -857,8 +893,6 @@ function renderPaperRows() {
     html += '<h3 style="font-size:12px;margin:0 0 4px;color:#123a6f;">🔎 RELASI KURANG NYAMAN</h3>';
     html += '<p style="font-size:10px;margin:2px 0;color:#555;">Pilih 1 teman yang paling sulit diajak interaksi.</p>';
     html += '<div style="font-size:9px;margin:4px 0;padding:2px 0;">Nama: _________________ &nbsp;&nbsp; Alasan: _________________</div></div>';
-    
-    // LEGENDA DI BAWAH LEMBAR SISWA
     html += '<div style="text-align:center;font-size:8px;color:#647687;margin-top:8px;border-top:1px solid #d9e4ef;padding-top:4px;">';
     html += '📌 <b>Keterangan:</b> ❤️ = Pertemanan &nbsp;|&nbsp; 🤝 = Kerja Sama &nbsp;|&nbsp; ⭐ = Kepemimpinan &nbsp;|&nbsp; 🔎 = Kurang Nyaman';
     html += '</div>';
@@ -903,7 +937,6 @@ function muatPaper() {
     document.getElementById('paperEntry').innerHTML = entryHtml;
 }
 
-// ===== FUNGSI CETAK LEMBAR SISWA =====
 function cetakLembarBaru() {
     if (!sesiAktif) {
         alert('⚠️ Pilih sesi dulu.');
@@ -961,7 +994,6 @@ function cetakLembarBaru() {
     htmlContent += '<div class="line">Nama: _________________ &nbsp;&nbsp; Alasan: _________________</div></div>\n';
     htmlContent += '<div class="question-block"><h3>🔎 RELASI KURANG NYAMAN</h3><p>Pilih 1 teman yang paling sulit diajak interaksi.</p>';
     htmlContent += '<div class="line">Nama: _________________ &nbsp;&nbsp; Alasan: _________________</div></div>\n';
-    // LEGENDA DI BAWAH (FOOTER)
     htmlContent += '<div style="text-align:center;font-size:9px;color:#647687;margin-top:12px;border-top:1px solid #d9e4ef;padding-top:6px;">';
     htmlContent += '📌 <b>Keterangan:</b> ❤️ = Pertemanan &nbsp;|&nbsp; 🤝 = Kerja Sama &nbsp;|&nbsp; ⭐ = Kepemimpinan &nbsp;|&nbsp; 🔎 = Kurang Nyaman';
     htmlContent += '</div>';
@@ -1041,7 +1073,7 @@ function simpanPaper() {
 }
 
 // ============================================================
-// HASIL (FINAL - LEGENDA DI BAWAH)
+// HASIL
 // ============================================================
 function renderHasil(data) {
     var sessionData = data;
@@ -1127,7 +1159,6 @@ function renderHasil(data) {
         });
     }
 
-    // URUTKAN DARI TOTAL TERTINGGI KE TERENDAH
     sorted.sort(function(a, b) {
         if (b.total !== a.total) return b.total - a.total;
         return a.name.localeCompare(b.name, 'id');
@@ -1136,7 +1167,6 @@ function renderHasil(data) {
     var totalResponded = rs.length;
     var totalStudents = st.length;
 
-    // Buat HTML dengan alasan langsung terlihat
     var html = '<div class="result-head">';
     html += '<div class="info"><strong>' + esc(school) + '</strong> • ' + esc(className) + '</div>';
     html += '<div class="info">📊 ' + totalResponded + '/' + totalStudents + ' siswa mengisi</div>';
@@ -1166,7 +1196,6 @@ function renderHasil(data) {
             else if (o === 2) rankClass = 'rank-3';
         }
         
-        // Fungsi untuk membuat daftar alasan langsung terlihat
         function buildReasonList(reasonList, catLabel) {
             if (!reasonList || reasonList.length === 0) {
                 return '<span class="reason-empty">-</span>';
@@ -1200,7 +1229,6 @@ function renderHasil(data) {
     }
     html += '</tbody></table></div>';
     
-    // LEGENDA DI BAWAH TABEL (SEBELUM FOOTER)
     html += '<div class="legend-footer">';
     html += '<span style="font-weight:700;">📌 Keterangan Simbol:</span>';
     html += '<span class="item"><span class="icon">❤️</span> Pertemanan</span>';
@@ -1220,9 +1248,6 @@ function lihatHasil() {
     tampilkanHasilOtomatis();
 }
 
-// ============================================================
-// CETAK HASIL - LANGSUNG MUNCUL DIALOG PRINT/SIMPAN PDF
-// ============================================================
 function cetakHasil() {
     var source = document.getElementById('res');
     if (!source || !source.innerHTML.trim() || source.innerHTML.indexOf('⚠️') !== -1 || source.innerHTML.indexOf('❌') !== -1) {
@@ -1360,26 +1385,42 @@ function resetAllData() {
 }
 
 // ============================================================
-// DETEKSI URL HASH UNTUK SISWA
+// DETEKSI URL HASH UNTUK SISWA - TANPA LOGIN
 // ============================================================
 window.addEventListener('hashchange', function() {
-    if (!document.getElementById('student').classList.contains('hidden')) {
-        loadStudent();
+    var hash = window.location.hash;
+    if (hash.indexOf('#sesi=') === 0) {
+        // Jika belum login, langsung masuk ke mode siswa
+        if (!getSession() || !getSession().email) {
+            // Tampilkan appPage dengan mode siswa
+            document.getElementById('loginPage').style.display = 'none';
+            document.getElementById('appPage').style.display = 'block';
+            enableStudentMode();
+        } else {
+            // Jika sudah login, tetap di mode normal
+            if (!document.getElementById('student').classList.contains('hidden')) {
+                loadStudent();
+            }
+        }
     }
 });
 
 window.addEventListener('DOMContentLoaded', function() {
     var hash = window.location.hash;
     if (hash.indexOf('#sesi=') === 0) {
-        page('student');
-        setTimeout(loadStudent, 300);
+        // Langsung ke mode siswa tanpa login
+        document.getElementById('loginPage').style.display = 'none';
+        document.getElementById('appPage').style.display = 'block';
+        enableStudentMode();
+    } else if (!checkSession()) {
+        showLogin();
     }
 });
 
-if (!checkSession()) {
+// Jika tidak ada session dan tidak ada hash, tampilkan login
+if (!checkSession() && window.location.hash.indexOf('#sesi=') !== 0) {
     showLogin();
 }
-function openPrintPage(){let code=document.getElementById('rcode')?.value.trim()||'';let pin=document.getElementById('rpin')?.value.trim()||'';if(!code||!pin){alert('Masukkan Kode Sesi dan PIN Guru BK terlebih dahulu.');return}let u='cetak-hasil.html?code='+encodeURIComponent(code)+'&pin='+encodeURIComponent(pin);let w=window.open(u,'_blank');if(!w)alert('Izinkan pop-up agar laporan dapat dibuka.')}
 </script>
 </body>
 </html>

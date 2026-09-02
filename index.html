@@ -5,8 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Sosio Digital NaFaS BK</title>
 <!-- Firebase SDK -->
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js">function openPrintPage(){let code=document.getElementById('rcode')?.value.trim()||'';let pin=document.getElementById('rpin')?.value.trim()||'';if(!code||!pin){alert('Masukkan Kode Sesi dan PIN Guru BK terlebih dahulu.');return}let u='cetak-hasil.html?code='+encodeURIComponent(code)+'&pin='+encodeURIComponent(pin);let w=window.open(u,'_blank');if(!w)alert('Izinkan pop-up agar laporan dapat dibuka.')}
-</script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
@@ -174,6 +173,14 @@ button:hover{transform:translateY(-1px)}
 .license-container .error{background:#fde8ec;color:#a04050;padding:10px;border-radius:6px;font-size:13px;margin-bottom:12px;display:none}
 .license-container .success{background:#eaf8f2;color:#0a6b4a;padding:10px;border-radius:6px;font-size:13px;margin-bottom:12px;display:none}
 .license-container .info{background:#fff8df;color:#7a6300;padding:10px;border-radius:6px;font-size:13px;margin-bottom:12px;display:none}
+
+/* ===== STYLE UNTUK INPUT PASSWORD DENGAN IKON MATA ===== */
+.password-wrapper{position:relative}
+.password-wrapper input{padding-right:45px}
+.toggle-password{position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;font-size:20px;cursor:pointer;color:#6a8aaa;padding:0;width:30px;height:30px;display:flex;align-items:center;justify-content:center;border-radius:50%}
+.toggle-password:hover{background:#eef4fa;color:#1a5a9e}
+.password-hint{font-size:11px;color:#6a8aaa;margin-top:-8px;margin-bottom:10px;padding-left:4px}
+.password-hint span{color:#1a5a9e}
 </style>
 </head>
 <body>
@@ -202,21 +209,38 @@ button:hover{transform:translateY(-1px)}
     <div id="loginError" class="error"></div>
     <div id="loginSuccess" class="success"></div>
     <div id="loginInfo" class="info"></div>
+    
+    <!-- FORM LOGIN -->
     <div id="formLogin">
         <label>📧 Email</label>
         <input type="email" id="loginEmail" placeholder="Masukkan email">
+        
         <label>🔒 Password</label>
-        <input type="password" id="loginPassword" placeholder="Masukkan password">
-        <button onclick="login()">🚀 Masuk (Guru BK)</button>
+        <div class="password-wrapper">
+            <input type="password" id="loginPassword" placeholder="Masukkan password">
+            <button class="toggle-password" onclick="togglePassword('loginPassword', this)" type="button">👁️</button>
+        </div>
+        <div class="password-hint">🔑 Masukkan password Anda</div>
+        
+        <button onclick="login()">🚀 Masuk</button>
         <div class="toggle-link">Belum punya akun? <a onclick="showRegister()">Daftar di sini</a></div>
     </div>
+    
+    <!-- FORM REGISTER -->
     <div id="formRegister" style="display:none;">
         <label>📧 Email</label>
         <input type="email" id="registerEmail" placeholder="Masukkan email">
+        
         <label>🔒 Password</label>
-        <input type="password" id="registerPassword" placeholder="Buat password (min 6 karakter)">
+        <div class="password-wrapper">
+            <input type="password" id="registerPassword" placeholder="Buat password">
+            <button class="toggle-password" onclick="togglePassword('registerPassword', this)" type="button">👁️</button>
+        </div>
+        <div class="password-hint">🔒 <span>Password minimal 6 karakter</span> (huruf, angka, atau simbol)</div>
+        
         <label>📝 Nama Guru BK</label>
         <input type="text" id="registerName" placeholder="Masukkan nama lengkap">
+        
         <button onclick="register()">📝 Daftar</button>
         <div class="toggle-link">Sudah punya akun? <a onclick="showLogin()">Masuk di sini</a></div>
     </div>
@@ -338,6 +362,20 @@ button:hover{transform:translateY(-1px)}
 
 <script>
 // ============================================================
+// FUNGSI TOGGLE PASSWORD (IKON MATA)
+// ============================================================
+function togglePassword(inputId, btn) {
+    var input = document.getElementById(inputId);
+    if (input.type === 'password') {
+        input.type = 'text';
+        btn.textContent = '🙈';
+    } else {
+        input.type = 'password';
+        btn.textContent = '👁️';
+    }
+}
+
+// ============================================================
 // KONFIGURASI FIREBASE
 // ============================================================
 var firebaseConfig = {
@@ -354,7 +392,7 @@ firebase.initializeApp(firebaseConfig);
 var db = firebase.firestore();
 
 // ============================================================
-// SISTEM LISENSI - 1 KODE GLOBAL
+// SISTEM LISENSI
 // ============================================================
 var LISENSI_KEY = 'NAFAS_LICENSE';
 
@@ -365,7 +403,6 @@ function saveLicense(key) {
     localStorage.setItem(LISENSI_KEY, key);
 }
 
-// ===== 1 KODE GLOBAL UNTUK SEMUA PEMBELI =====
 var VALID_LICENSES = [
     'NAFAS-2025-GLOBAL-001'
 ];
@@ -513,7 +550,7 @@ function checkSession() {
 }
 
 // ============================================================
-// APLIKASI UTAMA
+// APLIKASI UTAMA (SAMA SEPERTI SEBELUMNYA, DIKECILKAN AGAR TIDAK TERPOTONG)
 // ============================================================
 var sesiAktif = null;
 var isStudentMode = false;
@@ -808,7 +845,7 @@ function kirimJawaban() {
 }
 
 // ============================================================
-// FUNGSI GURU
+// FUNGSI GURU (SINGKAT)
 // ============================================================
 function buatSesi() {
     var names = document.getElementById('students').value.split('\n').map(function(x) { return x.trim(); }).filter(function(x) { return x !== ''; });
@@ -1557,7 +1594,7 @@ function resetAllData() {
 })();
 
 // ============================================================
-// INISIALISASI - CEK LISENSI
+// INISIALISASI
 // ============================================================
 var license = getLicense();
 if (license) {

@@ -5,7 +5,8 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Sosio Digital NaFaS BK</title>
 <!-- Firebase SDK -->
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js">function openPrintPage(){let code=document.getElementById('rcode')?.value.trim()||'';let pin=document.getElementById('rpin')?.value.trim()||'';if(!code||!pin){alert('Masukkan Kode Sesi dan PIN Guru BK terlebih dahulu.');return}let u='cetak-hasil.html?code='+encodeURIComponent(code)+'&pin='+encodeURIComponent(pin);let w=window.open(u,'_blank');if(!w)alert('Izinkan pop-up agar laporan dapat dibuka.')}
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js">
+function openPrintPage(){let code=document.getElementById('rcode')?.value.trim()||'';let pin=document.getElementById('rpin')?.value.trim()||'';if(!code||!pin){alert('Masukkan Kode Sesi dan PIN Guru BK terlebih dahulu.');return}let u='cetak-hasil.html?code='+encodeURIComponent(code)+'&pin='+encodeURIComponent(pin);let w=window.open(u,'_blank');if(!w)alert('Izinkan pop-up agar laporan dapat dibuka.')}
 </script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
 <style>
@@ -175,20 +176,21 @@ button:hover{transform:translateY(-1px)}
 .license-container .success{background:#eaf8f2;color:#0a6b4a;padding:10px;border-radius:6px;font-size:13px;margin-bottom:12px;display:none}
 .license-container .info{background:#fff8df;color:#7a6300;padding:10px;border-radius:6px;font-size:13px;margin-bottom:12px;display:none}
 
-/* ===== STYLE IKON MATA - POJOK KANAN ===== */
+/* ===== STYLE IKON MATA - TIDAK MENGHALANGI ===== */
 .password-wrapper {
     position: relative;
     width: 100%;
 }
 .password-wrapper input {
     width: 100%;
-    padding: 10px 45px 10px 14px;
+    padding: 10px 40px 10px 14px;
     border: 1px solid #d0ddee;
     border-radius: 8px;
     font-size: 14px;
     background: #fafcfe;
     box-sizing: border-box;
     margin-bottom: 14px;
+    padding-right: 45px; /* Memberi ruang untuk ikon di kanan */
 }
 .password-wrapper input:focus {
     border-color: #1a5a9e;
@@ -197,14 +199,14 @@ button:hover{transform:translateY(-1px)}
 }
 .password-wrapper .toggle-password {
     position: absolute;
-    right: 8px;
-    top: 10px;
+    right: 12px;
+    top: 11px;
     background: none;
     border: none;
     cursor: pointer;
     font-size: 18px;
     color: #94a3b8;
-    padding: 4px 6px;
+    padding: 2px 6px;
     transition: 0.3s;
     border-radius: 6px;
     line-height: 1;
@@ -216,6 +218,141 @@ button:hover{transform:translateY(-1px)}
 .password-wrapper .toggle-password:hover {
     background: rgba(26, 90, 158, 0.08);
     color: #1a5a9e;
+}
+
+/* ===== TOMBOL LUPA PASSWORD ===== */
+.forgot-password-btn {
+    background: none !important;
+    border: none !important;
+    color: #1a5a9e !important;
+    font-size: 12px !important;
+    font-weight: 600 !important;
+    cursor: pointer !important;
+    padding: 0 4px !important;
+    text-decoration: underline !important;
+    display: inline !important;
+    width: auto !important;
+    transform: none !important;
+}
+.forgot-password-btn:hover {
+    color: #0d4a8a !important;
+}
+.forgot-password-container {
+    text-align: right;
+    margin-top: -10px;
+    margin-bottom: 12px;
+}
+.forgot-password-container a {
+    color: #1a5a9e;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+/* ===== MODAL LUPA PASSWORD ===== */
+.modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    z-index: 999;
+    justify-content: center;
+    align-items: center;
+}
+.modal-box {
+    background: #fff;
+    border-radius: 16px;
+    padding: 30px 28px;
+    max-width: 400px;
+    width: 90%;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    position: relative;
+}
+.modal-box h2 {
+    color: #0d2b4f;
+    margin: 0 0 6px 0;
+    font-size: 20px;
+}
+.modal-box .subtitle {
+    color: #6a8aaa;
+    font-size: 13px;
+    margin-bottom: 20px;
+}
+.modal-box label {
+    font-weight: 700;
+    font-size: 13px;
+    color: #2a4a6a;
+    display: block;
+    margin-bottom: 4px;
+}
+.modal-box input {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1px solid #d0ddee;
+    border-radius: 8px;
+    font-size: 14px;
+    background: #fafcfe;
+    margin-bottom: 14px;
+    box-sizing: border-box;
+}
+.modal-box input:focus {
+    border-color: #1a5a9e;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(26,90,158,0.12);
+}
+.modal-box button {
+    width: 100%;
+    padding: 12px;
+    background: #1a5a9e;
+    color: #fff;
+    border: 0;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+.modal-box button:hover {
+    background: #0d4a8a;
+}
+.modal-box .close-btn {
+    position: absolute;
+    top: 12px;
+    right: 16px;
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: #94a3b8;
+    padding: 4px 8px;
+    width: auto;
+    transform: none;
+}
+.modal-box .close-btn:hover {
+    color: #1a5a9e;
+    background: none;
+}
+.modal-box .error {
+    background: #fde8ec;
+    color: #a04050;
+    padding: 10px;
+    border-radius: 6px;
+    font-size: 13px;
+    margin-bottom: 12px;
+    display: none;
+}
+.modal-box .success {
+    background: #eaf8f2;
+    color: #0a6b4a;
+    padding: 10px;
+    border-radius: 6px;
+    font-size: 13px;
+    margin-bottom: 12px;
+    display: none;
 }
 </style>
 </head>
@@ -256,6 +393,10 @@ button:hover{transform:translateY(-1px)}
             <button type="button" class="toggle-password" onclick="togglePassword('loginPassword', this)" aria-label="Tampilkan password">👁️</button>
         </div>
         
+        <div class="forgot-password-container">
+            <a class="forgot-password-btn" onclick="bukaModalLupaPassword()">🔑 Lupa password?</a>
+        </div>
+        
         <button onclick="login()">🚀 Masuk</button>
         <div class="toggle-link">Belum punya akun? <a onclick="showRegister()">Daftar di sini</a></div>
     </div>
@@ -266,7 +407,7 @@ button:hover{transform:translateY(-1px)}
         
         <label>🔒 Password</label>
         <div class="password-wrapper">
-            <input type="password" id="registerPassword" placeholder="Buat password">
+            <input type="password" id="registerPassword" placeholder="Buat password (min 6 karakter)">
             <button type="button" class="toggle-password" onclick="togglePassword('registerPassword', this)" aria-label="Tampilkan password">👁️</button>
         </div>
         
@@ -275,6 +416,23 @@ button:hover{transform:translateY(-1px)}
         
         <button onclick="register()">📝 Daftar</button>
         <div class="toggle-link">Sudah punya akun? <a onclick="showLogin()">Masuk di sini</a></div>
+    </div>
+</div>
+
+<!-- ===== MODAL LUPA PASSWORD ===== -->
+<div id="forgotPasswordModal" class="modal-overlay">
+    <div class="modal-box">
+        <button class="close-btn" onclick="tutupModalLupaPassword()">✕</button>
+        <h2>🔑 Lupa Password</h2>
+        <div class="subtitle">Masukkan email Anda untuk mereset password</div>
+        <div id="forgotError" class="error"></div>
+        <div id="forgotSuccess" class="success"></div>
+        <label>📧 Email</label>
+        <input type="email" id="forgotEmail" placeholder="Masukkan email terdaftar">
+        <button onclick="resetPassword()">📩 Kirim Link Reset</button>
+        <div style="text-align:center;margin-top:12px;font-size:12px;color:#6a8aaa;">
+            Password baru akan dikirim ke email Anda.
+        </div>
     </div>
 </div>
 
@@ -391,7 +549,7 @@ button:hover{transform:translateY(-1px)}
 
 <script>
 // ============================================================
-// FUNGSI TOGGLE PASSWORD (IKON MATA) - POJOK KANAN
+// FUNGSI TOGGLE PASSWORD (IKON MATA) - TIDAK MENGHALANGI
 // ============================================================
 function togglePassword(inputId, btn) {
     var input = document.getElementById(inputId);
@@ -404,6 +562,77 @@ function togglePassword(inputId, btn) {
         btn.textContent = '👁️';
         btn.setAttribute('aria-label', 'Tampilkan password');
     }
+    // Fokus kembali ke input setelah toggle
+    input.focus();
+}
+
+// ============================================================
+// MODAL LUPA PASSWORD
+// ============================================================
+function bukaModalLupaPassword() {
+    document.getElementById('forgotPasswordModal').style.display = 'flex';
+    document.getElementById('forgotEmail').value = document.getElementById('loginEmail').value || '';
+    document.getElementById('forgotError').style.display = 'none';
+    document.getElementById('forgotSuccess').style.display = 'none';
+}
+
+function tutupModalLupaPassword() {
+    document.getElementById('forgotPasswordModal').style.display = 'none';
+}
+
+// Tutup modal jika klik di luar box
+document.addEventListener('click', function(e) {
+    var modal = document.getElementById('forgotPasswordModal');
+    if (e.target === modal) {
+        tutupModalLupaPassword();
+    }
+});
+
+function resetPassword() {
+    var email = document.getElementById('forgotEmail').value.trim();
+    var errorEl = document.getElementById('forgotError');
+    var successEl = document.getElementById('forgotSuccess');
+    
+    errorEl.style.display = 'none';
+    successEl.style.display = 'none';
+    
+    if (!email) {
+        errorEl.textContent = '⚠️ Masukkan email Anda.';
+        errorEl.style.display = 'block';
+        return;
+    }
+    
+    var users = getUsers();
+    if (!users[email]) {
+        errorEl.textContent = '⚠️ Email ' + email + ' tidak terdaftar.';
+        errorEl.style.display = 'block';
+        return;
+    }
+    
+    // Generate password baru (6 karakter acak)
+    var chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+    var newPassword = '';
+    for (var i = 0; i < 8; i++) {
+        newPassword += chars[Math.floor(Math.random() * chars.length)];
+    }
+    
+    // Update password
+    users[email].password = newPassword;
+    saveUsers(users);
+    
+    // Tampilkan password baru
+    successEl.innerHTML = '✅ Password baru Anda: <b>' + newPassword + '</b><br>Silakan gunakan password ini untuk login.';
+    successEl.style.display = 'block';
+    
+    // Isi otomatis ke form login
+    document.getElementById('loginEmail').value = email;
+    document.getElementById('loginPassword').value = newPassword;
+    
+    // Tutup modal setelah 5 detik
+    setTimeout(function() {
+        tutupModalLupaPassword();
+        showLoginSuccess('✅ Password baru telah dibuat. Silakan login.');
+    }, 5000);
 }
 
 // ============================================================

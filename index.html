@@ -109,12 +109,12 @@ button:hover{transform:translateY(-1px)}
 .reason-item .reason-text{color:#4a6a8a;font-style:italic}
 .reason-empty{color:#aaa;font-size:7px;font-style:italic}
 
-/* ===== LEGENDA ===== */
-.legend-box{display:flex;flex-wrap:wrap;gap:6px 16px;padding:6px 10px;background:#f6f9fc;border-radius:6px;border:1px solid #d9e4ef;margin-top:4px;font-size:9px;color:#2a4a6a}
-.legend-box .item{display:flex;align-items:center;gap:4px}
-.legend-box .icon{font-size:13px}
+/* ===== LEGENDA DI BAWAH ===== */
+.legend-footer{display:flex;flex-wrap:wrap;gap:4px 16px;padding:4px 8px;background:#f6f9fc;border-radius:4px;border:1px solid #d9e4ef;margin-top:4px;font-size:8px;color:#2a4a6a;justify-content:center}
+.legend-footer .item{display:flex;align-items:center;gap:3px}
+.legend-footer .icon{font-size:11px}
 
-@media print{.reason-cell{max-width:300px;min-width:180px;font-size:6.5px}.reason-item{font-size:6.5px;padding:0.5px 0}.reason-item .cat{font-size:5px}.reason-item .reason-text{font-size:6.5px}.table-main td{padding:2px 3px;font-size:7px}.table-main th{font-size:6px;padding:2px 3px}.legend-box{font-size:7px;padding:3px 6px;gap:4px 10px}}
+@media print{.reason-cell{max-width:300px;min-width:180px;font-size:6.5px}.reason-item{font-size:6.5px;padding:0.5px 0}.reason-item .cat{font-size:5px}.reason-item .reason-text{font-size:6.5px}.table-main td{padding:2px 3px;font-size:7px}.table-main th{font-size:6px;padding:2px 3px}.legend-footer{font-size:6.5px;padding:2px 6px;gap:3px 10px}.legend-footer .icon{font-size:9px}}
 </style>
 </head>
 <body>
@@ -228,13 +228,6 @@ button:hover{transform:translateY(-1px)}
 
                     <div class="panel" style="background:#f8faff;border:2px solid #f4b400;margin-top:10px;">
                         <h3 style="margin:0 0 6px;color:#b8860b;">📝 ENTRI HASIL SISWA (UNTUK GURU)</h3>
-                        <div style="font-size:9px;color:#4a6a8a;margin-bottom:6px;background:#f6f9fc;padding:4px 8px;border-radius:4px;border:1px solid #d9e4ef;">
-                            <b>📌 Keterangan:</b>
-                            <span style="margin-left:6px;">❤️ = Pertemanan</span>
-                            <span style="margin-left:6px;">🤝 = Kerja Sama</span>
-                            <span style="margin-left:6px;">⭐ = Kepemimpinan</span>
-                            <span style="margin-left:6px;">🔎 = Kurang Nyaman</span>
-                        </div>
                         <div id="paperEntry"></div>
                         <div class="actions">
                             <button class="gold" onclick="muatPaper()">🔄 Muat Entri</button>
@@ -846,16 +839,6 @@ function renderPaperRows() {
     html += '</div></div>';
     html += '<div style="font-size:10px;background:#f6f9fc;border:1px solid #d9e4ef;border-radius:5px;padding:6px;margin-bottom:8px;">';
     html += '<b>📌 Petunjuk:</b> Jawab dengan jujur dan pilih teman yang sesuai dengan pertanyaan.</div>';
-    
-    // Tambahkan legenda di lembar siswa
-    html += '<div style="font-size:9px;background:#f6f9fc;border:1px solid #d9e4ef;border-radius:4px;padding:4px 8px;margin-bottom:6px;display:flex;flex-wrap:wrap;gap:4px 12px;">';
-    html += '<span><b>📌 Keterangan:</b></span>';
-    html += '<span>❤️ = Pertemanan</span>';
-    html += '<span>🤝 = Kerja Sama</span>';
-    html += '<span>⭐ = Kepemimpinan</span>';
-    html += '<span>🔎 = Kurang Nyaman</span>';
-    html += '</div>';
-    
     html += '<div style="border:1px solid #cfdbe7;border-radius:5px;padding:8px;margin:6px 0;">';
     html += '<h3 style="font-size:12px;margin:0 0 4px;color:#123a6f;">❤️ PERTEMANAN</h3>';
     html += '<p style="font-size:10px;margin:2px 0;color:#555;">Pilih 2 teman yang paling nyaman diajak berteman.</p>';
@@ -874,8 +857,14 @@ function renderPaperRows() {
     html += '<h3 style="font-size:12px;margin:0 0 4px;color:#123a6f;">🔎 RELASI KURANG NYAMAN</h3>';
     html += '<p style="font-size:10px;margin:2px 0;color:#555;">Pilih 1 teman yang paling sulit diajak interaksi.</p>';
     html += '<div style="font-size:9px;margin:4px 0;padding:2px 0;">Nama: _________________ &nbsp;&nbsp; Alasan: _________________</div></div>';
+    
+    // LEGENDA DI BAWAH LEMBAR SISWA
     html += '<div style="text-align:center;font-size:8px;color:#647687;margin-top:8px;border-top:1px solid #d9e4ef;padding-top:4px;">';
-    html += 'SOSIO DIGITAL NaFaS BK • Data untuk BK</div></div>';
+    html += '📌 <b>Keterangan:</b> ❤️ = Pertemanan &nbsp;|&nbsp; 🤝 = Kerja Sama &nbsp;|&nbsp; ⭐ = Kepemimpinan &nbsp;|&nbsp; 🔎 = Kurang Nyaman';
+    html += '</div>';
+    html += '<div style="text-align:center;font-size:8px;color:#647687;margin-top:2px;">';
+    html += 'SOSIO DIGITAL NaFaS BK • Data untuk BK';
+    html += '</div>';
     document.getElementById('paperRows').innerHTML = html;
 }
 
@@ -961,13 +950,6 @@ function cetakLembarBaru() {
     htmlContent += '<span><b>Kelas:</b> ' + className + '</span>\n';
     htmlContent += '<span><b>Sesi:</b> ' + code + '</span>\n';
     htmlContent += '</div></div>\n';
-    htmlContent += '<div style="font-size:9px;background:#f6f9fc;border:1px solid #d9e4ef;border-radius:4px;padding:4px 8px;margin-bottom:6px;display:flex;flex-wrap:wrap;gap:4px 12px;">';
-    htmlContent += '<span><b>📌 Keterangan:</b></span>';
-    htmlContent += '<span>❤️ = Pertemanan</span>';
-    htmlContent += '<span>🤝 = Kerja Sama</span>';
-    htmlContent += '<span>⭐ = Kepemimpinan</span>';
-    htmlContent += '<span>🔎 = Kurang Nyaman</span>';
-    htmlContent += '</div>';
     htmlContent += '<div class="instruction"><b>📌 Petunjuk:</b> Jawab dengan jujur dan pilih teman yang sesuai dengan pertanyaan.</div>\n';
     htmlContent += '<div class="question-block"><h3>❤️ PERTEMANAN</h3><p>Pilih 2 teman yang paling nyaman diajak berteman.</p>';
     htmlContent += '<div class="line">1) _________________ &nbsp;&nbsp; Alasan: _________________</div>';
@@ -979,7 +961,13 @@ function cetakLembarBaru() {
     htmlContent += '<div class="line">Nama: _________________ &nbsp;&nbsp; Alasan: _________________</div></div>\n';
     htmlContent += '<div class="question-block"><h3>🔎 RELASI KURANG NYAMAN</h3><p>Pilih 1 teman yang paling sulit diajak interaksi.</p>';
     htmlContent += '<div class="line">Nama: _________________ &nbsp;&nbsp; Alasan: _________________</div></div>\n';
-    htmlContent += '<div class="footer">🔐 SOSIO DIGITAL NaFaS BK • Data untuk BK</div>\n';
+    // LEGENDA DI BAWAH (FOOTER)
+    htmlContent += '<div style="text-align:center;font-size:9px;color:#647687;margin-top:12px;border-top:1px solid #d9e4ef;padding-top:6px;">';
+    htmlContent += '📌 <b>Keterangan:</b> ❤️ = Pertemanan &nbsp;|&nbsp; 🤝 = Kerja Sama &nbsp;|&nbsp; ⭐ = Kepemimpinan &nbsp;|&nbsp; 🔎 = Kurang Nyaman';
+    htmlContent += '</div>';
+    htmlContent += '<div style="text-align:center;font-size:8px;color:#8a9daf;margin-top:2px;">';
+    htmlContent += '🔐 SOSIO DIGITAL NaFaS BK • Data untuk BK';
+    htmlContent += '</div>';
     htmlContent += '<script>\n';
     htmlContent += 'setTimeout(function() { window.print(); }, 600);\n';
     htmlContent += '<\/script>\n';
@@ -1053,7 +1041,7 @@ function simpanPaper() {
 }
 
 // ============================================================
-// HASIL (FINAL - DENGAN LEGENDA)
+// HASIL (FINAL - LEGENDA DI BAWAH)
 // ============================================================
 function renderHasil(data) {
     var sessionData = data;
@@ -1158,17 +1146,6 @@ function renderHasil(data) {
     html += '📝 Alasan dari setiap pemilih langsung terlihat di kolom ❤️ 🤝 ⭐ 🔎';
     html += '</div>';
     
-    // LEGENDA IKON
-    html += '<div class="legend-box">';
-    html += '<span style="font-weight:700;">📌 Keterangan:</span>';
-    html += '<span class="item"><span class="icon">❤️</span> Pertemanan</span>';
-    html += '<span class="item"><span class="icon">🤝</span> Kerja Sama</span>';
-    html += '<span class="item"><span class="icon">⭐</span> Kepemimpinan</span>';
-    html += '<span class="item"><span class="icon">🔎</span> Kurang Nyaman</span>';
-    html += '<span class="item" style="margin-left:auto;"><span class="icon">✅</span> Sudah Mengisi</span>';
-    html += '<span class="item"><span class="icon">⏳</span> Belum Mengisi</span>';
-    html += '</div>';
-    
     html += '<div class="table-wrap"><table class="table-main"><thead><tr>';
     html += '<th style="width:20px;">#</th>';
     html += '<th style="text-align:left;min-width:60px;">Nama</th>';
@@ -1222,6 +1199,18 @@ function renderHasil(data) {
         html += '</tr>';
     }
     html += '</tbody></table></div>';
+    
+    // LEGENDA DI BAWAH TABEL (SEBELUM FOOTER)
+    html += '<div class="legend-footer">';
+    html += '<span style="font-weight:700;">📌 Keterangan Simbol:</span>';
+    html += '<span class="item"><span class="icon">❤️</span> Pertemanan</span>';
+    html += '<span class="item"><span class="icon">🤝</span> Kerja Sama</span>';
+    html += '<span class="item"><span class="icon">⭐</span> Kepemimpinan</span>';
+    html += '<span class="item"><span class="icon">🔎</span> Kurang Nyaman</span>';
+    html += '<span class="item"><span class="icon">✅</span> Sudah Mengisi</span>';
+    html += '<span class="item"><span class="icon">⏳</span> Belum Mengisi</span>';
+    html += '</div>';
+    
     html += '<div class="result-footer">🔐 Khusus Guru BK • Dicetak: ' + new Date().toLocaleDateString('id-ID') + '</div>';
     
     return html;
@@ -1251,17 +1240,14 @@ function cetakHasil() {
     var doneCount = responses.length;
     var totalCount = students.length;
     
-    // Ambil konten hasil dan modifikasi untuk cetak
     var contentHTML = source.innerHTML;
     
-    // Buka jendela baru
     var w = window.open('', '_blank', 'width=800,height=600');
     if (!w) { 
         alert('⚠️ Mohon izinkan pop-up untuk mencetak hasil.');
         return; 
     }
     
-    // Tulis HTML dengan auto-print
     w.document.write('<!doctype html><html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">');
     w.document.write('<title>Hasil Sosiometri ' + code + '</title><style>');
     w.document.write('*{box-sizing:border-box;margin:0;padding:0}');
@@ -1295,11 +1281,10 @@ function cetakHasil() {
     w.document.write('.reason-item .reason-text{color:#4a6a8a;font-style:italic;font-size:5.5px}');
     w.document.write('.reason-empty{color:#aaa;font-size:5px;font-style:italic}');
     w.document.write('.result-head .info{font-size:6.5px}');
-    w.document.write('.legend-box{font-size:6px;padding:2px 6px;gap:3px 8px}');
-    w.document.write('.legend-box .icon{font-size:10px}');
+    w.document.write('.legend-footer{font-size:6px;padding:2px 6px;gap:3px 8px}');
+    w.document.write('.legend-footer .icon{font-size:9px}');
     w.document.write('</style></head><body>');
     
-    // Tampilkan header dan konten
     w.document.write('<div class="print-header"><h1>📊 HASIL SOSIOMETRI</h1>');
     w.document.write('<h2>' + esc(school) + ' • ' + esc(className) + '</h2>');
     w.document.write('<div class="print-meta"><span>Kode: <strong>' + esc(code) + '</strong></span>');
@@ -1308,7 +1293,6 @@ function cetakHasil() {
     w.document.write('<span>👥 ' + doneCount + '/' + totalCount + ' mengisi</span></div></div>');
     w.document.write(contentHTML);
     
-    // Tambahan instruksi untuk guru (akan hilang saat print)
     w.document.write('<div class="no-print" style="text-align:center;margin-top:10px;padding:8px;background:#e8f5e9;border-radius:6px;border:1px solid #159a7c;font-size:11px;color:#0d6b4a;">');
     w.document.write('📌 <b>Petunjuk:</b> Pilih <b>"Save as PDF"</b> atau <b>"Cetak"</b> di dialog yang muncul.<br>');
     w.document.write('Jika dialog tidak muncul, klik tombol di bawah ini:');
@@ -1319,7 +1303,6 @@ function cetakHasil() {
     w.document.close();
     w.focus();
     
-    // Auto-print setelah 1 detik
     setTimeout(function() {
         try {
             w.print();
@@ -1396,7 +1379,6 @@ window.addEventListener('DOMContentLoaded', function() {
 if (!checkSession()) {
     showLogin();
 }
-function openPrintPage(){let code=document.getElementById('rcode')?.value.trim()||'';let pin=document.getElementById('rpin')?.value.trim()||'';if(!code||!pin){alert('Masukkan Kode Sesi dan PIN Guru BK terlebih dahulu.');return}let u='cetak-hasil.html?code='+encodeURIComponent(code)+'&pin='+encodeURIComponent(pin);let w=window.open(u,'_blank');if(!w)alert('Izinkan pop-up agar laporan dapat dibuka.')}
 </script>
 </body>
 </html>

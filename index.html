@@ -70,9 +70,9 @@ button:hover{transform:translateY(-1px)}
 .session-item .s-actions{margin-top:4px;display:flex;gap:3px;flex-wrap:wrap}
 .session-empty{text-align:center;padding:16px;color:#6b7d90}
 .table-wrap{overflow-x:auto;margin-top:4px;border-radius:6px;border:1px solid #d9e4ef}
-.table-main{width:100%;border-collapse:collapse;font-size:10px}
-.table-main th{background:#123a6f;color:#fff;padding:4px;text-align:center;font-weight:700;font-size:8px}
-.table-main td{padding:3px 4px;border-bottom:1px solid #eef2f6;text-align:center;font-size:9px}
+.table-main{width:100%;border-collapse:collapse;font-size:9px}
+.table-main th{background:#123a6f;color:#fff;padding:3px 5px;text-align:center;font-weight:700;font-size:7px}
+.table-main td{padding:3px 5px;border-bottom:1px solid #eef2f6;text-align:center;vertical-align:middle;font-size:8px}
 .table-main tr:nth-child(even){background:#f8fafc}
 .table-main .name-col{text-align:left;font-weight:600;padding-left:6px}
 .table-main .rank-badge{display:inline-block;min-width:16px;height:16px;line-height:16px;border-radius:50%;background:#eef2f6;color:#123a6f;font-weight:700;font-size:7px;text-align:center}
@@ -100,124 +100,15 @@ button:hover{transform:translateY(-1px)}
 .uncomfortable{border-left-color:#d96b7b}
 @media(max-width:650px){.brand{font-size:15px}.flex-header{flex-direction:column;align-items:stretch;gap:4px}}
 
-/* ===== STYLE ALASAN ===== */
-.reason-tooltip {
-    position: relative;
-    display: inline-block;
-    cursor: help;
-    color: #1a5a9e;
-    font-weight: 700;
-    font-size: 9px;
-    background: #eaf4ff;
-    padding: 1px 8px;
-    border-radius: 4px;
-    border: 1px solid #c9d8e6;
-}
-.reason-tooltip .tooltip-text {
-    visibility: hidden;
-    width: 320px;
-    background: #fff;
-    color: #1a2a3a;
-    text-align: left;
-    border-radius: 6px;
-    padding: 8px 10px;
-    border: 1px solid #b8c8d8;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-    position: absolute;
-    z-index: 100;
-    bottom: 125%;
-    left: 50%;
-    transform: translateX(-50%);
-    opacity: 0;
-    transition: opacity 0.3s;
-    font-weight: 400;
-    font-size: 9px;
-    max-height: 200px;
-    overflow-y: auto;
-    white-space: normal;
-    word-wrap: break-word;
-}
-.reason-tooltip .tooltip-text::after {
-    content: "";
-    position: absolute;
-    top: 100%;
-    left: 50%;
-    margin-left: -5px;
-    border-width: 5px;
-    border-style: solid;
-    border-color: #b8c8d8 transparent transparent transparent;
-}
-.reason-tooltip:hover .tooltip-text {
-    visibility: visible;
-    opacity: 1;
-}
-.reason-tooltip .tooltip-text .reason-item {
-    padding: 2px 0;
-    border-bottom: 1px dotted #e8edf2;
-}
-.reason-tooltip .tooltip-text .reason-item:last-child {
-    border-bottom: none;
-}
-.reason-tooltip .tooltip-text .from {
-    font-weight: 700;
-    color: #123a6f;
-}
-.reason-tooltip .tooltip-text .cat {
-    font-size: 7px;
-    color: #6a8aaa;
-    background: #eef4fa;
-    padding: 0 4px;
-    border-radius: 3px;
-}
-.reason-tooltip .tooltip-text .reason-text {
-    color: #4a6a8a;
-    font-style: italic;
-}
-.reason-cell {
-    min-width: 100px;
-    max-width: 180px;
-}
-@media print {
-    .reason-tooltip .tooltip-text {
-        visibility: visible !important;
-        opacity: 1 !important;
-        position: relative !important;
-        width: 100% !important;
-        transform: none !important;
-        box-shadow: none !important;
-        border: 1px solid #d9e4ef !important;
-        background: #f6f9fc !important;
-        padding: 3px 5px !important;
-        max-height: none !important;
-        overflow-y: visible !important;
-        font-size: 6.5px !important;
-        margin-top: 2px !important;
-    }
-    .reason-tooltip {
-        display: block !important;
-        background: none !important;
-        border: none !important;
-        padding: 0 !important;
-        cursor: default !important;
-    }
-    .reason-tooltip .tooltip-text .reason-item {
-        padding: 1px 0 !important;
-        font-size: 6.5px !important;
-    }
-    .reason-tooltip .tooltip-text .from {
-        font-size: 6.5px !important;
-    }
-    .reason-tooltip .tooltip-text .reason-text {
-        font-size: 6.5px !important;
-    }
-    .reason-tooltip .tooltip-text .cat {
-        font-size: 5.5px !important;
-    }
-    .reason-cell {
-        min-width: 120px !important;
-        max-width: 220px !important;
-    }
-}
+/* ===== STYLE ALASAN LANGSUNG TERLIHAT ===== */
+.reason-cell{text-align:left;font-size:7.5px;padding:2px 4px;max-width:220px;min-width:150px}
+.reason-item{font-size:7.5px;padding:1px 0;border-bottom:1px dotted #e8edf2;line-height:1.3}
+.reason-item:last-child{border-bottom:none}
+.reason-item .from{font-weight:700;color:#123a6f}
+.reason-item .cat{font-size:6px;color:#6a8aaa;background:#eef4fa;padding:0 3px;border-radius:3px;display:inline-block}
+.reason-item .reason-text{color:#4a6a8a;font-style:italic}
+.reason-empty{color:#aaa;font-size:7px;font-style:italic}
+@media print{.reason-cell{max-width:300px;min-width:180px;font-size:6.5px}.reason-item{font-size:6.5px;padding:0.5px 0}.reason-item .cat{font-size:5px}.reason-item .reason-text{font-size:6.5px}.table-main td{padding:2px 3px;font-size:7px}.table-main th{font-size:6px;padding:2px 3px}}
 </style>
 </head>
 <body>
@@ -1132,10 +1023,9 @@ function simpanPaper() {
 }
 
 // ============================================================
-// HASIL (FINAL - DENGAN TOOLTIP ALASAN & URUTAN BENAR)
+// HASIL (FINAL - ALASAN LANGSUNG TERLIHAT)
 // ============================================================
 function renderHasil(data) {
-    // Normalisasi data
     var sessionData = data;
     if (data.session) {
         sessionData = data.session;
@@ -1151,13 +1041,11 @@ function renderHasil(data) {
         return '<div class="notice">ℹ️ Belum ada siswa dalam sesi ini.</div>';
     }
 
-    // Buat map nama siswa dari ID
     var studentMap = {};
     for (var i = 0; i < st.length; i++) {
         studentMap[st[i].id] = st[i].name;
     }
 
-    // Hitung perolehan suara dan kumpulkan alasan
     var counts = { heart: {}, coop: {}, lead: {}, uncomfortable: {} };
     var reasons = { heart: {}, coop: {}, lead: {}, uncomfortable: {} };
     for (var i = 0; i < st.length; i++) {
@@ -1195,7 +1083,6 @@ function renderHasil(data) {
         }
     }
 
-    // Buat daftar siswa dengan skor
     var respondedIds = {};
     for (var m = 0; m < rs.length; m++) {
         respondedIds[rs[m].respondent] = true;
@@ -1222,7 +1109,7 @@ function renderHasil(data) {
         });
     }
 
-    // ===== URUTKAN DARI TOTAL TERTINGGI KE TERENDAH =====
+    // URUTKAN DARI TOTAL TERTINGGI KE TERENDAH
     sorted.sort(function(a, b) {
         if (b.total !== a.total) return b.total - a.total;
         return a.name.localeCompare(b.name, 'id');
@@ -1231,22 +1118,25 @@ function renderHasil(data) {
     var totalResponded = rs.length;
     var totalStudents = st.length;
 
-    // Buat HTML tabel dengan tooltip alasan
+    // Buat HTML dengan alasan langsung terlihat
     var html = '<div class="result-head">';
     html += '<div class="info"><strong>' + esc(school) + '</strong> • ' + esc(className) + '</div>';
     html += '<div class="info">📊 ' + totalResponded + '/' + totalStudents + ' siswa mengisi</div>';
     html += '<div class="info">🔑 ' + esc(code) + '</div></div>';
     
-    html += '<div style="font-size:9px;color:#6a8aaa;margin-bottom:4px;">';
-    html += '💡 <b>Arahkan kursor</b> ke angka di kolom ❤️ 🤝 ⭐ 🔎 untuk melihat alasan dari pemilih.';
+    html += '<div style="font-size:8px;color:#6a8aaa;margin-bottom:4px;text-align:center;">';
+    html += '📝 Alasan dari setiap pemilih langsung terlihat di kolom ❤️ 🤝 ⭐ 🔎';
     html += '</div>';
     
     html += '<div class="table-wrap"><table class="table-main"><thead><tr>';
-    html += '<th style="width:20px;">#</th><th style="text-align:left;min-width:70px;">Nama</th>';
-    html += '<th style="width:28px;">❤️</th><th style="width:28px;">🤝</th>';
-    html += '<th style="width:28px;">⭐</th><th style="width:28px;">🔎</th>';
-    html += '<th style="width:32px;">Total</th>';
-    html += '<th style="width:50px;">Status</th>';
+    html += '<th style="width:20px;">#</th>';
+    html += '<th style="text-align:left;min-width:60px;">Nama</th>';
+    html += '<th style="width:30px;">❤️</th>';
+    html += '<th style="width:30px;">🤝</th>';
+    html += '<th style="width:30px;">⭐</th>';
+    html += '<th style="width:30px;">🔎</th>';
+    html += '<th style="width:28px;">Total</th>';
+    html += '<th style="width:40px;">Status</th>';
     html += '</tr></thead><tbody>';
 
     for (var o = 0; o < sorted.length; o++) {
@@ -1258,22 +1148,20 @@ function renderHasil(data) {
             else if (o === 2) rankClass = 'rank-3';
         }
         
-        // Buat tooltip untuk setiap kategori
-        function buildTooltip(catLabel, reasonList) {
+        // Fungsi untuk membuat daftar alasan langsung terlihat
+        function buildReasonList(reasonList, catLabel) {
             if (!reasonList || reasonList.length === 0) {
-                return '<span style="color:#ccc;">-</span>';
+                return '<span class="reason-empty">-</span>';
             }
-            var tooltipHtml = '<span class="reason-tooltip">' + reasonList.length;
-            tooltipHtml += '<span class="tooltip-text">';
+            var html2 = '';
             for (var p = 0; p < reasonList.length; p++) {
-                tooltipHtml += '<div class="reason-item">';
-                tooltipHtml += '<span class="from">' + esc(reasonList[p].from) + '</span>';
-                tooltipHtml += ' <span class="cat">[' + catLabel + ']</span><br>';
-                tooltipHtml += '<span class="reason-text">" ' + esc(reasonList[p].reason) + ' "</span>';
-                tooltipHtml += '</div>';
+                html2 += '<div class="reason-item">';
+                html2 += '<span class="from">' + esc(reasonList[p].from) + '</span>';
+                html2 += ' <span class="cat">[' + catLabel + ']</span><br>';
+                html2 += '<span class="reason-text">"' + esc(reasonList[p].reason) + '"</span>';
+                html2 += '</div>';
             }
-            tooltipHtml += '</span></span>';
-            return tooltipHtml;
+            return html2;
         }
 
         html += '<tr><td>';
@@ -1284,12 +1172,12 @@ function renderHasil(data) {
         }
         html += '</td>';
         html += '<td class="name-col">' + esc(s.name) + '</td>';
-        html += '<td>' + (s.heart > 0 ? buildTooltip('❤️ Pertemanan', s.heartReasons) : '-') + '</td>';
-        html += '<td>' + (s.coop > 0 ? buildTooltip('🤝 Kerja Sama', s.coopReasons) : '-') + '</td>';
-        html += '<td>' + (s.lead > 0 ? buildTooltip('⭐ Kepemimpinan', s.leadReasons) : '-') + '</td>';
-        html += '<td>' + (s.uncomfortable > 0 ? buildTooltip('🔎 Kurang Nyaman', s.uncomfortableReasons) : '-') + '</td>';
+        html += '<td class="reason-cell">' + buildReasonList(s.heartReasons, '❤️') + '</td>';
+        html += '<td class="reason-cell">' + buildReasonList(s.coopReasons, '🤝') + '</td>';
+        html += '<td class="reason-cell">' + buildReasonList(s.leadReasons, '⭐') + '</td>';
+        html += '<td class="reason-cell">' + buildReasonList(s.uncomfortableReasons, '🔎') + '</td>';
         html += '<td class="total-col">' + s.total + '</td>';
-        html += '<td style="font-size:8px;">' + s.status + '</td>';
+        html += '<td style="font-size:7px;">' + s.status + '</td>';
         html += '</tr>';
     }
     html += '</tbody></table></div>';
@@ -1302,7 +1190,7 @@ function lihatHasil() {
     tampilkanHasilOtomatis();
 }
 
-// ===== CETAK HASIL (DENGAN ALASAN TERBUKA) =====
+// ===== CETAK HASIL =====
 function cetakHasil() {
     var source = document.getElementById('res');
     if (!source || !source.innerHTML.trim() || source.innerHTML.indexOf('⚠️') !== -1 || source.innerHTML.indexOf('❌') !== -1) {
@@ -1321,9 +1209,7 @@ function cetakHasil() {
     var w = window.open('', '_blank', 'width=900,height=700');
     if (!w) { alert('⚠️ Izinkan pop-up.'); return; }
     
-    // Ambil konten hasil dan pastikan semua alasan terlihat untuk cetak
     var contentHTML = source.innerHTML;
-    // Tooltip akan otomatis terbuka di print karena CSS @media print
     
     w.document.write('<!doctype html><html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">');
     w.document.write('<title>Hasil Sosiometri ' + code + '</title><style>');
@@ -1334,31 +1220,30 @@ function cetakHasil() {
     w.document.write('.print-header h2{font-size:9px;font-weight:400;color:#4a5d70;margin:2px 0}');
     w.document.write('.print-meta{display:flex;justify-content:center;gap:10px;font-size:6px;color:#6b7d90;margin-top:2px;flex-wrap:wrap}');
     w.document.write('.print-meta strong{color:#123a6f}');
-    w.document.write('table{width:100%;border-collapse:collapse;font-size:6.5px;margin-top:3px}');
+    w.document.write('table{width:100%;border-collapse:collapse;font-size:6px;margin-top:3px}');
     w.document.write('th{background:#123a6f;color:#fff;padding:2px 3px;text-align:center;font-weight:700;font-size:5.5px;text-transform:uppercase;letter-spacing:0.3px}');
-    w.document.write('td{padding:2px 3px;border-bottom:1px solid #e8edf2;text-align:center;vertical-align:middle}');
+    w.document.write('td{padding:2px 3px;border-bottom:1px solid #e8edf2;text-align:center;vertical-align:middle;font-size:6px}');
     w.document.write('.name-col{text-align:left;font-weight:600;padding-left:4px}');
     w.document.write('.rank-badge{display:inline-block;min-width:12px;height:12px;line-height:12px;border-radius:50%;background:#eef2f6;color:#123a6f;font-weight:700;font-size:5.5px;text-align:center}');
     w.document.write('.rank-1{background:#f4b400;color:#fff}');
     w.document.write('.rank-2{background:#b8c8d8;color:#fff}');
     w.document.write('.rank-3{background:#d9b382;color:#fff}');
-    w.document.write('.count{display:inline-block;background:#eaf1f9;padding:0 3px;border-radius:3px;font-weight:700;font-size:7px;color:#123a6f;min-width:14px}');
-    w.document.write('.count-low{background:#fde8ec;color:#b84a5a}');
-    w.document.write('.total-col{font-weight:900;color:#123a6f;font-size:8px}');
+    w.document.write('.total-col{font-weight:900;color:#123a6f;font-size:7px}');
     w.document.write('.result-footer{margin-top:3px;font-size:5px;color:#8a9daf;text-align:center;border-top:1px solid #d9e4ef;padding-top:2px}');
-    w.document.write('.result-head{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;padding:2px 6px;background:#eaf1f9;border-radius:3px;margin-bottom:3px;font-size:8px}');
+    w.document.write('.result-head{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;padding:2px 6px;background:#eaf1f9;border-radius:3px;margin-bottom:3px;font-size:7px}');
     w.document.write('.result-head .info{color:#4a6a8a}');
     w.document.write('.result-head .info strong{color:#123a6f}');
     w.document.write('.no-print{display:none!important}');
     w.document.write('@page{size:A4 landscape;margin:3mm}');
     w.document.write('@media print{body{padding:2mm}.no-print{display:none!important}table{page-break-inside:auto}tr{page-break-inside:avoid}}');
-    w.document.write('.reason-tooltip .tooltip-text{visibility:visible!important;opacity:1!important;position:relative!important;width:100%!important;transform:none!important;box-shadow:none!important;border:1px solid #d9e4ef!important;background:#f6f9fc!important;padding:3px 5px!important;max-height:none!important;overflow-y:visible!important;font-size:6px!important;margin-top:2px!important}');
-    w.document.write('.reason-tooltip{display:block!important;background:none!important;border:none!important;padding:0!important;cursor:default!important}');
-    w.document.write('.reason-tooltip .tooltip-text .reason-item{padding:1px 0!important;font-size:6px!important}');
-    w.document.write('.reason-tooltip .tooltip-text .from{font-size:6px!important}');
-    w.document.write('.reason-tooltip .tooltip-text .reason-text{font-size:6px!important}');
-    w.document.write('.reason-tooltip .tooltip-text .cat{font-size:5px!important}');
-    w.document.write('.result-head .info{font-size:7px}');
+    w.document.write('.reason-cell{text-align:left;font-size:5.5px;padding:1px 3px;max-width:180px;min-width:120px}');
+    w.document.write('.reason-item{font-size:5.5px;padding:1px 0;border-bottom:1px dotted #e8edf2;line-height:1.2}');
+    w.document.write('.reason-item:last-child{border-bottom:none}');
+    w.document.write('.reason-item .from{font-weight:700;color:#123a6f;font-size:5.5px}');
+    w.document.write('.reason-item .cat{font-size:4.5px;color:#6a8aaa;background:#eef4fa;padding:0 2px;border-radius:2px;display:inline-block}');
+    w.document.write('.reason-item .reason-text{color:#4a6a8a;font-style:italic;font-size:5.5px}');
+    w.document.write('.reason-empty{color:#aaa;font-size:5px;font-style:italic}');
+    w.document.write('.result-head .info{font-size:6.5px}');
     w.document.write('</style></head><body>');
     w.document.write('<div class="no-print" style="position:sticky;top:0;background:#fff;padding:2px 0;text-align:center;border-bottom:1px solid #d0dae6;margin-bottom:3px;z-index:10;">');
     w.document.write('<button onclick="window.print()" style="border:0;border-radius:3px;padding:2px 10px;background:#f4b400;color:#17324d;font-weight:700;cursor:pointer;font-size:8px;">🖨️ CETAK / PDF</button>');
@@ -1444,7 +1329,6 @@ window.addEventListener('DOMContentLoaded', function() {
 if (!checkSession()) {
     showLogin();
 }
-function openPrintPage(){let code=document.getElementById('rcode')?.value.trim()||'';let pin=document.getElementById('rpin')?.value.trim()||'';if(!code||!pin){alert('Masukkan Kode Sesi dan PIN Guru BK terlebih dahulu.');return}let u='cetak-hasil.html?code='+encodeURIComponent(code)+'&pin='+encodeURIComponent(pin);let w=window.open(u,'_blank');if(!w)alert('Izinkan pop-up agar laporan dapat dibuka.')}
 </script>
 </body>
 </html>

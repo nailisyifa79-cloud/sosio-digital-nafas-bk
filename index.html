@@ -6,7 +6,6 @@
 <title>Sosio Digital NaFaS BK</title>
 <!-- Firebase SDK -->
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js">
-function openPrintPage(){let code=document.getElementById('rcode')?.value.trim()||'';let pin=document.getElementById('rpin')?.value.trim()||'';if(!code||!pin){alert('Masukkan Kode Sesi dan PIN Guru BK terlebih dahulu.');return}let u='cetak-hasil.html?code='+encodeURIComponent(code)+'&pin='+encodeURIComponent(pin);let w=window.open(u,'_blank');if(!w)alert('Izinkan pop-up agar laporan dapat dibuka.')}
 </script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
 <style>
@@ -310,6 +309,38 @@ button:hover{transform:translateY(-1px)}
     margin-bottom: 12px;
     display: none;
 }
+
+/* ===== PERINGATAN UNTUK SISWA ===== */
+.student-warning {
+    background: #fff3cd;
+    border: 2px solid #ffc107;
+    border-radius: 8px;
+    padding: 10px 14px;
+    margin-bottom: 12px;
+    font-size: 12px;
+    color: #856404;
+    text-align: center;
+}
+.student-warning strong {
+    display: block;
+    font-size: 14px;
+    margin-bottom: 4px;
+}
+
+/* ===== VALIDASI PILIHAN SISWA ===== */
+.validation-error {
+    background: #fde8ec;
+    border: 2px solid #f0b8c4;
+    border-radius: 6px;
+    padding: 8px 12px;
+    margin: 6px 0;
+    font-size: 11px;
+    color: #a04050;
+    display: none;
+}
+.validation-error.show {
+    display: block;
+}
 </style>
 </head>
 <body>
@@ -447,7 +478,11 @@ button:hover{transform:translateY(-1px)}
 
             <section id="student" class="hidden">
                 <div class="panel"><h2>📱 Pengisian Siswa</h2>
-                    <div class="notice">✅ Hasil sosiometri hanya dapat dilihat oleh Guru BK. Jawaban Anda rahasia.</div>
+                    <div class="student-warning">
+                        <strong>🔒 Rahasia & Aman</strong>
+                        Jawaban Anda hanya akan dilihat oleh Guru BK. 
+                        <br>Hasil sosiometri <b>TIDAK</b> bisa dilihat oleh siswa lain.
+                    </div>
                     <div id="studentLoading" class="loading" style="display:none;"><span class="spinner"></span> Memuat data sesi...</div>
                     <label>Kode Sesi</label>
                     <input id="scode" placeholder="Masukkan kode sesi dari guru" style="font-weight:bold;color:#123a6f;">
@@ -455,6 +490,7 @@ button:hover{transform:translateY(-1px)}
                     <label>Pilih Nama Kamu</label>
                     <select id="me"></select>
                     <div id="q"></div>
+                    <div id="validationError" class="validation-error"></div>
                     <div class="actions"><button class="green" onclick="kirimJawaban()">📨 Kirim Jawaban</button></div>
                     <div id="smsg"></div>
                 </div>
@@ -512,7 +548,6 @@ function tutupModalLupaPassword() {
     document.getElementById('forgotPasswordModal').style.display = 'none';
 }
 
-// Tutup modal jika klik di luar box
 document.addEventListener('click', function(e) {
     var modal = document.getElementById('forgotPasswordModal');
     if (e.target === modal) {
@@ -541,26 +576,21 @@ function resetPassword() {
         return;
     }
     
-    // Generate password baru (8 karakter acak)
     var chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
     var newPassword = '';
     for (var i = 0; i < 8; i++) {
         newPassword += chars[Math.floor(Math.random() * chars.length)];
     }
     
-    // Update password
     users[email].password = newPassword;
     saveUsers(users);
     
-    // Tampilkan password baru
     successEl.innerHTML = '✅ Password baru Anda: <b>' + newPassword + '</b><br>Silakan gunakan password ini untuk login.';
     successEl.style.display = 'block';
     
-    // Isi otomatis ke form login
     document.getElementById('loginEmail').value = email;
     document.getElementById('loginPassword').value = newPassword;
     
-    // Tutup modal setelah 5 detik
     setTimeout(function() {
         tutupModalLupaPassword();
         showLoginSuccess('✅ Password baru telah dibuat. Silakan login.');
@@ -760,35 +790,6 @@ function initApp() {
     showTeacherSession();
 }
 
-function cekSesi() {
-    showLoading('tmsg', '🔍 Memuat data sesi...');
-    db.collection('sessions').get().then(function(snapshot) {
-        var sessions = [];
-        snapshot.forEach(function(doc) {
-            var data = doc.data();
-            data.id = doc.id;
-            sessions.push(data);
-        });
-        if (sessions.length === 0) {
-            pesan('tmsg', '📭 Belum ada sesi tersimpan di cloud.', 'notice');
-            return;
-        }
-        var msg = '📋 <b>Total sesi di cloud:</b> ' + sessions.length + '<br><br>';
-        for (var i = 0; i < sessions.length; i++) {
-            var s = sessions[i];
-            var siswaCount = s.students ? s.students.length : 0;
-            msg += '🔑 <b>' + s.code + '</b> — ' + esc(s.className || 'Kelas tidak terisi') + ' (' + siswaCount + ' siswa)<br>';
-        }
-        pesan('tmsg', msg, 'ok');
-    }).catch(function(err) {
-        pesan('tmsg', '❌ Gagal memuat sesi: ' + err.message, 'error');
-    });
-}
-
-function showLoading(id, msg) {
-    document.getElementById(id).innerHTML = '<div class="notice">⏳ ' + msg + '</div>';
-}
-
 function updateDashboard() {
     db.collection('sessions').get().then(function(snapshot) {
         document.getElementById('totalSessions').textContent = snapshot.size;
@@ -886,13 +887,16 @@ function page(id) {
 }
 
 // ============================================================
-// FUNGSI SISWA
+// FUNGSI SISWA - DENGAN VALIDASI LENGKAP
 // ============================================================
 function cariSesiSiswa() {
     var code = document.getElementById('scode').value.trim();
     var loadingEl = document.getElementById('studentLoading');
     var qEl = document.getElementById('q');
     var meEl = document.getElementById('me');
+    
+    // Sembunyikan error sebelumnya
+    document.getElementById('validationError').classList.remove('show');
     
     if (!code) {
         qEl.innerHTML = '<div class="error">⚠️ Masukkan kode sesi terlebih dahulu.</div>';
@@ -927,33 +931,132 @@ function cariSesiSiswa() {
                 optsHtml += '<option value="' + sessionData.students[j].id + '">' + sessionData.students[j].name + '</option>';
             }
             meEl.innerHTML = optsHtml;
-            qEl.innerHTML =
-                '<div class="panel aspect heart"><h3>❤️ Pertemanan</h3><p style="font-size:12px;color:#4a6a8a;margin:0 0 6px;">Pilih 2 teman yang paling nyaman diajak berteman.</p>' +
-                '<label>Pilihan 1</label><select class="ch heart"></select>' +
-                '<label>Alasan</label><textarea class="rs heart" placeholder="Tulis alasan..." style="min-height:35px;"></textarea>' +
-                '<label>Pilihan 2</label><select class="ch heart"></select>' +
-                '<label>Alasan</label><textarea class="rs heart" placeholder="Tulis alasan..." style="min-height:35px;"></textarea></div>' +
-                '<div class="panel aspect coop"><h3>🤝 Kerja Sama</h3><p style="font-size:12px;color:#4a6a8a;margin:0 0 6px;">Pilih 2 teman yang paling dipilih untuk bekerja sama.</p>' +
-                '<label>Pilihan 1</label><select class="ch coop"></select>' +
-                '<label>Alasan</label><textarea class="rs coop" placeholder="Tulis alasan..." style="min-height:35px;"></textarea>' +
-                '<label>Pilihan 2</label><select class="ch coop"></select>' +
-                '<label>Alasan</label><textarea class="rs coop" placeholder="Tulis alasan..." style="min-height:35px;"></textarea></div>' +
-                '<div class="panel aspect lead"><h3>⭐ Kepemimpinan</h3><p style="font-size:12px;color:#4a6a8a;margin:0 0 6px;">Pilih 1 teman yang mampu memimpin.</p>' +
-                '<label>Pilihan 1</label><select class="ch lead"></select>' +
-                '<label>Alasan</label><textarea class="rs lead" placeholder="Tulis alasan..." style="min-height:35px;"></textarea></div>' +
-                '<div class="panel aspect uncomfortable"><h3>🔎 Relasi Kurang Nyaman</h3><p style="font-size:12px;color:#4a6a8a;margin:0 0 6px;">Pilih 1 teman yang paling sulit diajak interaksi (opsional).</p>' +
-                '<label>Pilihan 1</label><select class="ch uncomfortable"></select>' +
-                '<label>Alasan</label><textarea class="rs uncomfortable" placeholder="Tulis alasan..." style="min-height:35px;"></textarea></div>';
-            var selects = document.querySelectorAll('.ch');
-            for (var k = 0; k < selects.length; k++) {
-                selects[k].innerHTML = optsHtml;
+            
+            // Simpan daftar nama untuk validasi
+            var studentNames = {};
+            for (var k = 0; k < sessionData.students.length; k++) {
+                studentNames[sessionData.students[k].id] = sessionData.students[k].name;
             }
+            window._studentNames = studentNames;
+            window._myId = null;
+            
+            // Event listener untuk memilih nama
+            meEl.onchange = function() {
+                window._myId = this.value;
+                perbaruiOpsiSiswa();
+            };
+            
+            // Buat form pertanyaan
+            buatFormPertanyaanSiswa(sessionData);
+            
             qEl.innerHTML += '<div class="ok" style="margin-top:6px;">✅ Sesi ditemukan! Kelas: ' + esc(sessionData.className || '-') + '</div>';
+            
+            // Terapkan validasi awal
+            perbaruiOpsiSiswa();
         }
     }).catch(function(err) {
         loadingEl.style.display = 'none';
         qEl.innerHTML = '<div class="error">❌ Gagal mencari sesi: ' + err.message + '</div>';
     });
+}
+
+function buatFormPertanyaanSiswa(sessionData) {
+    var qEl = document.getElementById('q');
+    var optsHtml = '<option value="">— Pilih —</option>';
+    for (var j = 0; j < sessionData.students.length; j++) {
+        optsHtml += '<option value="' + sessionData.students[j].id + '">' + sessionData.students[j].name + '</option>';
+    }
+    
+    qEl.innerHTML = 
+        '<div class="panel aspect heart"><h3>❤️ Pertemanan</h3><p style="font-size:12px;color:#4a6a8a;margin:0 0 6px;">Pilih 2 teman yang paling nyaman diajak berteman.</p>' +
+        '<label>Pilihan 1</label><select class="ch heart" data-category="heart" data-index="0"></select>' +
+        '<label>Alasan</label><textarea class="rs heart" placeholder="Tulis alasan..." style="min-height:35px;"></textarea>' +
+        '<label>Pilihan 2</label><select class="ch heart" data-category="heart" data-index="1"></select>' +
+        '<label>Alasan</label><textarea class="rs heart" placeholder="Tulis alasan..." style="min-height:35px;"></textarea></div>' +
+        '<div class="panel aspect coop"><h3>🤝 Kerja Sama</h3><p style="font-size:12px;color:#4a6a8a;margin:0 0 6px;">Pilih 2 teman yang paling dipilih untuk bekerja sama.</p>' +
+        '<label>Pilihan 1</label><select class="ch coop" data-category="coop" data-index="0"></select>' +
+        '<label>Alasan</label><textarea class="rs coop" placeholder="Tulis alasan..." style="min-height:35px;"></textarea>' +
+        '<label>Pilihan 2</label><select class="ch coop" data-category="coop" data-index="1"></select>' +
+        '<label>Alasan</label><textarea class="rs coop" placeholder="Tulis alasan..." style="min-height:35px;"></textarea></div>' +
+        '<div class="panel aspect lead"><h3>⭐ Kepemimpinan</h3><p style="font-size:12px;color:#4a6a8a;margin:0 0 6px;">Pilih 1 teman yang mampu memimpin.</p>' +
+        '<label>Pilihan 1</label><select class="ch lead" data-category="lead" data-index="0"></select>' +
+        '<label>Alasan</label><textarea class="rs lead" placeholder="Tulis alasan..." style="min-height:35px;"></textarea></div>' +
+        '<div class="panel aspect uncomfortable"><h3>🔎 Relasi Kurang Nyaman</h3><p style="font-size:12px;color:#4a6a8a;margin:0 0 6px;">Pilih 1 teman yang paling sulit diajak interaksi (opsional).</p>' +
+        '<label>Pilihan 1</label><select class="ch uncomfortable" data-category="uncomfortable" data-index="0"></select>' +
+        '<label>Alasan</label><textarea class="rs uncomfortable" placeholder="Tulis alasan..." style="min-height:35px;"></textarea></div>';
+    
+    // Isi semua select dengan opsi
+    var selects = document.querySelectorAll('.ch');
+    for (var k = 0; k < selects.length; k++) {
+        selects[k].innerHTML = optsHtml;
+        // Tambahkan event listener untuk validasi
+        selects[k].addEventListener('change', function() {
+            perbaruiOpsiSiswa();
+        });
+    }
+}
+
+function perbaruiOpsiSiswa() {
+    var myId = document.getElementById('me').value;
+    window._myId = myId;
+    
+    // Kumpulkan semua pilihan yang sudah dipilih di setiap kategori
+    var selects = document.querySelectorAll('.ch');
+    var usedValues = {};
+    
+    // Kelompokkan select berdasarkan kategori
+    var categorySelects = {};
+    selects.forEach(function(sel) {
+        var cat = sel.dataset.category;
+        if (!categorySelects[cat]) categorySelects[cat] = [];
+        categorySelects[cat].push(sel);
+    });
+    
+    // Untuk setiap kategori, cek duplikasi di dalam kategori yang sama
+    for (var cat in categorySelects) {
+        var catSel = categorySelects[cat];
+        var values = [];
+        catSel.forEach(function(sel) {
+            if (sel.value) values.push(sel.value);
+        });
+        
+        // Cek duplikat dalam kategori yang sama
+        var hasDuplicate = false;
+        var dupValue = null;
+        for (var i = 0; i < values.length; i++) {
+            for (var j = i + 1; j < values.length; j++) {
+                if (values[i] === values[j]) {
+                    hasDuplicate = true;
+                    dupValue = values[i];
+                    break;
+                }
+            }
+            if (hasDuplicate) break;
+        }
+        
+        // Tampilkan error jika ada duplikat
+        var errorEl = document.getElementById('validationError');
+        if (hasDuplicate && dupValue) {
+            var name = window._studentNames ? window._studentNames[dupValue] : dupValue;
+            errorEl.textContent = '⚠️ Anda memilih "' + name + '" dua kali dalam kategori yang sama. Pilih nama yang berbeda.';
+            errorEl.classList.add('show');
+            return;
+        }
+        
+        // Cek apakah ada yang memilih diri sendiri
+        for (var k = 0; k < catSel.length; k++) {
+            if (catSel[k].value === myId && myId) {
+                var myName = window._studentNames ? window._studentNames[myId] : myId;
+                errorEl.textContent = '⚠️ Anda tidak boleh memilih diri sendiri ("' + myName + '"). Pilih teman yang lain.';
+                errorEl.classList.add('show');
+                return;
+            }
+        }
+    }
+    
+    // Tidak ada error
+    var errorEl = document.getElementById('validationError');
+    errorEl.classList.remove('show');
 }
 
 function vals(c) {
@@ -985,18 +1088,31 @@ function kirimJawaban() {
         u = vals('uncomfortable');
     var all = h.concat(c).concat(l).concat(u);
     var reasons = reas('heart').concat(reas('coop')).concat(reas('lead')).concat(reas('uncomfortable'));
+    
     if (!me) { pesan('smsg', '⚠️ Pilih nama.', 'error'); return; }
     if (h.length < 2 || c.length < 2 || l.length < 1) { pesan('smsg', '⚠️ Lengkapi semua pilihan.', 'error'); return; }
+    
+    // Validasi alasan
     for (var i = 0; i < reasons.length; i++) {
         if (!reasons[i].trim()) { pesan('smsg', '⚠️ Isi semua alasan.', 'error'); return; }
     }
-    if (all.indexOf(me) !== -1) { pesan('smsg', '⚠️ Tidak boleh pilih sendiri.', 'error'); return; }
+    
+    // Validasi tidak pilih diri sendiri
+    if (all.indexOf(me) !== -1) { pesan('smsg', '⚠️ Tidak boleh memilih diri sendiri.', 'error'); return; }
+    
+    // Validasi tidak ada pilihan duplikat dalam satu kategori
     var hSet = {};
-    for (var j = 0; j < h.length; j++) hSet[h[j]] = true;
+    for (var j = 0; j < h.length; j++) {
+        if (hSet[h[j]]) { pesan('smsg', '⚠️ Dalam kategori Pertemanan, pilih 2 nama yang berbeda.', 'error'); return; }
+        hSet[h[j]] = true;
+    }
     var cSet = {};
-    for (var k = 0; k < c.length; k++) cSet[c[k]] = true;
-    if (Object.keys(hSet).length < 2 || Object.keys(cSet).length < 2) { pesan('smsg', '⚠️ Pilihan harus berbeda.', 'error'); return; }
+    for (var k = 0; k < c.length; k++) {
+        if (cSet[c[k]]) { pesan('smsg', '⚠️ Dalam kategori Kerja Sama, pilih 2 nama yang berbeda.', 'error'); return; }
+        cSet[c[k]] = true;
+    }
 
+    // Cek apakah sudah mengisi sebelumnya
     var responses = sesiAktif.responses || [];
     for (var m = 0; m < responses.length; m++) {
         if (responses[m].respondent === me) {
@@ -1029,6 +1145,7 @@ function kirimJawaban() {
         document.querySelectorAll('.rs').forEach(function(x) { x.value = ''; });
         document.getElementById('me').value = '';
         document.getElementById('q').innerHTML = '<div class="ok">✅ Terima kasih! Jawabanmu sudah tersimpan.</div>';
+        document.getElementById('validationError').classList.remove('show');
         sesiAktif.responses = sesiAktif.responses || [];
         sesiAktif.responses.push(jawaban);
     }).catch(function(err) {
@@ -1547,7 +1664,7 @@ function renderPaperRows() {
     html += '<span><b>Sesi:</b> ' + esc(sesiAktif.code || '______________') + '</span>';
     html += '</div></div>';
     html += '<div style="font-size:10px;background:#f6f9fc;border:1px solid #d9e4ef;border-radius:5px;padding:6px;margin-bottom:8px;">';
-    html += '<b>📌 Petunjuk:</b> Jawab dengan jujur dan pilih teman yang sesuai dengan pertanyaan.</div>';
+    html += '<b>📌 Petunjuk:</b> Jawab dengan jujur dan pilih teman yang sesuai dengan pertanyaan. Jangan pilih diri sendiri.</div>';
     html += '<div style="border:1px solid #cfdbe7;border-radius:5px;padding:8px;margin:6px 0;">';
     html += '<h3 style="font-size:12px;margin:0 0 4px;color:#123a6f;">❤️ PERTEMANAN</h3>';
     html += '<p style="font-size:10px;margin:2px 0;color:#555;">Pilih 2 teman yang paling nyaman diajak berteman.</p>';
@@ -1590,7 +1707,7 @@ function muatPaper() {
     var entryHtml = '';
     for (var j = 0; j < sesiAktif.students.length; j++) {
         var s = sesiAktif.students[j];
-        entryHtml += '<div class="panel" style="padding:8px;margin-bottom:6px;">';
+        entryHtml += '<div class="panel" style="padding:8px;margin-bottom:6px;" data-student-id="' + s.id + '">';
         entryHtml += '<h3 style="margin:0 0 4px;font-size:12px;">👤 ' + (j + 1) + '. ' + esc(s.name) + '</h3>';
         entryHtml += '<div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;">';
         var categories = ['heart', 'heart', 'coop', 'coop', 'lead', 'uncomfortable'];
@@ -1644,8 +1761,35 @@ function simpanPaper() {
             for (var e = 2; e < 4; e++) cr.push(ins[e].value.trim());
             var lr = ins[4] && ins[4].value.trim() ? [ins[4].value.trim()] : [];
             var ur = ins[5] && ins[5].value.trim() ? [ins[5].value.trim()] : [];
+            
+            // Validasi: tidak boleh memilih diri sendiri
+            var myId = s.id;
+            var semuaPilihan = h.concat(c).concat(l).concat(u);
+            if (semuaPilihan.indexOf(myId) !== -1) {
+                pesan('pmsg', '⚠️ ' + s.name + ' memilih diri sendiri. Perbaiki.', 'error');
+                return;
+            }
+            
+            // Validasi duplikat dalam kategori
+            var hSet = {};
+            for (var p = 0; p < h.length; p++) {
+                if (hSet[h[p]]) {
+                    pesan('pmsg', '⚠️ ' + s.name + ' memilih nama yang sama di Pertemanan.', 'error');
+                    return;
+                }
+                hSet[h[p]] = true;
+            }
+            var cSet = {};
+            for (var q = 0; q < c.length; q++) {
+                if (cSet[c[q]]) {
+                    pesan('pmsg', '⚠️ ' + s.name + ' memilih nama yang sama di Kerja Sama.', 'error');
+                    return;
+                }
+                cSet[c[q]] = true;
+            }
+            
             if (h.length !== 2 || c.length !== 2 || l.length !== 1) {
-                pesan('pmsg', '⚠️ Entri ' + (i + 1) + ' belum lengkap.', 'error');
+                pesan('pmsg', '⚠️ Entri ' + (i + 1) + ' (' + s.name + ') belum lengkap.', 'error');
                 return;
             }
             for (var f = 0; f < hr.length; f++) { if (!hr[f]) { pesan('pmsg', '⚠️ Entri ' + (i + 1) + ' alasan belum lengkap.', 'error'); return; } }

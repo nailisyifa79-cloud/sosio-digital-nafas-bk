@@ -6,7 +6,6 @@
 <title>Sosio Digital NaFaS BK</title>
 <!-- Firebase SDK -->
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js">
-function openPrintPage(){let code=document.getElementById('rcode')?.value.trim()||'';let pin=document.getElementById('rpin')?.value.trim()||'';if(!code||!pin){alert('Masukkan Kode Sesi dan PIN Guru BK terlebih dahulu.');return}let u='cetak-hasil.html?code='+encodeURIComponent(code)+'&pin='+encodeURIComponent(pin);let w=window.open(u,'_blank');if(!w)alert('Izinkan pop-up agar laporan dapat dibuka.')}
 </script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
 <style>
@@ -896,7 +895,6 @@ function cariSesiSiswa() {
     var qEl = document.getElementById('q');
     var meEl = document.getElementById('me');
     
-    // Sembunyikan error sebelumnya
     document.getElementById('validationError').classList.remove('show');
     
     if (!code) {
@@ -933,7 +931,6 @@ function cariSesiSiswa() {
             }
             meEl.innerHTML = optsHtml;
             
-            // Simpan daftar nama untuk validasi
             var studentNames = {};
             for (var k = 0; k < sessionData.students.length; k++) {
                 studentNames[sessionData.students[k].id] = sessionData.students[k].name;
@@ -941,18 +938,15 @@ function cariSesiSiswa() {
             window._studentNames = studentNames;
             window._myId = null;
             
-            // Event listener untuk memilih nama
             meEl.onchange = function() {
                 window._myId = this.value;
                 perbaruiOpsiSiswa();
             };
             
-            // Buat form pertanyaan
             buatFormPertanyaanSiswa(sessionData);
             
             qEl.innerHTML += '<div class="ok" style="margin-top:6px;">✅ Sesi ditemukan! Kelas: ' + esc(sessionData.className || '-') + '</div>';
             
-            // Terapkan validasi awal
             perbaruiOpsiSiswa();
         }
     }).catch(function(err) {
@@ -986,11 +980,9 @@ function buatFormPertanyaanSiswa(sessionData) {
         '<label>Pilihan 1</label><select class="ch uncomfortable" data-category="uncomfortable" data-index="0"></select>' +
         '<label>Alasan</label><textarea class="rs uncomfortable" placeholder="Tulis alasan..." style="min-height:35px;"></textarea></div>';
     
-    // Isi semua select dengan opsi
     var selects = document.querySelectorAll('.ch');
     for (var k = 0; k < selects.length; k++) {
         selects[k].innerHTML = optsHtml;
-        // Tambahkan event listener untuk validasi
         selects[k].addEventListener('change', function() {
             perbaruiOpsiSiswa();
         });
@@ -1001,11 +993,7 @@ function perbaruiOpsiSiswa() {
     var myId = document.getElementById('me').value;
     window._myId = myId;
     
-    // Kumpulkan semua pilihan yang sudah dipilih di setiap kategori
     var selects = document.querySelectorAll('.ch');
-    var usedValues = {};
-    
-    // Kelompokkan select berdasarkan kategori
     var categorySelects = {};
     selects.forEach(function(sel) {
         var cat = sel.dataset.category;
@@ -1013,7 +1001,8 @@ function perbaruiOpsiSiswa() {
         categorySelects[cat].push(sel);
     });
     
-    // Untuk setiap kategori, cek duplikasi di dalam kategori yang sama
+    var errorEl = document.getElementById('validationError');
+    
     for (var cat in categorySelects) {
         var catSel = categorySelects[cat];
         var values = [];
@@ -1021,7 +1010,6 @@ function perbaruiOpsiSiswa() {
             if (sel.value) values.push(sel.value);
         });
         
-        // Cek duplikat dalam kategori yang sama
         var hasDuplicate = false;
         var dupValue = null;
         for (var i = 0; i < values.length; i++) {
@@ -1035,8 +1023,6 @@ function perbaruiOpsiSiswa() {
             if (hasDuplicate) break;
         }
         
-        // Tampilkan error jika ada duplikat
-        var errorEl = document.getElementById('validationError');
         if (hasDuplicate && dupValue) {
             var name = window._studentNames ? window._studentNames[dupValue] : dupValue;
             errorEl.textContent = '⚠️ Anda memilih "' + name + '" dua kali dalam kategori yang sama. Pilih nama yang berbeda.';
@@ -1044,7 +1030,6 @@ function perbaruiOpsiSiswa() {
             return;
         }
         
-        // Cek apakah ada yang memilih diri sendiri
         for (var k = 0; k < catSel.length; k++) {
             if (catSel[k].value === myId && myId) {
                 var myName = window._studentNames ? window._studentNames[myId] : myId;
@@ -1055,8 +1040,6 @@ function perbaruiOpsiSiswa() {
         }
     }
     
-    // Tidak ada error
-    var errorEl = document.getElementById('validationError');
     errorEl.classList.remove('show');
 }
 
@@ -1093,15 +1076,12 @@ function kirimJawaban() {
     if (!me) { pesan('smsg', '⚠️ Pilih nama.', 'error'); return; }
     if (h.length < 2 || c.length < 2 || l.length < 1) { pesan('smsg', '⚠️ Lengkapi semua pilihan.', 'error'); return; }
     
-    // Validasi alasan
     for (var i = 0; i < reasons.length; i++) {
         if (!reasons[i].trim()) { pesan('smsg', '⚠️ Isi semua alasan.', 'error'); return; }
     }
     
-    // Validasi tidak pilih diri sendiri
     if (all.indexOf(me) !== -1) { pesan('smsg', '⚠️ Tidak boleh memilih diri sendiri.', 'error'); return; }
     
-    // Validasi tidak ada pilihan duplikat dalam satu kategori
     var hSet = {};
     for (var j = 0; j < h.length; j++) {
         if (hSet[h[j]]) { pesan('smsg', '⚠️ Dalam kategori Pertemanan, pilih 2 nama yang berbeda.', 'error'); return; }
@@ -1113,7 +1093,6 @@ function kirimJawaban() {
         cSet[c[k]] = true;
     }
 
-    // Cek apakah sudah mengisi sebelumnya
     var responses = sesiAktif.responses || [];
     for (var m = 0; m < responses.length; m++) {
         if (responses[m].respondent === me) {
@@ -1724,14 +1703,81 @@ function muatPaper() {
     document.getElementById('paperEntry').innerHTML = entryHtml;
 }
 
+// ============================================================
+// CETAK LEMBAR SISWA - KHUSUS LEMBAR SAJA
+// ============================================================
 function cetakLembarBaru() {
     if (!sesiAktif) {
         alert('⚠️ Pilih sesi dulu.');
         return;
     }
-    window.print();
+    
+    var content = document.getElementById('paperRows').innerHTML;
+    var className = sesiAktif.className || '______________';
+    var code = sesiAktif.code || '______________';
+    
+    var w = window.open('', '_blank', 'width=800,height=600');
+    if (!w) {
+        alert('⚠️ Izinkan pop-up untuk mencetak.');
+        return;
+    }
+    
+    w.document.write('<!doctype html><html><head><meta charset="utf-8">');
+    w.document.write('<title>Lembar Sosiometri - ' + code + '</title>');
+    w.document.write('<style>');
+    w.document.write('*{box-sizing:border-box;margin:0;padding:0}');
+    w.document.write('body{font-family:Arial,sans-serif;padding:10mm;background:#fff;color:#1a2a3a}');
+    w.document.write('.page{max-width:210mm;margin:auto}');
+    w.document.write('h1{font-size:18px;text-align:center;color:#0d2b4f;margin:0 0 4px}');
+    w.document.write('h2{font-size:14px;text-align:center;font-weight:400;color:#4a6a8a;margin:0 0 12px}');
+    w.document.write('.meta{display:flex;justify-content:center;gap:20px;font-size:12px;color:#6b7d90;margin-bottom:12px;border-bottom:2px solid #123a6f;padding-bottom:10px}');
+    w.document.write('.meta strong{color:#123a6f}');
+    w.document.write('.box{border:1px solid #cfdbe7;border-radius:6px;padding:10px;margin:8px 0}');
+    w.document.write('.box h3{font-size:13px;color:#123a6f;margin:0 0 4px}');
+    w.document.write('.box p{font-size:11px;color:#555;margin:0 0 6px}');
+    w.document.write('.row{font-size:11px;margin:4px 0;padding:3px 0;border-bottom:1px dotted #e8edf2}');
+    w.document.write('.row:last-child{border-bottom:none}');
+    w.document.write('.petunjuk{background:#f6f9fc;border:1px solid #d9e4ef;border-radius:5px;padding:8px;margin-bottom:10px;font-size:11px}');
+    w.document.write('.footer{text-align:center;font-size:9px;color:#94a3b8;margin-top:14px;border-top:1px solid #d9e4ef;padding-top:8px}');
+    w.document.write('.no-print{display:none !important}');
+    w.document.write('@page{size:A4;margin:8mm}');
+    w.document.write('@media print{body{padding:5mm}.no-print{display:none !important}}');
+    w.document.write('</style></head><body>');
+    
+    w.document.write('<div class="page">');
+    w.document.write('<h1>🌟 SOSIO DIGITAL NaFaS BK</h1>');
+    w.document.write('<h2>LEMBAR SOSIOMETRI</h2>');
+    w.document.write('<div class="meta">');
+    w.document.write('<span><strong>Nama:</strong> _________________</span>');
+    w.document.write('<span><strong>Kelas:</strong> ' + className + '</span>');
+    w.document.write('<span><strong>Sesi:</strong> ' + code + '</span>');
+    w.document.write('</div>');
+    w.document.write('<div class="petunjuk">📌 <b>Petunjuk:</b> Jawab dengan jujur. Pilih teman yang sesuai dengan pertanyaan. <b>Jangan pilih diri sendiri.</b></div>');
+    
+    w.document.write(content);
+    
+    w.document.write('<div class="footer">📌 ❤️ = Pertemanan &nbsp;|&nbsp; 🤝 = Kerja Sama &nbsp;|&nbsp; ⭐ = Kepemimpinan &nbsp;|&nbsp; 🔎 = Kurang Nyaman</div>');
+    w.document.write('</div>');
+    
+    w.document.write('<div class="no-print" style="text-align:center;margin-top:16px;padding:10px;background:#e8f5e9;border-radius:6px;border:1px solid #159a7c;">');
+    w.document.write('📌 <b>Petunjuk:</b> Pilih <b>"Cetak"</b> atau <b>"Save as PDF"</b> di dialog yang muncul.');
+    w.document.write('<br><br><button onclick="window.print()" style="padding:8px 20px;background:#f4b400;border:0;border-radius:6px;font-weight:700;font-size:14px;cursor:pointer;">🖨️ Cetak / Simpan PDF</button>');
+    w.document.write('</div>');
+    
+    w.document.write('</body></html>');
+    w.document.close();
+    w.focus();
+    
+    setTimeout(function() {
+        try {
+            w.print();
+        } catch(e) {}
+    }, 800);
 }
 
+// ============================================================
+// SIMPAN PAPER
+// ============================================================
 function simpanPaper() {
     if (!sesiAktif) { pesan('pmsg', '⚠️ Pilih sesi.', 'error'); return; }
     var cards = document.querySelectorAll('#paperEntry .panel');
@@ -1763,7 +1809,6 @@ function simpanPaper() {
             var lr = ins[4] && ins[4].value.trim() ? [ins[4].value.trim()] : [];
             var ur = ins[5] && ins[5].value.trim() ? [ins[5].value.trim()] : [];
             
-            // Validasi: tidak boleh memilih diri sendiri
             var myId = s.id;
             var semuaPilihan = h.concat(c).concat(l).concat(u);
             if (semuaPilihan.indexOf(myId) !== -1) {
@@ -1771,7 +1816,6 @@ function simpanPaper() {
                 return;
             }
             
-            // Validasi duplikat dalam kategori
             var hSet = {};
             for (var p = 0; p < h.length; p++) {
                 if (hSet[h[p]]) {
